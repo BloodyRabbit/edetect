@@ -1,27 +1,24 @@
 /** @file
- * @brief Declaration of CudaFilterPipeline class.
+ * @brief Declaration of ImageFilterPipeline class.
  *
  * @author Jan Bobek
  */
 
-#ifndef CUDA_FILTER_PIPELINE_HXX__INCL__
-#define CUDA_FILTER_PIPELINE_HXX__INCL__
-
-#include "CudaFilter.hxx"
+#ifndef IMAGE_FILTER_PIPELINE_HXX__INCL__
+#define IMAGE_FILTER_PIPELINE_HXX__INCL__
 
 /**
  * @brief A series of filters.
  *
  * @author Jan Bobek
  */
-class CudaFilterPipeline
-: public CudaFilter
+class ImageFilterPipeline
 {
 public:
     /**
      * @brief Releases the filters.
      */
-    ~CudaFilterPipeline();
+    ~ImageFilterPipeline();
 
     /**
      * @brief Adds a filter to the pipeline.
@@ -29,7 +26,7 @@ public:
      * @param[in] filter
      *   The filter to add.
      */
-    void add( CudaFilter* filter );
+    void add( ImageFilter* filter );
     /**
      * @brief Clears filters in the pipeline.
      */
@@ -41,11 +38,11 @@ public:
      * @param[in,out] image
      *   The image to filter.
      */
-    void process( CudaImage& image );
+    void filter( Image& image );
 
 protected:
     /// The list of active filters.
-    std::list< CudaFilter* > mFilters;
+    std::list< ImageFilter* > mFilters;
 };
 
-#endif /* !CUDA_FILTER_PIPELINE_HXX__INCL__ */
+#endif /* !IMAGE_FILTER_PIPELINE_HXX__INCL__ */
