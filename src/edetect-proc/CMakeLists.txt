@@ -18,3 +18,6 @@ target_link_libraries( "gauss" ${COMMON_LIBRARIES} )
 
 add_executable( "sobel" "sobel.cxx" ${COMMON_SOURCES} )
 target_link_libraries( "sobel" ${COMMON_LIBRARIES} )
+
+add_executable( "kirsch" "kirsch.cxx" ${COMMON_SOURCES} )
+target_link_libraries( "kirsch" ${COMMON_LIBRARIES} )
