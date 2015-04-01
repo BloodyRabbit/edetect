@@ -13,13 +13,8 @@ set(
   COMMON_LIBRARIES
   )
 
-add_executable(
-  "gauss"
-  ${COMMON_SOURCES}
-  "gauss.cxx"
-  )
-target_link_libraries(
-  "gauss"
-  ${COMMON_LIBRARIES}
-  )
+add_executable( "gauss" "gauss.cxx" ${COMMON_SOURCES} )
+target_link_libraries( "gauss" ${COMMON_LIBRARIES} )
 
+add_executable( "sobel" "sobel.cxx" ${COMMON_SOURCES} )
+target_link_libraries( "sobel" ${COMMON_LIBRARIES} )
