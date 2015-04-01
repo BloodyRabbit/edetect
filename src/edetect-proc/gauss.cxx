@@ -4,13 +4,8 @@
  * @author Jan Bobek
  */
 
-#include "common.hxx"
-#include "CudaDesaturateFilter.hxx"
-#include "CudaError.hxx"
-#include "CudaFilterPipeline.hxx"
-#include "CudaGaussianBlurFilter.hxx"
-#include "CudaImage.hxx"
-#include "CudaIntFloatFilter.hxx"
+#include "edetect-proc.hxx"
+#include "ImageFilterPipeline.hxx"
 
 int
 main(
@@ -18,8 +13,7 @@ main(
     char* argv[]
     )
 {
-    unsigned int radius;
-    char* endptr;
+    const char *radius, *infile, *outfile;
 
     if( argc != 4 )
     {
@@ -28,53 +22,46 @@ main(
         return false;
     }
 
-    radius = strtol( argv[1], &endptr, 10 );
-    if( *endptr )
-    {
-        fprintf( stderr, "Failed to convert %s to integer: invalid character %c\n",
-                 argv[1], *endptr );
-        return false;
-    }
+    radius = argv[1];
+    infile = argv[2];
+    outfile = argv[3];
 
     try
     {
-        CudaImage img( argv[2] );
-        fprintf( stderr, "Loaded image from file `%s'\n",
-                 argv[2] );
+        ImageBackend backend( "cuda" );
+        Image image( backend, infile );
 
         fprintf( stderr,
+                 "Loaded image from file `%s'\n"
                  "Input image info:\n"
-                 "  Width:     %lu px\n"
-                 "  Height:    %lu px\n",
-                 img.columns(),
-                 img.rows() );
+                 "  Width:     %u px\n"
+                 "  Height:    %u px\n",
+                 infile,
+                 image.columns(),
+                 image.rows() );
 
-        CudaFilterPipeline pipeline;
-
+        ImageFilterPipeline pipeline;
         // Convert image from integer RGB to float RGB
-        pipeline.add( new CudaIntFloatFilter );
+        pipeline.add( new ImageFilter( backend, "int-float" ) );
         // Convert image to float grayscale, Luminosity method
-        pipeline.add( new CudaDesaturateFilter(
-                          CudaDesaturateFilter::METHOD_LUMINOSITY ) );
+        pipeline.add( new ImageFilter( backend, "desaturate", 1,
+                                       "method", "luminosity" ) );
         // Apply Gaussian blur to the image
-        pipeline.add( new CudaGaussianBlurFilter( radius ) );
+        pipeline.add( new ImageFilter( backend, "gaussian-blur", 1,
+                                       "radius", radius ) );
         // Convert the image back to integer grayscale
-        pipeline.add( new CudaIntFloatFilter );
+        pipeline.add( new ImageFilter( backend, "int-float" ) );
 
-        pipeline.process( img );
-        img.save( argv[3] );
+        pipeline.filter( image );
+        image.save( outfile );
 
-        fprintf( stderr, "Saved image to file `%s'\n",
-                 argv[3] );
+        fprintf( stderr, "Saved image to file `%s'\n", outfile );
     }
     catch( const std::exception& e )
     {
         fprintf( stderr, "%s\n", e.what() );
-
-        cudaCheckError( cudaDeviceReset() );
         return EXIT_FAILURE;
     }
 
-    cudaCheckError( cudaDeviceReset() );
     return EXIT_SUCCESS;
 }
