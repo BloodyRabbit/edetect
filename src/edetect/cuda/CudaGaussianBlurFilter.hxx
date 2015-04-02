@@ -4,10 +4,10 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_GAUSSIAN_BLUR_HXX__INCL__
-#define CUDA_GAUSSIAN_BLUR_HXX__INCL__
+#ifndef CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__
+#define CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__
 
-#include "CudaConvolution2dSeparableFilter.hxx"
+#include "cuda/CudaConvolution2dSeparableFilter.hxx"
 
 /**
  * @brief Applies Gaussian blur to the image.
@@ -47,4 +47,4 @@ protected:
     CudaConvolution2dSeparableFilter mFilter;
 };
 
-#endif /* !CUDA_GAUSSIAN_BLUR_HXX__INCL__ */
+#endif /* !CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__ */

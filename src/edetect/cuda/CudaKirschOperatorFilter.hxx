@@ -4,10 +4,10 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
-#define CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
+#define CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
-#include "CudaConvolution2dFilter.hxx"
+#include "cuda/CudaConvolution2dFilter.hxx"
 
 /**
  * @brief Applies Kirsch operator to the image.
@@ -43,4 +43,4 @@ protected:
     CudaConvolution2dFilter mFilters[KERNEL_COUNT];
 };
 
-#endif /* !CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__ */

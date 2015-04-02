@@ -5,9 +5,9 @@
  */
 
 #include "common.hxx"
-#include "CudaError.hxx"
-#include "CudaImage.hxx"
-#include "CudaSobelOperatorFilter.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
+#include "cuda/CudaSobelOperatorFilter.hxx"
 
 /**
  * @brief CUDA kernel which computes final gradient

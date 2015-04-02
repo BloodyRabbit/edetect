@@ -4,8 +4,8 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_FILTER_HXX__INCL__
-#define CUDA_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_FILTER_HXX__INCL__
+#define CUDA__CUDA_FILTER_HXX__INCL__
 
 class CudaImage;
 
@@ -31,4 +31,4 @@ public:
     virtual void process( CudaImage& image ) = 0;
 };
 
-#endif /* !CUDA_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_FILTER_HXX__INCL__ */

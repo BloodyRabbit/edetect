@@ -5,9 +5,9 @@
  */
 
 #include "common.hxx"
-#include "CudaError.hxx"
-#include "CudaImage.hxx"
-#include "CudaKirschOperatorFilter.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
+#include "cuda/CudaKirschOperatorFilter.hxx"
 
 /**
  * @brief CUDA kernel computing Kirsch operator gradient.

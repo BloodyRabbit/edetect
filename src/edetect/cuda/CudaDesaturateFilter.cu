@@ -5,9 +5,9 @@
  */
 
 #include "common.hxx"
-#include "CudaDesaturateFilter.hxx"
-#include "CudaError.hxx"
-#include "CudaImage.hxx"
+#include "cuda/CudaDesaturateFilter.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
 
 /**
  * @brief CUDA kernel for desaturation using

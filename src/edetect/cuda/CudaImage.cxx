@@ -5,8 +5,8 @@
  */
 
 #include "common.hxx"
-#include "CudaError.hxx"
-#include "CudaImage.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
 
 /*************************************************************************/
 /* CudaImage                                                             */

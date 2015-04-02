@@ -4,8 +4,8 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_IMAGE_HXX__INCL__
-#define CUDA_IMAGE_HXX__INCL__
+#ifndef CUDA__CUDA_IMAGE_HXX__INCL__
+#define CUDA__CUDA_IMAGE_HXX__INCL__
 
 /**
  * @brief An image stored at CUDA device.
@@ -308,4 +308,4 @@ protected:
     static const size_t FMT_CHANNEL_SIZE[];
 };
 
-#endif /* !CUDA_IMAGE_HXX__INCL__ */
+#endif /* !CUDA__CUDA_IMAGE_HXX__INCL__ */

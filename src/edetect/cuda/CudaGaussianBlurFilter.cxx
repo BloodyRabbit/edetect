@@ -5,7 +5,7 @@
  */
 
 #include "common.hxx"
-#include "CudaGaussianBlurFilter.hxx"
+#include "cuda/CudaGaussianBlurFilter.hxx"
 
 /*************************************************************************/
 /* CudaGaussianBlurFilter                                                */

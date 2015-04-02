@@ -5,8 +5,8 @@
  */
 
 #include "common.hxx"
-#include "CudaError.hxx"
-#include "CudaIntFloatFilter.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaIntFloatFilter.hxx"
 
 /**
  * @brief CUDA kernel converting integer-pixels to float-pixels.

@@ -5,7 +5,7 @@
  */
 
 #include "common.hxx"
-#include "CudaError.hxx"
+#include "cuda/CudaError.hxx"
 
 /*************************************************************************/
 /* CudaError                                                             */

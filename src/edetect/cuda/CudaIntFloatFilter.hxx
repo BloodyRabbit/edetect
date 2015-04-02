@@ -4,11 +4,11 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_INT_FLOAT_FILTER_HXX__INCL__
-#define CUDA_INT_FLOAT_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
+#define CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
 
-#include "CudaFilter.hxx"
-#include "CudaImage.hxx"
+#include "cuda/CudaFilter.hxx"
+#include "cuda/CudaImage.hxx"
 
 /**
  * @brief Converts integer-pixel images to
@@ -33,4 +33,4 @@ protected:
     static const CudaImage::Format FMT_TARGET[];
 };
 
-#endif /* !CUDA_INT_FLOAT_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__ */

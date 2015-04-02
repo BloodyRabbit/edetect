@@ -4,8 +4,8 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_ERROR_HXX__INCL__
-#define CUDA_ERROR_HXX__INCL__
+#ifndef CUDA__CUDA_ERROR_HXX__INCL__
+#define CUDA__CUDA_ERROR_HXX__INCL__
 
 /**
  * @brief Thrown on CUDA error.
@@ -104,4 +104,4 @@ cudaCheckError__(
         throw CudaError( x, msg, file, line );
 }
 
-#endif /* !CUDA_ERROR_HXX__INCL__ */
+#endif /* !CUDA__CUDA_ERROR_HXX__INCL__ */

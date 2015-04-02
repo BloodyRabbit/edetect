@@ -4,10 +4,10 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
-#define CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
+#define CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
 
-#include "CudaFilter.hxx"
+#include "cuda/CudaFilter.hxx"
 
 /**
  * @brief Performs two-dimensional discrete convolution
@@ -87,4 +87,4 @@ protected:
     unsigned int mKernelColumnsRadius;
 };
 
-#endif /* !CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__ */

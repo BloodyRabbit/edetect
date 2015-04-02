@@ -11,25 +11,28 @@ set( CUDA_NVCC_FLAGS
   CACHE STRING "Additional flags to pass to NVCC compiler." )
 
 find_package( "CUDA" REQUIRED )
+include_directories(
+  "${CMAKE_CURRENT_SOURCE_DIR}"
+  )
 
 cuda_add_library(
   "edetect"
   "common.hxx"
-  "CudaConvolution2dFilter.hxx"
-  "CudaConvolution2dFilter.cu"
-  "CudaConvolution2dSeparableFilter.hxx"
-  "CudaConvolution2dSeparableFilter.cu"
-  "CudaDesaturateFilter.hxx"
-  "CudaDesaturateFilter.cu"
-  "CudaError.hxx"
-  "CudaError.cxx"
-  "CudaFilter.hxx"
-  "CudaGaussianBlurFilter.hxx"
-  "CudaGaussianBlurFilter.cxx"
-  "CudaIntFloatFilter.hxx"
-  "CudaIntFloatFilter.cu"
-  "CudaImage.hxx"
-  "CudaImage.cxx"
+  "cuda/CudaConvolution2dFilter.hxx"
+  "cuda/CudaConvolution2dFilter.cu"
+  "cuda/CudaConvolution2dSeparableFilter.hxx"
+  "cuda/CudaConvolution2dSeparableFilter.cu"
+  "cuda/CudaDesaturateFilter.hxx"
+  "cuda/CudaDesaturateFilter.cu"
+  "cuda/CudaError.hxx"
+  "cuda/CudaError.cxx"
+  "cuda/CudaFilter.hxx"
+  "cuda/CudaGaussianBlurFilter.hxx"
+  "cuda/CudaGaussianBlurFilter.cxx"
+  "cuda/CudaIntFloatFilter.hxx"
+  "cuda/CudaIntFloatFilter.cu"
+  "cuda/CudaImage.hxx"
+  "cuda/CudaImage.cxx"
   )
 target_link_libraries(
   "edetect"

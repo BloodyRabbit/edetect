@@ -4,10 +4,10 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__
-#define CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__
+#define CUDA__CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__
 
-#include "CudaConvolution2dSeparableFilter.hxx"
+#include "cuda/CudaConvolution2dSeparableFilter.hxx"
 
 /**
  * @brief Applies Sobel operator to the image.
@@ -45,4 +45,4 @@ protected:
     static const float KERNEL_1_2_1[2 * KERNEL_RADIUS + 1];
 };
 
-#endif /* !CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__ */

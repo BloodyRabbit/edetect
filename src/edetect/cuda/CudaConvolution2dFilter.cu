@@ -5,9 +5,9 @@
  */
 
 #include "common.hxx"
-#include "CudaConvolution2dFilter.hxx"
-#include "CudaError.hxx"
-#include "CudaImage.hxx"
+#include "cuda/CudaConvolution2dFilter.hxx"
+#include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
 
 /// The convolution kernel.
 __constant__ float cKernel[(2 * CudaConvolution2dFilter::MAX_RADIUS + 1) * (2 * CudaConvolution2dFilter::MAX_RADIUS + 1)];

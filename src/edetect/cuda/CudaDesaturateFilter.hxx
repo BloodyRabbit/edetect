@@ -4,10 +4,10 @@
  * @author Jan Bobek
  */
 
-#ifndef CUDA_DESATURATE_FILTER_HXX__INCL__
-#define CUDA_DESATURATE_FILTER_HXX__INCL__
+#ifndef CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__
+#define CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__
 
-#include "CudaFilter.hxx"
+#include "cuda/CudaFilter.hxx"
 
 /**
  * @brief Desaturates the image (converts
@@ -52,4 +52,4 @@ protected:
     Method mMethod;
 };
 
-#endif /* !CUDA_DESATURATE_FILTER_HXX__INCL__ */
+#endif /* !CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__ */
