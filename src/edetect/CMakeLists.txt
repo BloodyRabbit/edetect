@@ -17,7 +17,7 @@ include_directories(
 
 cuda_add_library(
   "edetect"
-  "common.hxx"
+  "edetect.hxx"
   "cuda/CudaConvolution2dFilter.hxx"
   "cuda/CudaConvolution2dFilter.cu"
   "cuda/CudaConvolution2dSeparableFilter.hxx"

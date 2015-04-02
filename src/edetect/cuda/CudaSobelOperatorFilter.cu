@@ -4,7 +4,7 @@
  * @author Jan Bobek
  */
 
-#include "common.hxx"
+#include "edetect.hxx"
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaImage.hxx"
 #include "cuda/CudaSobelOperatorFilter.hxx"

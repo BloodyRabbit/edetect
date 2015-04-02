@@ -1,17 +1,15 @@
 /** @file
- * @brief Common project includes.
+ * @brief Common includes of edetect.
  *
  * @author Jan Bobek
  */
 
-#ifndef COMMON_HXX__INCL__
-#define COMMON_HXX__INCL__
+#ifndef EDETECT_HXX__INCL__
+#define EDETECT_HXX__INCL__
 
 #include <cmath>
-#include <cstdio>
 #include <cstdlib>
 
-#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
@@ -19,4 +17,4 @@
 #include <cuda_runtime.h>
 #include <FreeImagePlus.h>
 
-#endif /* !COMMON_HXX__INCL__ */
+#endif /* !EDETECT_HXX__INCL__ */
