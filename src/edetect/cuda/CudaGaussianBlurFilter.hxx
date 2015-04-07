@@ -15,18 +15,13 @@
  * @author Jan Bobek
  */
 class CudaGaussianBlurFilter
-: public CudaFilter
+: public IImageFilter
 {
 public:
     /**
      * @brief Initializes the filter.
-     *
-     * @param[in] radius
-     *   Desired radius of the kernel.
      */
-    CudaGaussianBlurFilter(
-        unsigned int radius
-        );
+    CudaGaussianBlurFilter();
     /**
      * @brief Releases the generated kernels.
      */
@@ -38,7 +33,14 @@ public:
      * @param[in,out] image
      *   The image to apply the blur to.
      */
-    void process( CudaImage& image );
+    void filter( CudaImage& image );
+    /// @copydoc IImageFilter::setParam(const char*, const void*)
+    void setParam( const char* name, const void* value );
+
+    /**
+     * @brief Sets radius of the Gaussian kernel.
+     */
+    void setRadius( unsigned int radius );
 
 protected:
     /// The generated kernel.

@@ -155,36 +155,27 @@ CudaKirschOperatorFilter::CudaKirschOperatorFilter()
 }
 
 void
-CudaKirschOperatorFilter::process(
+CudaKirschOperatorFilter::filter(
     CudaImage& image
     )
 {
     switch( image.format() )
     {
-    case CudaImage::FMT_GRAY_FLOAT32:
+    case Image::FMT_GRAY_FLOAT32:
         break;
 
     default:
-    case CudaImage::FMT_GRAY_UINT8:
-    case CudaImage::FMT_RGB_UINT8:
-    case CudaImage::FMT_RGB_FLOAT32:
+    case Image::FMT_GRAY_UINT8:
+    case Image::FMT_RGB_UINT8:
+    case Image::FMT_RGB_FLOAT32:
         throw std::runtime_error(
             "CudaKirschOperatorFilter: Unsupported image format" );
     }
 
-    CudaImage* dupImages[KERNEL_COUNT] =
-        { &image,
-          new CudaImage( image ),
-          new CudaImage( image ),
-          new CudaImage( image ),
-
-          new CudaImage( image ),
-          new CudaImage( image ),
-          new CudaImage( image ),
-          new CudaImage( image ) };
-
-    for( unsigned int i = 0; i < KERNEL_COUNT; ++i )
-        mFilters[i].process( *dupImages[i] );
+    CudaImage dupImages[KERNEL_COUNT - 1];
+    for( unsigned int i = 1; i < KERNEL_COUNT; ++i )
+        mFilters[i].filter( dupImages[i - 1] = image );
+    mFilters[0].filter( image );
 
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
@@ -193,19 +184,16 @@ CudaKirschOperatorFilter::process(
         (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
     computeGradientKirsch<<< numBlocks, threadsPerBlock >>>(
-        (unsigned char*)dupImages[0]->data(), dupImages[0]->rowStride(),
-        (unsigned char*)dupImages[1]->data(), dupImages[1]->rowStride(),
-        (unsigned char*)dupImages[2]->data(), dupImages[2]->rowStride(),
-        (unsigned char*)dupImages[3]->data(), dupImages[3]->rowStride(),
-        (unsigned char*)dupImages[4]->data(), dupImages[4]->rowStride(),
-        (unsigned char*)dupImages[5]->data(), dupImages[5]->rowStride(),
-        (unsigned char*)dupImages[6]->data(), dupImages[6]->rowStride(),
-        (unsigned char*)dupImages[7]->data(), dupImages[7]->rowStride(),
+        image.data(), image.stride(),
+        dupImages[0].data(), dupImages[0].stride(),
+        dupImages[1].data(), dupImages[1].stride(),
+        dupImages[2].data(), dupImages[2].stride(),
+        dupImages[3].data(), dupImages[3].stride(),
+        dupImages[4].data(), dupImages[4].stride(),
+        dupImages[5].data(), dupImages[5].stride(),
+        dupImages[6].data(), dupImages[6].stride(),
         image.rows(), image.columns() );
 
     cudaCheckLastError( "Kirsch gradient computation kernel launch failed" );
     cudaMsgCheckError( cudaDeviceSynchronize(), "Kirsch gradient computation kernel run failed" );
-
-    for( unsigned int i = 1; i < KERNEL_COUNT; ++i )
-        delete dupImages[i];
 }

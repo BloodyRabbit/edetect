@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
 #define CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
 
-#include "cuda/CudaFilter.hxx"
+#include "IImageFilter.hxx"
 
 /**
  * @brief Performs two-dimensional discrete convolution
@@ -16,30 +16,16 @@
  * @author Jan Bobek
  */
 class CudaConvolution2dSeparableFilter
-: public CudaFilter
+: public IImageFilter
 {
 public:
     /// The largest supported radius.
     static const unsigned int MAX_RADIUS = 32;
 
     /**
-     * @brief Initializes the convolution filter.
-     *
-     * @param[in] kernelRows
-     *   The convolution kernel for rows.
-     * @param[in] kernelRowsRadius
-     *   Radius of the row kernel.
-     * @param[in] kernelColumns
-     *   The convolution kernel for columns.
-     * @param[in] kernelColumnsRadius
-     *   Radius of the column kernel.
+     * @brief Initializes the filter.
      */
-    CudaConvolution2dSeparableFilter(
-        const float* kernelRows = NULL,
-        unsigned int kernelRowsRadius = 0,
-        const float* kernelColumns = NULL,
-        unsigned int kernelColumnsRadius = 0
-        );
+    CudaConvolution2dSeparableFilter();
 
     /**
      * @brief Performs convolution on the image.
@@ -47,44 +33,39 @@ public:
      * @param[in] image
      *   The image to convolve.
      */
-    void process( CudaImage& image );
+    void filter( CudaImage& image );
+    /// @copydoc IImageFilter::setParam(const char*, const void*)
+    void setParam( const char* name, const void* value );
 
     /**
      * @brief Sets the row kernel.
      *
      * @param[in] kernel
-     *   The kernel.
+     *   The row kernel.
      * @param[in] radius
-     *   Radius of the kernel.
+     *   Radius of the row kernel.
      */
-    void setKernelRows(
-        const float* kernel,
-        unsigned int radius
-        );
+    void setRowKernel( const float* kernel, unsigned int radius );
     /**
      * @brief Sets the column kernel.
      *
      * @param[in] kernel
-     *   The kernel.
+     *   The column kernel.
      * @param[in] radius
-     *   Radius of the kernel.
+     *   Radius of the column kernel.
      */
-    void setKernelColumns(
-        const float* kernel,
-        unsigned int radius
-        );
-
+    void setColumnKernel( const float* kernel, unsigned int radius );
 
 protected:
     /// The row kernel.
-    const float* mKernelRows;
+    const float* mRowKernel;
     /// Radius of the row kernel.
-    unsigned int mKernelRowsRadius;
+    unsigned int mRowKernelRadius;
 
     /// The column kernel.
-    const float* mKernelColumns;
+    const float* mColumnKernel;
     /// Radius of the column kernel.
-    unsigned int mKernelColumnsRadius;
+    unsigned int mColumnKernelRadius;
 };
 
 #endif /* !CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__ */

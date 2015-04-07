@@ -6,6 +6,7 @@
 
 #include "edetect.hxx"
 #include "cuda/CudaError.hxx"
+#include "cuda/CudaImage.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 
 /**
@@ -95,53 +96,55 @@ convertFloat2Int(
 /*************************************************************************/
 /* CudaIntFloatFilter                                                    */
 /*************************************************************************/
-const CudaImage::Format
+const Image::Format
 CudaIntFloatFilter::FMT_TARGET[] =
 {
-    CudaImage::FMT_INVALID,      // FMT_INVALID
-    CudaImage::FMT_GRAY_FLOAT32, // FMT_GRAY_UINT8
-    CudaImage::FMT_GRAY_UINT8,   // FMT_GRAY_FLOAT32
-    CudaImage::FMT_RGB_FLOAT32,  // FMT_RGB_UINT8
-    CudaImage::FMT_RGB_UINT8,    // FMT_RGB_FLOAT32
+    Image::FMT_INVALID,      // FMT_INVALID
+    Image::FMT_GRAY_FLOAT32, // FMT_GRAY_UINT8
+    Image::FMT_GRAY_UINT8,   // FMT_GRAY_FLOAT32
+    Image::FMT_RGB_FLOAT32,  // FMT_RGB_UINT8
+    Image::FMT_RGB_UINT8,    // FMT_RGB_FLOAT32
 };
 
 void
-CudaIntFloatFilter::process(
+CudaIntFloatFilter::filter(
     CudaImage& image
     )
 {
-    const CudaImage::Format fmtTarget =
+    const Image::Format fmtTarget =
         FMT_TARGET[image.format()];
+    const unsigned int columns =
+        image.columns() * Image::channels( image.format() );
 
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
     const dim3 numBlocks(
-        (image.columns() * image.channels() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (columns + threadsPerBlock.x - 1) / threadsPerBlock.x,
         (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    CudaImage newImage(
-        image.rows(), image.columns(), fmtTarget );
+    CudaImage newImage;
+    newImage.reset( image.rows(), image.columns(), fmtTarget );
 
     switch( fmtTarget )
     {
-    case CudaImage::FMT_RGB_FLOAT32:
-    case CudaImage::FMT_GRAY_FLOAT32:
+    case Image::FMT_RGB_FLOAT32:
+    case Image::FMT_GRAY_FLOAT32:
         convertInt2Float<<< numBlocks, threadsPerBlock >>>(
-            (unsigned char*)newImage.data(), newImage.rowStride(),
-            (unsigned char*)image.data(), image.rowStride(),
-            image.rows(), image.columns() * image.channels() );
+            newImage.data(), newImage.stride(),
+            image.data(), image.stride(),
+            image.rows(), columns );
         break;
 
-    case CudaImage::FMT_RGB_UINT8:
-    case CudaImage::FMT_GRAY_UINT8:
+    case Image::FMT_RGB_UINT8:
+    case Image::FMT_GRAY_UINT8:
         convertFloat2Int<<< numBlocks, threadsPerBlock >>>(
-            (unsigned char*)newImage.data(), newImage.rowStride(),
-            (unsigned char*)image.data(), image.rowStride(),
-            image.rows(), image.columns() * image.channels() );
+            newImage.data(), newImage.stride(),
+            image.data(), image.stride(),
+            image.rows(), columns );
         break;
 
     default:
-    case CudaImage::FMT_INVALID:
+    case Image::FMT_INVALID:
         throw std::runtime_error(
             "CudaIntFloatFilter: invalid format" );
     }

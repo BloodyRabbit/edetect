@@ -108,30 +108,26 @@ convolve2d(
 /*************************************************************************/
 /* CudaConvolution2dFilter                                               */
 /*************************************************************************/
-CudaConvolution2dFilter::CudaConvolution2dFilter(
-    const float* kernel,
-    unsigned int radius
-    )
+CudaConvolution2dFilter::CudaConvolution2dFilter()
 : mKernel( NULL ),
   mRadius( 0 )
 {
-    setKernel( kernel, radius );
 }
 
 void
-CudaConvolution2dFilter::process(
+CudaConvolution2dFilter::filter(
     CudaImage& image
     )
 {
     switch( image.format() )
     {
-    case CudaImage::FMT_GRAY_FLOAT32:
+    case Image::FMT_GRAY_FLOAT32:
         break;
 
     default:
-    case CudaImage::FMT_GRAY_UINT8:
-    case CudaImage::FMT_RGB_UINT8:
-    case CudaImage::FMT_RGB_FLOAT32:
+    case Image::FMT_GRAY_UINT8:
+    case Image::FMT_RGB_UINT8:
+    case Image::FMT_RGB_FLOAT32:
         throw std::runtime_error(
             "CudaConvolution2dFilter: Unsupported image format" );
     }
@@ -142,9 +138,9 @@ CudaConvolution2dFilter::process(
         (image.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
         (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    CudaImage newImage(
-        image.rows(), image.columns(),
-        CudaImage::FMT_GRAY_FLOAT32 );
+    CudaImage newImage;
+    newImage.reset( image.rows(), image.columns(),
+                    Image::FMT_GRAY_FLOAT32 );
 
     cudaCheckError(
         cudaMemcpyToSymbol(
@@ -152,8 +148,8 @@ CudaConvolution2dFilter::process(
             0, cudaMemcpyHostToDevice ) );
 
     convolve2d<<< numBlocks, threadsPerBlock >>>(
-        (unsigned char*)newImage.data(), newImage.rowStride(),
-        (unsigned char*)image.data(), image.rowStride(),
+        newImage.data(), newImage.stride(),
+        image.data(), image.stride(),
         image.rows(), image.columns(), mRadius );
 
     cudaCheckLastError( "2D-convolution kernel launch failed" );
@@ -163,14 +159,28 @@ CudaConvolution2dFilter::process(
 }
 
 void
+CudaConvolution2dFilter::setParam(
+    const char* name,
+    const void* value
+    )
+{
+    if( !strcmp( name, "kernel" ) )
+        setKernel( (const float*)value, mRadius );
+    else if( !strcmp( name, "radius" ) )
+        setKernel( mKernel, *(const unsigned int*)value );
+    else
+        IImageFilter::setParam( name, value );
+}
+
+void
 CudaConvolution2dFilter::setKernel(
     const float* kernel,
     unsigned int radius
     )
 {
     if( MAX_RADIUS < radius )
-        throw std::runtime_error(
-            "CudaConvolution2dFilter: Kernel too large" );
+        throw std::invalid_argument(
+            "CudaConvolution2dFilter: Convolution kernel too large" );
 
     mKernel = kernel;
     mRadius = radius;

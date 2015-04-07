@@ -68,39 +68,43 @@ CudaSobelOperatorFilter::KERNEL_1_2_1[] =
 };
 
 CudaSobelOperatorFilter::CudaSobelOperatorFilter()
-: mVertFilter(
-    KERNEL_1_0_1, KERNEL_RADIUS,
-    KERNEL_1_2_1, KERNEL_RADIUS ),
-  mHorzFilter(
-    KERNEL_1_2_1, KERNEL_RADIUS,
-    KERNEL_1_0_1, KERNEL_RADIUS )
 {
+    mVertFilter.setRowKernel(
+        KERNEL_1_0_1, KERNEL_RADIUS );
+    mVertFilter.setColumnKernel(
+        KERNEL_1_2_1, KERNEL_RADIUS );
+
+    mHorzFilter.setRowKernel(
+        KERNEL_1_2_1, KERNEL_RADIUS );
+    mHorzFilter.setColumnKernel(
+        KERNEL_1_0_1, KERNEL_RADIUS );
 }
 
 void
-CudaSobelOperatorFilter::process(
+CudaSobelOperatorFilter::filter(
     CudaImage& image
     )
 {
     switch( image.format() )
     {
-    case CudaImage::FMT_GRAY_FLOAT32:
+    case Image::FMT_GRAY_FLOAT32:
         break;
 
     default:
-    case CudaImage::FMT_GRAY_UINT8:
-    case CudaImage::FMT_RGB_UINT8:
-    case CudaImage::FMT_RGB_FLOAT32:
+    case Image::FMT_GRAY_UINT8:
+    case Image::FMT_RGB_UINT8:
+    case Image::FMT_RGB_FLOAT32:
         throw std::runtime_error(
             "CudaSobelOperatorFilter: Unsupported image format" );
     }
 
-    CudaImage dupImage( image );
+    CudaImage dupImage;
+    dupImage = image;
 
     // Detect vertical edges
-    mVertFilter.process( image );
+    mVertFilter.filter( image );
     // Detect horizontal edges
-    mHorzFilter.process( dupImage );
+    mHorzFilter.filter( dupImage );
 
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
@@ -109,8 +113,8 @@ CudaSobelOperatorFilter::process(
         (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
     computeGradientSobel<<< numBlocks, threadsPerBlock >>>(
-        (unsigned char*)image.data(), image.rowStride(),
-        (unsigned char*)dupImage.data(), dupImage.rowStride(),
+        image.data(), image.stride(),
+        dupImage.data(), dupImage.stride(),
         image.rows(), image.columns() );
 
     cudaCheckLastError( "Sobel gradient computation kernel launch failed" );

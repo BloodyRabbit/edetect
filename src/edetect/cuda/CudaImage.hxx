@@ -7,305 +7,89 @@
 #ifndef CUDA__CUDA_IMAGE_HXX__INCL__
 #define CUDA__CUDA_IMAGE_HXX__INCL__
 
+#include "IImage.hxx"
+
 /**
  * @brief An image stored at CUDA device.
  *
  * @author Jan Bobek
  */
 class CudaImage
+: public IImage
 {
 public:
     /**
-     * @brief An enum representing supported image formats.
-     *
-     * @author Jan Bobek
-     */
-    enum Format
-    {
-        FMT_INVALID = 0,  ///< Invalid format
-        FMT_GRAY_UINT8,   ///< Grayscale, 8bpp [0..255]
-        FMT_GRAY_FLOAT32, ///< Grayscale, 32bpp [0..1]
-        FMT_RGB_UINT8,    ///< RGB, 24bpp [0..255]
-        FMT_RGB_FLOAT32   ///< RGB, 96bpp [0..1]
-    };
-
-    /**
-     * @brief Obtains number of channels of the specified
-     *   format.
-     *
-     * @param[in] fmt
-     *   The format to examine.
-     *
-     * @return
-     *   Number of channels of the specified format.
-     */
-    static size_t channels( Format fmt ) { return FMT_CHANNELS[fmt]; }
-    /**
-     * @brief Obtains size of a single pixel channel of
-     *   the specified format.
-     *
-     * @param[in] fmt
-     *   The format to examine.
-     *
-     * @return
-     *   Size of a single pixel channel of the specified
-     *   format.
-     */
-    static size_t channelSize( Format fmt ) { return FMT_CHANNEL_SIZE[fmt]; }
-    /**
-     * @brief Obtains size of a single pixel of the
-     *   specified format.
-     *
-     * @param[in] fmt
-     *   The format to examine.
-     *
-     * @return
-     *   Size of a single pixel of the specified format.
-     */
-    static size_t pixelSize( Format fmt ) { return channels( fmt ) * channelSize( fmt ); }
-
-    /**
-     * @brief Initializes an empty image.
-     *
-     * @param[in] rows
-     *   Number of rows in the image.
-     * @param[in] cols
-     *   Number of columns in the image.
-     * @param[in] fmt
-     *   Format of the image.
-     *
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
-    CudaImage(
-        size_t rows = 0,
-        size_t cols = 0,
-        Format fmt = FMT_INVALID
-        );
-    /**
      * @brief Initializes the image.
-     *
-     * @param[in] file
-     *   Name of the file to load image from.
-     *
-     * @throw std::runtime_error
-     *   Failed to open the file or load the image.
-     * @throw CudaError
-     *   Not enough memory on device.
      */
-    CudaImage( const char* file );
+    CudaImage();
     /**
-     * @brief Initializes the image.
-     *
-     * @param[in] img
-     *   The image data.
-     * @param[in] rows
-     *   Number of rows in the image.
-     * @param[in] cols
-     *   Number of columns in the image.
-     * @param[in] rowStride
-     *   Size of the row stride in bytes.
-     * @param[in] fmt
-     *   Format of the image.
-     *
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
-    CudaImage(
-        const void* img,
-        size_t rows,
-        size_t cols,
-        size_t rowStride,
-        Format fmt
-        );
-    /**
-     * @brief Duplicates an image.
-     *
-     * @param[in] oth
-     *   The image to duplicate.
-     */
-    CudaImage( const CudaImage& oth );
-    /**
-     * @brief Releases resources held by the image object.
+     * @brief Deallocates the image.
      */
     ~CudaImage();
 
-    /**
-     * @brief Obtains pointer to the image data.
-     *
-     * @return
-     *   Pointer to the image data.
-     */
-    void* data() { return mImage; }
-    /**
-     * @brief Obtains pointer to the image data.
-     *
-     * @return
-     *   Pointer to the image data.
-     */
-    const void* data() const { return mImage; }
+    /// @copydoc IImage::data()
+    unsigned char* data();
+    /// @copydoc IImage::data() const
+    const unsigned char* data() const;
 
-    /**
-     * @brief Obtains number of rows in the image.
-     *
-     * @return
-     *   Number of rows in the image.
-     */
-    size_t rows() const { return mRows; }
-    /**
-     * @brief Obtains number of columns in the image.
-     *
-     * @return
-     *   Number of columns in the image.
-     */
-    size_t columns() const { return mColumns; }
-    /**
-     * @brief Obtains size of the row stride (in bytes).
-     *
-     * @return
-     *   Size of the row stride (in bytes).
-     */
-    size_t rowStride() const { return mRowStride; }
+    /// @copydoc IImage::rows() const
+    unsigned int rows() const;
+    /// @copydoc IImage::columns() const
+    unsigned int columns() const;
+    /// @copydoc IImage::stride() const
+    unsigned int stride() const;
 
-    /**
-     * @brief Obtains format of the image.
-     *
-     * @return
-     *   Format of the image.
-     */
-    Format format() const { return mFmt; }
-    /**
-     * @brief Obtains number of channels in a single pixel.
-     *
-     * @return
-     *   Number of channels in a single pixel.
-     */
-    size_t channels() const { return channels( mFmt ); }
-    /**
-     * @brief Obtains size of a single pixel channel.
-     *
-     * @return
-     *   Size of a single pixel channel.
-     */
-    size_t channelSize() const { return channelSize( mFmt ); }
-    /**
-     * @brief Obtains size of a single pixel.
-     *
-     * @return
-     *   Size of a single pixel.
-     */
-    size_t pixelSize() const { return pixelSize( mFmt ); }
+    /// @copydoc IImage::format() const
+    Image::Format format() const;
 
-    /**
-     * @brief Loads the image from a file.
-     *
-     * @param[in] file
-     *   Name of the file.
-     *
-     * @throw std::runtime_error
-     *   Failed to open the file or load the image.
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
+    /// @copydoc IImage::load(const char*)
     void load( const char* file );
-    /**
-     * @brief Loads the image from memory.
-     *
-     * @param[in] img
-     *   The image data.
-     * @param[in] rows
-     *   Number of rows in the image.
-     * @param[in] cols
-     *   Number of columns in the image.
-     * @param[in] rowStride
-     *   Size of the row stride (in bytes).
-     * @param[in] fmt
-     *   Format of the image.
-     *
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
+    /// @copydoc IImage::load(const void*, unsigned int, unsigned int, unsigned int, Image::Format)
     void load(
-        const void* img,
-        size_t rows,
-        size_t cols,
-        size_t rowStride,
-        Format fmt
+        const void* data,
+        unsigned int rows,
+        unsigned int cols,
+        unsigned int stride,
+        Image::Format fmt
         );
 
-    /**
-     * @brief Saves the image to a file.
-     *
-     * @param[in] file
-     *   Name of the file.
-     *
-     * @throw std::runtime_error
-     *   Failed to save the image.
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
+    /// @copydoc IImage::save(const char*)
     void save( const char* file );
-    /**
-     * @brief Saves the image to memory.
-     *
-     * @param[out] img
-     *   Where to store the image data.
-     * @param[in,opt] rowStride
-     *   The row stride to use (in bytes).
-     */
-    void save( void* img, size_t rowStride = 0 );
+    /// @copydoc IImage::save(void*, unsigned int)
+    void save( void* data, unsigned int stride = 0 );
 
-    /**
-     * @brief Swaps content of two images.
-     *
-     * @param[in] oth
-     *   The image to swap content with.
-     */
-    void swap( CudaImage& oth );
-    /**
-     * @brief Resets the image.
-     *
-     * @param[in,opt] rows
-     *   New number of rows.
-     * @param[in,opt] columns
-     *   New number of columns.
-     * @param[in,opt] fmt
-     *   New format.
-     *
-     * @throw CudaError
-     *   Not enough memory on device.
-     */
+    /// @copydoc IImage::reset(unsigned int, unsigned int, Image::Format)
     void reset(
-        size_t rows = 0,
-        size_t cols = 0,
-        Format fmt = FMT_INVALID
+        unsigned int rows = 0,
+        unsigned int cols = 0,
+        Image::Format fmt = Image::FMT_INVALID
         );
 
-    /**
-     * @brief Duplicates an image.
-     *
-     * @param[in] oth
-     *   The image to duplicate.
-     */
+    /// @copydoc IImage::swap(IImage&)
+    void swap( IImage& oth );
+    /// @coppydoc IImage::swap(CudaImage&)
+    void swap( CudaImage& oth );
+
+    /// @copydoc IImage::operator=(const CudaImage&)
     CudaImage& operator=( const CudaImage& oth );
 
 protected:
+    /// @copydoc IImage::apply(IImageFilter&)
+    void apply( IImageFilter& filter );
+    /// @copydoc IImage::duplicate(IImage&)
+    void duplicate( IImage& dest ) const;
+
     /// The image data.
-    void* mImage;
+    unsigned char* mData;
     /// Number of rows in the image.
-    size_t mRows;
+    unsigned int mRows;
     /// Number of columns in the image.
-    size_t mColumns;
+    unsigned int mColumns;
     /// Size of the row stride (in bytes).
-    size_t mRowStride;
+    unsigned int mStride;
 
     /// Format of the image.
-    Format mFmt;
-
-    /// Keeps number of channels of each format.
-    static const size_t FMT_CHANNELS[];
-    /// Keeps channel size (in bytes) of each format.
-    static const size_t FMT_CHANNEL_SIZE[];
+    Image::Format mFmt;
 };
 
 #endif /* !CUDA__CUDA_IMAGE_HXX__INCL__ */

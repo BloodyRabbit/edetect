@@ -15,7 +15,7 @@
  * @author Jan Bobek
  */
 class CudaKirschOperatorFilter
-: public CudaFilter
+: public IImageFilter
 {
 public:
     /**
@@ -29,7 +29,7 @@ public:
      * @param[in,out] image
      *   The image to apply the operator to.
      */
-    void process( CudaImage& image );
+    void filter( CudaImage& image );
 
 protected:
     /// Number of kernels used by Kirsch operator.

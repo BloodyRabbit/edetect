@@ -150,30 +150,23 @@ desaturateLuminosity(
 /*************************************************************************/
 /* CudaDesaturateFilter                                                  */
 /*************************************************************************/
-CudaDesaturateFilter::CudaDesaturateFilter(
-    CudaDesaturateFilter::Method method
-    )
-: mMethod( method )
-{
-}
-
 void
-CudaDesaturateFilter::process(
+CudaDesaturateFilter::filter(
     CudaImage& image
     )
 {
     switch( image.format() )
     {
-    case CudaImage::FMT_GRAY_UINT8:
-    case CudaImage::FMT_GRAY_FLOAT32:
+    case Image::FMT_GRAY_UINT8:
+    case Image::FMT_GRAY_FLOAT32:
         fputs( "CudaDesaturateFilter: Image already in grayscale\n", stderr );
         return;
 
-    case CudaImage::FMT_RGB_FLOAT32:
+    case Image::FMT_RGB_FLOAT32:
         break;
 
     default:
-    case CudaImage::FMT_RGB_UINT8:
+    case Image::FMT_RGB_UINT8:
         throw std::runtime_error(
             "CudaDesaturateFilter: Unsupported image format" );
     }
@@ -184,30 +177,30 @@ CudaDesaturateFilter::process(
         (image.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
         (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    CudaImage newImage(
-        image.rows(), image.columns(),
-        CudaImage::FMT_GRAY_FLOAT32 );
+    CudaImage newImage;
+    newImage.reset( image.rows(), image.columns(),
+                    Image::FMT_GRAY_FLOAT32 );
 
     switch( mMethod )
     {
     case METHOD_AVERAGE:
         desaturateAverage<<< numBlocks, threadsPerBlock >>>(
-            (unsigned char*)newImage.data(), newImage.rowStride(),
-            (unsigned char*)image.data(), image.rowStride(),
+            newImage.data(), newImage.stride(),
+            image.data(), image.stride(),
             image.rows(), image.columns() );
         break;
 
     case METHOD_LIGHTNESS:
         desaturateLightness<<< numBlocks, threadsPerBlock >>>(
-            (unsigned char*)newImage.data(), newImage.rowStride(),
-            (unsigned char*)image.data(), image.rowStride(),
+            newImage.data(), newImage.stride(),
+            image.data(), image.stride(),
             image.rows(), image.columns() );
         break;
 
     case METHOD_LUMINOSITY:
         desaturateLuminosity<<< numBlocks, threadsPerBlock >>>(
-            (unsigned char*)newImage.data(), newImage.rowStride(),
-            (unsigned char*)image.data(), image.rowStride(),
+            newImage.data(), newImage.stride(),
+            image.data(), image.stride(),
             image.rows(), image.columns() );
         break;
     }
@@ -216,4 +209,28 @@ CudaDesaturateFilter::process(
     cudaMsgCheckError( cudaDeviceSynchronize(), "Desaturation kernel run failed" );
 
     image.swap( newImage );
+}
+
+void
+CudaDesaturateFilter::setParam(
+    const char* name,
+    const void* value
+    )
+{
+    if( !strcmp( name, "method" ) )
+    {
+        const char* strval = (const char*)value;
+
+        if( !strcmp( strval, "average" ) )
+            mMethod = METHOD_AVERAGE;
+        else if( !strcmp( strval, "lightness" ) )
+            mMethod = METHOD_LIGHTNESS;
+        else if( !strcmp( strval, "luminosity" ) )
+            mMethod = METHOD_LUMINOSITY;
+        else
+            throw std::invalid_argument(
+                "CudaDesaturateFilter: Method not implemented" );
+    }
+    else
+        IImageFilter::setParam( name, value );
 }

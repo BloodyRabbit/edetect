@@ -5,90 +5,61 @@
  */
 
 #include "edetect.hxx"
+#include "IImageFilter.hxx"
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaImage.hxx"
 
 /*************************************************************************/
 /* CudaImage                                                             */
 /*************************************************************************/
-const size_t
-CudaImage::FMT_CHANNELS[] =
-{
-    0, // FMT_INVALID
-    1, // FMT_GRAY_UINT8
-    1, // FMT_GRAY_FLOAT32
-    3, // FMT_RGB_UINT8
-    3, // FMT_RGB_FLOAT32
-};
-
-const size_t
-CudaImage::FMT_CHANNEL_SIZE[] =
-{
-    0,                     // FMT_INVALID
-    sizeof(unsigned char), // FMT_GRAY_UINT8
-    sizeof(float),         // FMT_GRAY_FLOAT32
-    sizeof(unsigned char), // FMT_RGB_UINT8
-    sizeof(float),         // FMT_RGB_FLOAT32
-};
-
-CudaImage::CudaImage(
-    size_t rows,
-    size_t cols,
-    CudaImage::Format fmt
-    )
-: mImage( NULL ),
+CudaImage::CudaImage()
+: mData( NULL ),
   mRows( 0 ),
   mColumns( 0 ),
-  mRowStride( 0 ),
-  mFmt( FMT_INVALID )
+  mStride( 0 ),
+  mFmt( Image::FMT_INVALID )
 {
-    reset( rows, cols, fmt );
-}
-
-CudaImage::CudaImage(
-    const char* file
-    )
-: mImage( NULL ),
-  mRows( 0 ),
-  mColumns( 0 ),
-  mRowStride( 0 ),
-  mFmt( FMT_INVALID )
-{
-    load( file );
-}
-
-CudaImage::CudaImage(
-    const void* img,
-    size_t rows,
-    size_t cols,
-    size_t rowStride,
-    CudaImage::Format fmt
-    )
-: mImage( NULL ),
-  mRows( 0 ),
-  mColumns( 0 ),
-  mRowStride( 0 ),
-  mFmt( FMT_INVALID )
-{
-    load( img, rows, cols,
-          rowStride, fmt );
-}
-
-CudaImage::CudaImage(
-    const CudaImage& oth
-    )
-: mImage( NULL ),
-  mRows( 0 ),
-  mColumns( 0 ),
-  mRowStride( 0 ),
-  mFmt( FMT_INVALID )
-{
-    *this = oth;
 }
 
 CudaImage::~CudaImage()
 {
     reset();
+}
+
+unsigned char*
+CudaImage::data()
+{
+    return mData;
+}
+
+const unsigned char*
+CudaImage::data() const
+{
+    return mData;
+}
+
+unsigned int
+CudaImage::rows() const
+{
+    return mRows;
+}
+
+unsigned int
+CudaImage::columns() const
+{
+    return mColumns;
+}
+
+unsigned int
+CudaImage::stride() const
+{
+    return mStride;
+}
+
+Image::Format
+CudaImage::format() const
+{
+    return mFmt;
 }
 
 void
@@ -108,7 +79,7 @@ CudaImage::load(
             // Grayscale 8bpp
             load( img.accessPixels(), img.getHeight(),
                   img.getWidth(), img.getScanWidth(),
-                  FMT_GRAY_UINT8 );
+                  Image::FMT_GRAY_UINT8 );
             return;
         }
         break;
@@ -119,7 +90,7 @@ CudaImage::load(
             // RGB 24bpp
             load( img.accessPixels(), img.getHeight(),
                   img.getWidth(), img.getScanWidth(),
-                  FMT_RGB_UINT8 );
+                  Image::FMT_RGB_UINT8 );
             return;
         }
         break;
@@ -134,19 +105,20 @@ CudaImage::load(
 
 void
 CudaImage::load(
-    const void* img,
-    size_t rows,
-    size_t cols,
-    size_t rowStride,
-    CudaImage::Format fmt
+    const void* data,
+    unsigned int rows,
+    unsigned int cols,
+    unsigned int stride,
+    Image::Format fmt
     )
 {
     reset( rows, cols, fmt );
 
-    const size_t rowSize = cols * pixelSize( fmt );
+    const unsigned int rowSize =
+        cols * Image::pixelSize( fmt );
     cudaCheckError(
         cudaMemcpy2D(
-            mImage, mRowStride, img, rowStride,
+            mData, mStride, data, stride,
             rowSize, rows, cudaMemcpyHostToDevice ) );
 }
 
@@ -159,11 +131,11 @@ CudaImage::save(
 
     switch( mFmt )
     {
-    case FMT_GRAY_UINT8:
+    case Image::FMT_GRAY_UINT8:
         img.setSize( FIT_BITMAP, mColumns, mRows, 8 );
         break;
 
-    case FMT_RGB_UINT8:
+    case Image::FMT_RGB_UINT8:
         img.setSize( FIT_BITMAP, mColumns, mRows, 24 );
         break;
 
@@ -179,18 +151,59 @@ CudaImage::save(
 
 void
 CudaImage::save(
-    void* img,
-    size_t rowStride
+    void* data,
+    unsigned int stride
     )
 {
-    if( !rowStride )
-        rowStride = mRowStride;
+    if( !stride )
+        stride = mStride;
 
-    const size_t rowSize = mColumns * pixelSize();
+    const unsigned int rowSize =
+        mColumns * Image::pixelSize( mFmt );
     cudaCheckError(
         cudaMemcpy2D(
-            img, rowStride, mImage, mRowStride,
+            data, stride, mData, mStride,
             rowSize, mRows, cudaMemcpyDeviceToHost ) );
+}
+
+void
+CudaImage::reset(
+    unsigned int rows,
+    unsigned int cols,
+    Image::Format fmt
+    )
+{
+    if( mData )
+        cudaCheckError( cudaFree( mData ) );
+
+    const unsigned int rowSize =
+        cols * Image::pixelSize( fmt );
+    if( 0 < rows * rowSize )
+    {
+        size_t stride;
+        cudaCheckError(
+            cudaMallocPitch(
+                &mData, &stride, rowSize, rows ) );
+
+        mRows = rows;
+        mColumns = cols;
+        mStride = stride;
+        mFmt = fmt;
+    }
+    else
+    {
+        mData = NULL;
+        mRows = mColumns = mStride = 0;
+        mFmt = Image::FMT_INVALID;
+    }
+}
+
+void
+CudaImage::swap(
+    IImage& oth
+    )
+{
+    oth.swap( *this );
 }
 
 void
@@ -198,40 +211,11 @@ CudaImage::swap(
     CudaImage& oth
     )
 {
-    std::swap( mImage, oth.mImage );
+    std::swap( mData, oth.mData );
     std::swap( mRows, oth.mRows );
     std::swap( mColumns, oth.mColumns );
-    std::swap( mRowStride, oth.mRowStride );
+    std::swap( mStride, oth.mStride );
     std::swap( mFmt, oth.mFmt );
-}
-
-void
-CudaImage::reset(
-    size_t rows,
-    size_t cols,
-    CudaImage::Format fmt
-    )
-{
-    if( mImage )
-        cudaCheckError( cudaFree( mImage ) );
-
-    const size_t rowSize = cols * pixelSize( fmt );
-    if( 0 < rows * rowSize )
-    {
-        cudaCheckError(
-            cudaMallocPitch(
-                &mImage, &mRowStride, rowSize, rows ) );
-
-        mRows = rows;
-        mColumns = cols;
-        mFmt = fmt;
-    }
-    else
-    {
-        mImage = NULL;
-        mRows = mColumns = mRowStride = 0;
-        mFmt = FMT_INVALID;
-    }
 }
 
 CudaImage&
@@ -241,11 +225,28 @@ CudaImage::operator=(
 {
     reset( oth.rows(), oth.columns(), oth.format() );
 
-    const size_t rowSize = oth.columns() * oth.pixelSize();
+    const unsigned int rowSize =
+        oth.columns() * Image::pixelSize( oth.format() );
     cudaCheckError(
         cudaMemcpy2D(
-            mImage, mRowStride, oth.data(), oth.rowStride(),
+            mData, mStride, oth.data(), oth.stride(),
             rowSize, oth.rows(), cudaMemcpyDeviceToDevice ) );
 
     return *this;
+}
+
+void
+CudaImage::apply(
+    IImageFilter& filter
+    )
+{
+    filter.filter( *this );
+}
+
+void
+CudaImage::duplicate(
+    IImage& dest
+    ) const
+{
+    dest = *this;
 }
