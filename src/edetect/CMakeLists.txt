@@ -18,6 +18,11 @@ include_directories(
 cuda_add_library(
   "edetect"
   "edetect.hxx"
+  "IImage.hxx"
+  "IImage.ixx"
+  "IImageBackend.hxx"
+  "IImageFilter.hxx"
+  "IImageFilter.ixx"
   "cuda/CudaConvolution2dFilter.hxx"
   "cuda/CudaConvolution2dFilter.cu"
   "cuda/CudaConvolution2dSeparableFilter.hxx"
