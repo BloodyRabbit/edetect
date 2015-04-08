@@ -10,10 +10,6 @@
 
 #include "Image.hxx"
 
-class IImageFilter;
-
-class CudaImage;
-
 /**
  * @brief Interface of an image.
  *
@@ -21,27 +17,44 @@ class CudaImage;
  */
 class IImage
 {
-    friend class IImageFilter;
-
 public:
+    /**
+     * @brief Initializes the image.
+     */
+    IImage();
     /**
      * @brief Destroys the image.
      */
     virtual ~IImage();
 
+    /**
+     * @brief Obtains clone of the image.
+     *
+     * @return
+     *   Pointer to identical image.
+     */
+    virtual IImage* clone() const = 0;
+    /**
+     * @brief Obtains clone of the image implementation.
+     *
+     * @return
+     *   Pointer to identical implementation of IImage.
+     */
+    virtual IImage* cloneImpl() const = 0;
+
     /// @copydoc Image::data()
-    virtual unsigned char* data() = 0;
+    unsigned char* data();
     /// @copydoc Image::data() const
-    virtual const unsigned char* data() const = 0;
+    const unsigned char* data() const;
 
     /// @copydoc Image::rows() const
-    virtual unsigned int rows() const = 0;
+    unsigned int rows() const;
     /// @copydoc Image::columns() const
-    virtual unsigned int columns() const = 0;
+    unsigned int columns() const;
     /// @copydoc Image::stride() const
-    virtual unsigned int stride() const = 0;
+    unsigned int stride() const;
     /// @copydoc Image::format() const
-    virtual Image::Format format() const = 0;
+    Image::Format format() const;
 
     /// @copydoc Image::load(const void*, unsigned int, unsigned int, unsigned int, Image::Format)
     virtual void load(
@@ -61,43 +74,25 @@ public:
         ) = 0;
 
     /// @copydoc Image::swap(Image&)
-    virtual void swap( IImage& oth ) = 0;
-    /**
-     * @brief Swaps with a CUDA image.
-     *
-     * @param[in,out] oth
-     *   The image to swap with.
-     */
-    virtual void swap( CudaImage& oth );
-
-    /// @copydoc Image::operator=(const Image&)
-    IImage& operator=( const IImage& oth );
-    /**
-     * @brief Duplicates a CUDA image.
-     *
-     * @param[in] oth
-     *   The image to duplicate.
-     *
-     * @return
-     *   The duplicated image.
-     */
-    virtual CudaImage& operator=( const CudaImage& oth );
+    void swap( IImage& oth );
 
 protected:
-    /**
-     * @brief Applies given filter to this image.
-     *
-     * @param[in] filter
-     *   The filter to apply.
-     */
-    virtual void apply( IImageFilter& filter ) = 0;
-    /**
-     * @brief Duplicates this image.
-     *
-     * @param[out] dest
-     *   Where to place the duplicate.
-     */
-    virtual void duplicate( IImage& dest ) const = 0;
+    // Disable copy constructor
+    IImage( const IImage& oth );
+    // Disable copy operator
+    IImage& operator=( const IImage& oth );
+
+    /// The image data.
+    unsigned char* mData;
+    /// Number of rows in the image.
+    unsigned int mRows;
+    /// Number of columns in the image.
+    unsigned int mColumns;
+    /// Size of the row stride (in bytes).
+    unsigned int mStride;
+
+    /// Format of the image.
+    Image::Format mFmt;
 };
 
 #include "IImage.ixx"

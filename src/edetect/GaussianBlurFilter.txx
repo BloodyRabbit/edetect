@@ -1,35 +1,36 @@
 /** @file
- * @brief Definition of CudaGaussianBlurFilter class.
+ * @brief Template definition of class GaussianBlurFilter.
  *
  * @author Jan Bobek
  */
 
-#include "edetect.hxx"
-#include "cuda/CudaGaussianBlurFilter.hxx"
-
 /*************************************************************************/
-/* CudaGaussianBlurFilter                                                */
+/* GaussianBlurFilter< F >                                               */
 /*************************************************************************/
-CudaGaussianBlurFilter::CudaGaussianBlurFilter()
+template< typename F >
+GaussianBlurFilter< F >::GaussianBlurFilter()
 : mKernel( NULL )
 {
 }
 
-CudaGaussianBlurFilter::~CudaGaussianBlurFilter()
+template< typename F >
+GaussianBlurFilter< F >::~GaussianBlurFilter()
 {
     delete mKernel;
 }
 
+template< typename F >
 void
-CudaGaussianBlurFilter::filter(
-    CudaImage& image
+GaussianBlurFilter< F >::filter(
+    IImage& image
     )
 {
     mFilter.filter( image );
 }
 
+template< typename F >
 void
-CudaGaussianBlurFilter::setParam(
+GaussianBlurFilter< F >::setParam(
     const char* name,
     const void* value
     )
@@ -42,7 +43,7 @@ CudaGaussianBlurFilter::setParam(
 
         if( *endptr )
             throw std::invalid_argument(
-                "CudaGaussianBlurFilter: Invalid radius value" );
+                "GaussianBlurFilter: Invalid radius value" );
 
         setRadius( radius );
     }
@@ -50,8 +51,9 @@ CudaGaussianBlurFilter::setParam(
         IImageFilter::setParam( name, value );
 }
 
+template< typename F >
 void
-CudaGaussianBlurFilter::setRadius(
+GaussianBlurFilter< F >::setRadius(
     unsigned int radius
     )
 {
@@ -68,8 +70,6 @@ CudaGaussianBlurFilter::setRadius(
     for( unsigned int i = 0; i < (2 * radius + 1); ++i )
         mKernel[i] /= sum;
 
-    mFilter.setParam( "row-kernel", mKernel );
-    mFilter.setParam( "row-kernel-radius", &radius );
-    mFilter.setParam( "column-kernel", mKernel );
-    mFilter.setParam( "column-kernel-radius", &radius );
+    mFilter.setRowKernel( mKernel, radius );
+    mFilter.setColumnKernel( mKernel, radius );
 }

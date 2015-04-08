@@ -9,7 +9,6 @@
 #define IIMAGE_FILTER_HXX__INCL__
 
 class IImage;
-class CudaImage;
 
 /**
  * @brief Interface of an image filter.
@@ -25,15 +24,7 @@ public:
     virtual ~IImageFilter();
 
     /// @copydoc ImageFilter::filter(Image&)
-    void filter( IImage& image );
-    /**
-     * @brief Applies the filter to a CUDA image.
-     *
-     * @param[in,out] image
-     *   The image to filter.
-     */
-    virtual void filter( CudaImage& image );
-
+    virtual void filter( IImage& image ) = 0;
     /// @copydoc ImageFilter::setParam(const char*, const void*)
     virtual void setParam( const char* name, const void* value );
 };

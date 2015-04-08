@@ -10,10 +10,10 @@
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaImage.hxx"
 
+#include "GaussianBlurFilter.hxx"
 #include "cuda/CudaConvolution2dFilter.hxx"
 #include "cuda/CudaConvolution2dSeparableFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
-#include "cuda/CudaGaussianBlurFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaSobelOperatorFilter.hxx"
@@ -44,7 +44,7 @@ CudaBackend::createFilter(
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
-        return new CudaGaussianBlurFilter;
+        return new GaussianBlurFilter< CudaConvolution2dSeparableFilter >;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )

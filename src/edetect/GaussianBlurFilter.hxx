@@ -1,31 +1,32 @@
 /** @file
- * @brief Declaration of CudaGaussianBlurFilter class.
+ * @brief Declaration of class GaussianBlurFilter.
  *
  * @author Jan Bobek
  */
 
-#ifndef CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__
-#define CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__
+#ifndef GAUSSIAN_BLUR_FILTER_HXX__INCL__
+#define GAUSSIAN_BLUR_FILTER_HXX__INCL__
 
-#include "cuda/CudaConvolution2dSeparableFilter.hxx"
+#include "IImageFilter.hxx"
 
 /**
  * @brief Applies Gaussian blur to the image.
  *
  * @author Jan Bobek
  */
-class CudaGaussianBlurFilter
+template< typename F >
+class GaussianBlurFilter
 : public IImageFilter
 {
 public:
     /**
      * @brief Initializes the filter.
      */
-    CudaGaussianBlurFilter();
+    GaussianBlurFilter();
     /**
      * @brief Releases the generated kernels.
      */
-    ~CudaGaussianBlurFilter();
+    ~GaussianBlurFilter();
 
     /**
      * @brief Applies the Gaussian kernel to the image.
@@ -33,7 +34,7 @@ public:
      * @param[in,out] image
      *   The image to apply the blur to.
      */
-    void filter( CudaImage& image );
+    void filter( IImage& image );
     /// @copydoc IImageFilter::setParam(const char*, const void*)
     void setParam( const char* name, const void* value );
 
@@ -46,7 +47,9 @@ protected:
     /// The generated kernel.
     float* mKernel;
     /// The convolution filter we are delegating to.
-    CudaConvolution2dSeparableFilter mFilter;
+    F mFilter;
 };
 
-#endif /* !CUDA__CUDA_GAUSSIAN_BLUR_FILTER_HXX__INCL__ */
+#include "GaussianBlurFilter.txx"
+
+#endif /* !GAUSSIAN_BLUR_FILTER_HXX__INCL__ */

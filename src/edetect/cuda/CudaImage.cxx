@@ -12,54 +12,9 @@
 /*************************************************************************/
 /* CudaImage                                                             */
 /*************************************************************************/
-CudaImage::CudaImage()
-: mData( NULL ),
-  mRows( 0 ),
-  mColumns( 0 ),
-  mStride( 0 ),
-  mFmt( Image::FMT_INVALID )
-{
-}
-
 CudaImage::~CudaImage()
 {
     reset();
-}
-
-unsigned char*
-CudaImage::data()
-{
-    return mData;
-}
-
-const unsigned char*
-CudaImage::data() const
-{
-    return mData;
-}
-
-unsigned int
-CudaImage::rows() const
-{
-    return mRows;
-}
-
-unsigned int
-CudaImage::columns() const
-{
-    return mColumns;
-}
-
-unsigned int
-CudaImage::stride() const
-{
-    return mStride;
-}
-
-Image::Format
-CudaImage::format() const
-{
-    return mFmt;
 }
 
 void
@@ -143,11 +98,7 @@ CudaImage::swap(
     CudaImage& oth
     )
 {
-    std::swap( mData, oth.mData );
-    std::swap( mRows, oth.mRows );
-    std::swap( mColumns, oth.mColumns );
-    std::swap( mStride, oth.mStride );
-    std::swap( mFmt, oth.mFmt );
+    MemImage::swap( oth );
 }
 
 CudaImage&

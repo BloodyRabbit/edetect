@@ -9,36 +9,71 @@
 /* IImage                                                                */
 /*************************************************************************/
 inline
+IImage::IImage()
+: mData( NULL ),
+  mRows( 0 ),
+  mColumns( 0 ),
+  mStride( 0 ),
+  mFmt( Image::FMT_INVALID )
+{
+}
+
+inline
 IImage::~IImage()
 {
 }
 
 inline
+unsigned char*
+IImage::data()
+{
+    return mData;
+}
+
+inline
+const unsigned char*
+IImage::data() const
+{
+    return mData;
+}
+
+inline
+unsigned int
+IImage::rows() const
+{
+    return mRows;
+}
+
+inline
+unsigned int
+IImage::columns() const
+{
+    return mColumns;
+}
+
+inline
+unsigned int
+IImage::stride() const
+{
+    return mStride;
+}
+
+inline
+Image::Format
+IImage::format() const
+{
+    return mFmt;
+}
+
+inline
 void
 IImage::swap(
-    CudaImage&
+    IImage& oth
     )
 {
-    throw std::invalid_argument(
-        "IImage:: Swapping with CudaImage not implemented" );
-}
-
-inline
-IImage&
-IImage::operator=(
-    const IImage& oth
-    )
-{
-    oth.duplicate( *this );
-    return *this;
-}
-
-inline
-CudaImage&
-IImage::operator=(
-    const CudaImage&
-    )
-{
-    throw std::invalid_argument(
-        "IImage: Duplicating CudaImage not implemented" );
+    std::swap( mData, oth.mData );
+    std::swap( mRows, oth.mRows );
+    std::swap( mColumns, oth.mColumns );
+    std::swap( mStride, oth.mStride );
+    std::swap( mFmt, oth.mFmt );
 }

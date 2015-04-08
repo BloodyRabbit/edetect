@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_IMAGE_HXX__INCL__
 #define CUDA__CUDA_IMAGE_HXX__INCL__
 
-#include "IImage.hxx"
+#include "MemImage.hxx"
 
 /**
  * @brief An image stored at CUDA device.
@@ -15,32 +15,13 @@
  * @author Jan Bobek
  */
 class CudaImage
-: public IImage
+: public MemImage
 {
 public:
-    /**
-     * @brief Initializes the image.
-     */
-    CudaImage();
     /**
      * @brief Deallocates the image.
      */
     ~CudaImage();
-
-    /// @copydoc IImage::data()
-    unsigned char* data();
-    /// @copydoc IImage::data() const
-    const unsigned char* data() const;
-
-    /// @copydoc IImage::rows() const
-    unsigned int rows() const;
-    /// @copydoc IImage::columns() const
-    unsigned int columns() const;
-    /// @copydoc IImage::stride() const
-    unsigned int stride() const;
-
-    /// @copydoc IImage::format() const
-    Image::Format format() const;
 
     /// @copydoc IImage::load(const void*, unsigned int, unsigned int, unsigned int, Image::Format)
     void load(
@@ -59,11 +40,15 @@ public:
         Image::Format fmt = Image::FMT_INVALID
         );
 
+    // Eliminates annoying warnings
+    using IImage::swap;
     /// @copydoc IImage::swap(IImage&)
     void swap( IImage& oth );
     /// @coppydoc IImage::swap(CudaImage&)
     void swap( CudaImage& oth );
 
+    // Eliminates annoying warnings
+    using IImage::operator=;
     /// @copydoc IImage::operator=(const CudaImage&)
     CudaImage& operator=( const CudaImage& oth );
 
@@ -72,18 +57,6 @@ protected:
     void apply( IImageFilter& filter );
     /// @copydoc IImage::duplicate(IImage&)
     void duplicate( IImage& dest ) const;
-
-    /// The image data.
-    unsigned char* mData;
-    /// Number of rows in the image.
-    unsigned int mRows;
-    /// Number of columns in the image.
-    unsigned int mColumns;
-    /// Size of the row stride (in bytes).
-    unsigned int mStride;
-
-    /// Format of the image.
-    Image::Format mFmt;
 };
 
 #endif /* !CUDA__CUDA_IMAGE_HXX__INCL__ */
