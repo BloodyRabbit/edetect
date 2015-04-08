@@ -48,6 +48,25 @@ cuda_add_library(
   "GaussianBlurFilter.hxx"
   "GaussianBlurFilter.txx"
 
+  # CPU backend implementation
+  "cpu/CpuBackend.hxx"
+  "cpu/CpuBackend.cxx"
+  "cpu/CpuImage.hxx"
+  "cpu/CpuImage.cxx"
+  # CPU-backed filters
+  "cpu/CpuConvolution2dFilter.hxx"
+  "cpu/CpuConvolution2dFilter.cxx"
+  "cpu/CpuConvolution2dSeparableFilter.hxx"
+  "cpu/CpuConvolution2dSeparableFilter.cxx"
+  "cpu/CpuDesaturateFilter.hxx"
+  "cpu/CpuDesaturateFilter.cxx"
+  "cpu/CpuIntFloatFilter.hxx"
+  "cpu/CpuIntFloatFilter.cxx"
+  "cpu/CpuKirschOperatorFilter.hxx"
+  "cpu/CpuKirschOperatorFilter.cxx"
+  "cpu/CpuSobelOperatorFilter.hxx"
+  "cpu/CpuSobelOperatorFilter.cxx"
+
   # CUDA backend implementation
   "cuda/CudaBackend.hxx"
   "cuda/CudaBackend.cxx"

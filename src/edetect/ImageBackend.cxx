@@ -9,6 +9,7 @@
 #include "ImageBackend.hxx"
 
 #include "IImageBackend.hxx"
+#include "cpu/CpuBackend.hxx"
 #include "cuda/CudaBackend.hxx"
 
 /*************************************************************************/
@@ -19,7 +20,9 @@ ImageBackend::ImageBackend(
     )
 : mBackend( NULL )
 {
-    if( !strcmp( name, "cuda" ) )
+    if( !strcmp( name, "cpu" ) )
+        mBackend = new CpuBackend;
+    else if( !strcmp( name, "cuda" ) )
         mBackend = new CudaBackend;
     else
         throw std::invalid_argument(
