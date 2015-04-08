@@ -235,7 +235,7 @@ public:
      * @param[in] file
      *   Name of the file.
      */
-    void save( const char* file );
+    void save( const char* file ) const;
     /**
      * @brief Saves the image to memory.
      *
@@ -244,7 +244,7 @@ public:
      * @param[in,opt] stride
      *   The row stride to use (in bytes).
      */
-    void save( void* data, unsigned int stride = 0 );
+    void save( void* data, unsigned int stride = 0 ) const;
 
     /**
      * @brief Resets the image.

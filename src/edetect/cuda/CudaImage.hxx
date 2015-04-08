@@ -42,8 +42,6 @@ public:
     /// @copydoc IImage::format() const
     Image::Format format() const;
 
-    /// @copydoc IImage::load(const char*)
-    void load( const char* file );
     /// @copydoc IImage::load(const void*, unsigned int, unsigned int, unsigned int, Image::Format)
     void load(
         const void* data,
@@ -52,12 +50,8 @@ public:
         unsigned int stride,
         Image::Format fmt
         );
-
-    /// @copydoc IImage::save(const char*)
-    void save( const char* file );
     /// @copydoc IImage::save(void*, unsigned int)
-    void save( void* data, unsigned int stride = 0 );
-
+    void save( void* data, unsigned int stride = 0 ) const;
     /// @copydoc IImage::reset(unsigned int, unsigned int, Image::Format)
     void reset(
         unsigned int rows = 0,

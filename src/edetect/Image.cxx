@@ -8,6 +8,7 @@
 #include "edetect.hxx"
 #include "Image.hxx"
 #include "ImageBackend.hxx"
+#include "ImageLoader.hxx"
 
 #include "IImage.hxx"
 
@@ -162,7 +163,7 @@ Image::load(
     const char* file
     )
 {
-    mImage->load( file );
+    ImageLoader::load( *mImage, file );
 }
 
 void
@@ -180,16 +181,16 @@ Image::load(
 void
 Image::save(
     const char* file
-    )
+    ) const
 {
-    mImage->save( file );
+    ImageLoader::save( file, *mImage );
 }
 
 void
 Image::save(
     void* data,
     unsigned int stride
-    )
+    ) const
 {
     mImage->save( data, stride );
 }

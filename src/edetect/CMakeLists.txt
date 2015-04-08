@@ -26,6 +26,8 @@ cuda_add_library(
   "Image.cxx"
   "ImageBackend.cxx"
   "ImageFilter.cxx"
+  "ImageLoader.hxx"
+  "ImageLoader.cxx"
   "cuda/CudaBackend.hxx"
   "cuda/CudaBackend.cxx"
   "cuda/CudaConvolution2dFilter.hxx"

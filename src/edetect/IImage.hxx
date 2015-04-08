@@ -43,8 +43,6 @@ public:
     /// @copydoc Image::format() const
     virtual Image::Format format() const = 0;
 
-    /// @copydoc Image::load(const char*)
-    virtual void load( const char* file ) = 0;
     /// @copydoc Image::load(const void*, unsigned int, unsigned int, unsigned int, Image::Format)
     virtual void load(
         const void* data,
@@ -53,12 +51,8 @@ public:
         unsigned int stride,
         Image::Format fmt
         ) = 0;
-
-    /// @copydoc Image::save(const char*)
-    virtual void save( const char* file ) = 0;
     /// @copydoc Image::save(void*, unsigned int)
-    virtual void save( void* data, unsigned int stride = 0 ) = 0;
-
+    virtual void save( void* data, unsigned int stride = 0 ) const = 0;
     /// @copydoc Image::reset(unsigned int, unsigned int, Image::Format)
     virtual void reset(
         unsigned int rows = 0,

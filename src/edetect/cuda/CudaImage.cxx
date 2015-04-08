@@ -64,47 +64,6 @@ CudaImage::format() const
 
 void
 CudaImage::load(
-    const char* file
-    )
-{
-    fipImage img;
-    if( !img.load( file ) )
-        throw std::runtime_error( "Failed to load image from file" );
-
-    switch( img.getColorType() )
-    {
-    case FIC_MINISBLACK:
-        if( 8 == img.getBitsPerPixel() )
-        {
-            // Grayscale 8bpp
-            load( img.accessPixels(), img.getHeight(),
-                  img.getWidth(), img.getScanWidth(),
-                  Image::FMT_GRAY_UINT8 );
-            return;
-        }
-        break;
-
-    case FIC_RGB:
-        if( 24 == img.getBitsPerPixel() )
-        {
-            // RGB 24bpp
-            load( img.accessPixels(), img.getHeight(),
-                  img.getWidth(), img.getScanWidth(),
-                  Image::FMT_RGB_UINT8 );
-            return;
-        }
-        break;
-
-    default:
-        break;
-    }
-
-    throw std::runtime_error(
-        "Failed to load image: Unsupported image format" );
-}
-
-void
-CudaImage::load(
     const void* data,
     unsigned int rows,
     unsigned int cols,
@@ -124,36 +83,9 @@ CudaImage::load(
 
 void
 CudaImage::save(
-    const char* file
-    )
-{
-    fipImage img;
-
-    switch( mFmt )
-    {
-    case Image::FMT_GRAY_UINT8:
-        img.setSize( FIT_BITMAP, mColumns, mRows, 8 );
-        break;
-
-    case Image::FMT_RGB_UINT8:
-        img.setSize( FIT_BITMAP, mColumns, mRows, 24 );
-        break;
-
-    default:
-        throw std::runtime_error(
-            "Failed to save image: Unsupported image format" );
-    }
-
-    save( img.accessPixels(), img.getScanWidth() );
-    if( !img.save( file ) )
-        throw std::runtime_error( "Failed to save image to file" );
-}
-
-void
-CudaImage::save(
     void* data,
     unsigned int stride
-    )
+    ) const
 {
     if( !stride )
         stride = mStride;
