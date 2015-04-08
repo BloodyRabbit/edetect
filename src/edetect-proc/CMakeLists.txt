@@ -11,6 +11,7 @@ set(
   )
 set(
   COMMON_LIBRARIES
+  "edetect"
   )
 
 add_executable( "gauss" "gauss.cxx" ${COMMON_SOURCES} )
