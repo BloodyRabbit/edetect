@@ -6,43 +6,42 @@
 
 #include "edetect.hxx"
 #include "cuda/CudaError.hxx"
-#include "cuda/CudaImage.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 
 /**
  * @brief CUDA kernel computing Kirsch operator gradient.
  *
- * @param[in] src1
+ * @param[in,out] sdata1
  *   The source image data #1.
- * @param[in] srcStride1
+ * @param[in] sstride1
  *   Size of the row stride in source data #1.
- * @param[in] src2
+ * @param[in] sdata2
  *   The source image data #2.
- * @param[in] srcStride2
+ * @param[in] sstride2
  *   Size of the row stride in source data #2.
- * @param[in] src3
+ * @param[in] sdata3
  *   The source image data #3.
- * @param[in] srcStride3
+ * @param[in] sstride3
  *   Size of the row stride in source data #3.
- * @param[in] src4
+ * @param[in] sdata4
  *   The source image data #4.
- * @param[in] srcStride4
+ * @param[in] sstride4
  *   Size of the row stride in source data #4.
- * @param[in] src5
+ * @param[in] sdata5
  *   The source image data #5.
- * @param[in] srcStride5
+ * @param[in] sstride5
  *   Size of the row stride in source data #5.
- * @param[in] src6
+ * @param[in] sdata6
  *   The source image data #6.
- * @param[in] srcStride6
+ * @param[in] sstride6
  *   Size of the row stride in source data #6.
- * @param[in] src7
+ * @param[in] sdata7
  *   The source image data #7.
- * @param[in] srcStride7
+ * @param[in] sstride7
  *   Size of the row stride in source data #7.
- * @param[in] src8
+ * @param[in] sdata8
  *   The source image data #8.
- * @param[in] srcStride8
+ * @param[in] sstride8
  *   Size of the row stride in source data #8.
  * @param[in] rows
  *   Number of rows in the image.
@@ -50,51 +49,51 @@
  *   Number of columns in the image.
  */
 __global__ void
-computeGradientKirsch(
-    unsigned char* src1,
-    unsigned int srcStride1,
-    const unsigned char* src2,
-    unsigned int srcStride2,
-    const unsigned char* src3,
-    unsigned int srcStride3,
-    const unsigned char* src4,
-    unsigned int srcStride4,
-    const unsigned char* src5,
-    unsigned int srcStride5,
-    const unsigned char* src6,
-    unsigned int srcStride6,
-    const unsigned char* src7,
-    unsigned int srcStride7,
-    const unsigned char* src8,
-    unsigned int srcStride8,
+computeGradientKirschKernel(
+    unsigned char* sdata1,
+    unsigned int sstride1,
+    const unsigned char* sdata2,
+    unsigned int sstride2,
+    const unsigned char* sdata3,
+    unsigned int sstride3,
+    const unsigned char* sdata4,
+    unsigned int sstride4,
+    const unsigned char* sdata5,
+    unsigned int sstride5,
+    const unsigned char* sdata6,
+    unsigned int sstride6,
+    const unsigned char* sdata7,
+    unsigned int sstride7,
+    const unsigned char* sdata8,
+    unsigned int sstride8,
     unsigned int rows,
     unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
         float* src1p =
-            (float*)(src1 + row * srcStride1) + col;
+            (float*)(sdata1 + row * sstride1) + col;
 
         const float* src2p =
-            (const float*)(src2 + row * srcStride2) + col;
+            (const float*)(sdata2 + row * sstride2) + col;
         const float* src3p =
-            (const float*)(src3 + row * srcStride3) + col;
+            (const float*)(sdata3 + row * sstride3) + col;
         const float* src4p =
-            (const float*)(src4 + row * srcStride4) + col;
+            (const float*)(sdata4 + row * sstride4) + col;
         const float* src5p =
-            (const float*)(src5 + row * srcStride5) + col;
+            (const float*)(sdata5 + row * sstride5) + col;
         const float* src6p =
-            (const float*)(src6 + row * srcStride6) + col;
+            (const float*)(sdata6 + row * sstride6) + col;
         const float* src7p =
-            (const float*)(src7 + row * srcStride7) + col;
+            (const float*)(sdata7 + row * sstride7) + col;
         const float* src8p =
-            (const float*)(src8 + row * srcStride8) + col;
+            (const float*)(sdata8 + row * sstride8) + col;
 
         float x = fabs(*src1p);
         x = fmaxf( x, fabs(*src2p) );
@@ -112,88 +111,29 @@ computeGradientKirsch(
 /*************************************************************************/
 /* CudaKirschOperatorFilter                                              */
 /*************************************************************************/
-const float
-CudaKirschOperatorFilter::KERNELS[][(2 * KERNEL_RADIUS + 1) * (2 * KERNEL_RADIUS + 1)] =
-{
-    { -3.0f, -3.0f,  5.0f,
-      -3.0f,  0.0f,  5.0f,
-      -3.0f, -3.0f,  5.0f },
-
-    { -3.0f,  5.0f,  5.0f,
-      -3.0f,  0.0f,  5.0f,
-      -3.0f, -3.0f, -3.0f },
-
-    {  5.0f,  5.0f,  5.0f,
-      -3.0f,  0.0f, -3.0f,
-      -3.0f, -3.0f, -3.0f },
-
-    {  5.0f,  5.0f, -3.0f,
-       5.0f,  0.0f, -3.0f,
-      -3.0f, -3.0f, -3.0f },
-
-    {  5.0f, -3.0f, -3.0f,
-       5.0f,  0.0f, -3.0f,
-       5.0f, -3.0f, -3.0f },
-
-    { -3.0f, -3.0f, -3.0f,
-       5.0f,  0.0f, -3.0f,
-       5.0f,  5.0f, -3.0f },
-
-    { -3.0f, -3.0f, -3.0f,
-      -3.0f,  0.0f, -3.0f,
-       5.0f,  5.0f,  5.0f },
-
-    { -3.0f, -3.0f, -3.0f,
-      -3.0f,  0.0f,  5.0f,
-      -3.0f,  5.0f,  5.0f },
-};
-
-CudaKirschOperatorFilter::CudaKirschOperatorFilter()
-{
-    for( unsigned int i = 0; i < KERNEL_COUNT; ++i )
-        mFilters[i].setKernel( (const float*)&KERNELS[i], KERNEL_RADIUS );
-}
-
 void
-CudaKirschOperatorFilter::filter(
-    CudaImage& image
+CudaKirschOperatorFilter::computeGradient(
+    IImage* images[KERNEL_COUNT]
     )
 {
-    switch( image.format() )
-    {
-    case Image::FMT_GRAY_FLOAT32:
-        break;
-
-    default:
-    case Image::FMT_GRAY_UINT8:
-    case Image::FMT_RGB_UINT8:
-    case Image::FMT_RGB_FLOAT32:
-        throw std::runtime_error(
-            "CudaKirschOperatorFilter: Unsupported image format" );
-    }
-
-    CudaImage dupImages[KERNEL_COUNT - 1];
-    for( unsigned int i = 1; i < KERNEL_COUNT; ++i )
-        mFilters[i].filter( dupImages[i - 1] = image );
-    mFilters[0].filter( image );
-
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
     const dim3 numBlocks(
-        (image.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
-        (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+        (images[0]->columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (images[0]->rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    computeGradientKirsch<<< numBlocks, threadsPerBlock >>>(
-        image.data(), image.stride(),
-        dupImages[0].data(), dupImages[0].stride(),
-        dupImages[1].data(), dupImages[1].stride(),
-        dupImages[2].data(), dupImages[2].stride(),
-        dupImages[3].data(), dupImages[3].stride(),
-        dupImages[4].data(), dupImages[4].stride(),
-        dupImages[5].data(), dupImages[5].stride(),
-        dupImages[6].data(), dupImages[6].stride(),
-        image.rows(), image.columns() );
+    computeGradientKirschKernel<<< numBlocks, threadsPerBlock >>>(
+        images[0]->data(), images[0]->stride(),
+        images[1]->data(), images[1]->stride(),
+        images[2]->data(), images[2]->stride(),
+        images[3]->data(), images[3]->stride(),
+        images[4]->data(), images[4]->stride(),
+        images[5]->data(), images[5]->stride(),
+        images[6]->data(), images[6]->stride(),
+        images[7]->data(), images[7]->stride(),
+        images[0]->rows(), images[0]->columns()
+        );
 
-    cudaCheckLastError( "Kirsch gradient computation kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "Kirsch gradient computation kernel run failed" );
+    cudaCheckLastError( "CudaKirschOperatorFilter: gradient computation kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaKirschOperatorFilter: gradient computation kernel run failed" );
 }

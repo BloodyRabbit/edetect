@@ -6,19 +6,18 @@
 
 #include "edetect.hxx"
 #include "cuda/CudaError.hxx"
-#include "cuda/CudaImage.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 
 /**
  * @brief CUDA kernel converting integer-pixels to float-pixels.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -26,26 +25,26 @@
  *   Number of columns in the image.
  */
 __global__ void
-convertInt2Float(
-    unsigned char* dst,
-    size_t dstStride,
-    const unsigned char* src,
-    size_t srcStride,
-    size_t rows,
-    size_t cols
+convertInt2FloatKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
+    unsigned int rows,
+    unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( col < cols && row < rows )
     {
         float* const dstp =
-            (float*)(dst + row * dstStride) + col;
+            (float*)(ddata + row * dstride) + col;
         const unsigned char* const srcp =
-            src + row * srcStride + col;
+            sdata + row * sstride + col;
 
         *dstp = *srcp / 255.0f;
     }
@@ -54,13 +53,13 @@ convertInt2Float(
 /**
  * @brief CUDA kernel converting float-pixels to integer-pixels.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -68,26 +67,26 @@ convertInt2Float(
  *   Number of columns in the image.
  */
 __global__ void
-convertFloat2Int(
-    unsigned char* dst,
-    size_t dstStride,
-    const unsigned char* src,
-    size_t srcStride,
-    size_t rows,
-    size_t cols
+convertFloat2IntKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
+    unsigned int rows,
+    unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( col < cols && row < rows )
     {
         unsigned char* const dstp =
-            dst + row * dstStride + col;
+            ddata + row * dstride + col;
         const float* const srcp =
-            (const float*)(src + row * srcStride) + col;
+            (const float*)(sdata + row * sstride) + col;
 
         *dstp = (unsigned char)(__saturatef(*srcp) * 255.0f);
     }
@@ -96,61 +95,52 @@ convertFloat2Int(
 /*************************************************************************/
 /* CudaIntFloatFilter                                                    */
 /*************************************************************************/
-const Image::Format
-CudaIntFloatFilter::FMT_TARGET[] =
-{
-    Image::FMT_INVALID,      // FMT_INVALID
-    Image::FMT_GRAY_FLOAT32, // FMT_GRAY_UINT8
-    Image::FMT_GRAY_UINT8,   // FMT_GRAY_FLOAT32
-    Image::FMT_RGB_FLOAT32,  // FMT_RGB_UINT8
-    Image::FMT_RGB_UINT8,    // FMT_RGB_FLOAT32
-};
-
 void
-CudaIntFloatFilter::filter(
-    CudaImage& image
+CudaIntFloatFilter::convertInt2Float(
+    IImage& dest,
+    const IImage& src
     )
 {
-    const Image::Format fmtTarget =
-        FMT_TARGET[image.format()];
     const unsigned int columns =
-        image.columns() * Image::channels( image.format() );
+        src.columns() * Image::channels( src.format() );
 
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
     const dim3 numBlocks(
         (columns + threadsPerBlock.x - 1) / threadsPerBlock.x,
-        (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    CudaImage newImage;
-    newImage.reset( image.rows(), image.columns(), fmtTarget );
+    convertInt2FloatKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), columns
+        );
 
-    switch( fmtTarget )
-    {
-    case Image::FMT_RGB_FLOAT32:
-    case Image::FMT_GRAY_FLOAT32:
-        convertInt2Float<<< numBlocks, threadsPerBlock >>>(
-            newImage.data(), newImage.stride(),
-            image.data(), image.stride(),
-            image.rows(), columns );
-        break;
+    cudaCheckLastError( "CudaIntFloatFilter: Int2Float kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaIntFloatFilter: Int2Float kernel run failed" );
+}
 
-    case Image::FMT_RGB_UINT8:
-    case Image::FMT_GRAY_UINT8:
-        convertFloat2Int<<< numBlocks, threadsPerBlock >>>(
-            newImage.data(), newImage.stride(),
-            image.data(), image.stride(),
-            image.rows(), columns );
-        break;
+void
+CudaIntFloatFilter::convertFloat2Int(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    const unsigned int columns =
+        src.columns() * Image::channels( src.format() );
 
-    default:
-    case Image::FMT_INVALID:
-        throw std::runtime_error(
-            "CudaIntFloatFilter: invalid format" );
-    }
+    // 32 = warp size, 8 * 32 = 256 threads
+    const dim3 threadsPerBlock(32, 8);
+    const dim3 numBlocks(
+        (columns + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    cudaCheckLastError( "Int-Float conversion kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "Int-Float conversion kernel run failed" );
+    convertFloat2IntKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), columns
+        );
 
-    image.swap( newImage );
+    cudaCheckLastError( "CudaIntFloatFilter: Float2Int kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaIntFloatFilter: Float2Int kernel run failed" );
 }

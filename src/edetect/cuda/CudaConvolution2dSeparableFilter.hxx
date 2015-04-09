@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
 #define CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__
 
-#include "IImageFilter.hxx"
+#include "IConvolution2dSeparableFilter.hxx"
 
 /**
  * @brief Performs two-dimensional discrete convolution
@@ -16,56 +16,22 @@
  * @author Jan Bobek
  */
 class CudaConvolution2dSeparableFilter
-: public IImageFilter
+: public IConvolution2dSeparableFilter
 {
 public:
     /// The largest supported radius.
     static const unsigned int MAX_RADIUS = 32;
 
-    /**
-     * @brief Initializes the filter.
-     */
-    CudaConvolution2dSeparableFilter();
-
-    /**
-     * @brief Performs convolution on the image.
-     *
-     * @param[in] image
-     *   The image to convolve.
-     */
-    void filter( CudaImage& image );
-    /// @copydoc IImageFilter::setParam(const char*, const void*)
-    void setParam( const char* name, const void* value );
-
-    /**
-     * @brief Sets the row kernel.
-     *
-     * @param[in] kernel
-     *   The row kernel.
-     * @param[in] radius
-     *   Radius of the row kernel.
-     */
+    /// @copydoc IConvolution2dSeparableFilter::setRowKernel(const float*, unsigned int)
     void setRowKernel( const float* kernel, unsigned int radius );
-    /**
-     * @brief Sets the column kernel.
-     *
-     * @param[in] kernel
-     *   The column kernel.
-     * @param[in] radius
-     *   Radius of the column kernel.
-     */
+    /// @copydoc IConvolution2dSeparableFilter::setColumnKernel(const float*, unsigned int)
     void setColumnKernel( const float* kernel, unsigned int radius );
 
 protected:
-    /// The row kernel.
-    const float* mRowKernel;
-    /// Radius of the row kernel.
-    unsigned int mRowKernelRadius;
-
-    /// The column kernel.
-    const float* mColumnKernel;
-    /// Radius of the column kernel.
-    unsigned int mColumnKernelRadius;
+    /// @copydoc IConvolution2dSeparableFilter::convolveRows(IImage&, const IImage&)
+    void convolveRows( IImage& dest, const IImage& src );
+    /// @copydoc IConvolution2dSeparableFilter::convolveColumns(IImage&, const IImage&)
+    void convolveColumns( IImage& dest, const IImage& src );
 };
 
 #endif /* !CUDA__CUDA_CONVOLUTION_2D_SEPARABLE_FILTER_HXX__INCL__ */

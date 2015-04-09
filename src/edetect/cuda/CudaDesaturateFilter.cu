@@ -5,21 +5,21 @@
  */
 
 #include "edetect.hxx"
+#include "IImage.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaError.hxx"
-#include "cuda/CudaImage.hxx"
 
 /**
  * @brief CUDA kernel for desaturation using
  *   the Average method.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -27,26 +27,26 @@
  *   Number of columns in the image.
  */
 __global__ void
-desaturateAverage(
-    unsigned char* dst,
-    size_t dstStride,
-    const unsigned char* src,
-    size_t srcStride,
-    size_t rows,
-    size_t cols
+desaturateAverageKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
+    unsigned int rows,
+    unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
         float* const dstp =
-            (float*)(dst + row * dstStride) + col;
+            (float*)(ddata + row * dstride) + col;
         const float3* const srcp =
-            (const float3*)(src + row * srcStride) + col;
+            (const float3*)(sdata + row * sstride) + col;
 
         *dstp = (srcp->x + srcp->y + srcp->z) / 3.0f;
     }
@@ -56,13 +56,13 @@ desaturateAverage(
  * @brief CUDA kernel for desaturation using
  *   the Lightness method.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -70,26 +70,26 @@ desaturateAverage(
  *   Number of columns in the image.
  */
 __global__ void
-desaturateLightness(
-    unsigned char* dst,
-    size_t dstStride,
-    const unsigned char* src,
-    size_t srcStride,
-    size_t rows,
-    size_t cols
+desaturateLightnessKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
+    unsigned int rows,
+    unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
         float* const dstp =
-            (float*)(dst + row * dstStride) + col;
+            (float*)(ddata + row * dstride) + col;
         const float3* const srcp =
-            (const float3*)(src + row * srcStride) + col;
+            (const float3*)(sdata + row * sstride) + col;
 
         const float a = fminf( srcp->x, srcp->y );
         const float b = fmaxf( srcp->x, srcp->y );
@@ -104,13 +104,13 @@ desaturateLightness(
  * @brief CUDA kernel for desaturation using
  *   the Luminosity method.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -118,32 +118,32 @@ desaturateLightness(
  *   Number of columns in the image.
  */
 __global__ void
-desaturateLuminosity(
-    unsigned char* dst,
-    size_t dstStride,
-    const unsigned char* src,
-    size_t srcStride,
-    size_t rows,
-    size_t cols
+desaturateLuminosityKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
+    unsigned int rows,
+    unsigned int cols
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
         float* const dstp =
-            (float*)(dst + row * dstStride) + col;
+            (float*)(ddata + row * dstride) + col;
         const float3* const srcp =
-            (const float3*)(src + row * srcStride) + col;
+            (const float3*)(sdata + row * sstride) + col;
 
         *dstp =
             /* z:RED y:GREEN x:BLUE */
-            0.2126f * srcp->z
-            + 0.7152f * srcp->y
-            + 0.0722f * srcp->x;
+            0.2126f * srcp->z +
+            0.7152f * srcp->y +
+            0.0722f * srcp->x;
     }
 }
 
@@ -151,86 +151,67 @@ desaturateLuminosity(
 /* CudaDesaturateFilter                                                  */
 /*************************************************************************/
 void
-CudaDesaturateFilter::filter(
-    CudaImage& image
+CudaDesaturateFilter::desaturateAverage(
+    IImage& dest,
+    const IImage& src
     )
 {
-    switch( image.format() )
-    {
-    case Image::FMT_GRAY_UINT8:
-    case Image::FMT_GRAY_FLOAT32:
-        fputs( "CudaDesaturateFilter: Image already in grayscale\n", stderr );
-        return;
-
-    case Image::FMT_RGB_FLOAT32:
-        break;
-
-    default:
-    case Image::FMT_RGB_UINT8:
-        throw std::runtime_error(
-            "CudaDesaturateFilter: Unsupported image format" );
-    }
-
     // 32 = warp size, 8 * 32 = 256 threads
     const dim3 threadsPerBlock(32, 8);
     const dim3 numBlocks(
-        (image.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
-        (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+        (src.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-    CudaImage newImage;
-    newImage.reset( image.rows(), image.columns(),
-                    Image::FMT_GRAY_FLOAT32 );
+    desaturateAverageKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), src.columns()
+        );
 
-    switch( mMethod )
-    {
-    case METHOD_AVERAGE:
-        desaturateAverage<<< numBlocks, threadsPerBlock >>>(
-            newImage.data(), newImage.stride(),
-            image.data(), image.stride(),
-            image.rows(), image.columns() );
-        break;
-
-    case METHOD_LIGHTNESS:
-        desaturateLightness<<< numBlocks, threadsPerBlock >>>(
-            newImage.data(), newImage.stride(),
-            image.data(), image.stride(),
-            image.rows(), image.columns() );
-        break;
-
-    case METHOD_LUMINOSITY:
-        desaturateLuminosity<<< numBlocks, threadsPerBlock >>>(
-            newImage.data(), newImage.stride(),
-            image.data(), image.stride(),
-            image.rows(), image.columns() );
-        break;
-    }
-
-    cudaCheckLastError( "Desaturation kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "Desaturation kernel run failed" );
-
-    image.swap( newImage );
+    cudaCheckLastError( "CudaDesaturateFilter: Average kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaDesaturateFilter: Average kernel run failed" );
 }
 
 void
-CudaDesaturateFilter::setParam(
-    const char* name,
-    const void* value
+CudaDesaturateFilter::desaturateLightness(
+    IImage& dest,
+    const IImage& src
     )
 {
-    if( !strcmp( name, "method" ) )
-    {
-        const char* strval = (const char*)value;
+    // 32 = warp size, 8 * 32 = 256 threads
+    const dim3 threadsPerBlock(32, 8);
+    const dim3 numBlocks(
+        (src.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
 
-        if( !strcmp( strval, "average" ) )
-            mMethod = METHOD_AVERAGE;
-        else if( !strcmp( strval, "lightness" ) )
-            mMethod = METHOD_LIGHTNESS;
-        else if( !strcmp( strval, "luminosity" ) )
-            mMethod = METHOD_LUMINOSITY;
-        else
-            throw std::invalid_argument(
-                "CudaDesaturateFilter: Method not implemented" );
-    }
-    else
-        IImageFilter::setParam( name, value );
+    desaturateLightnessKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), src.columns()
+        );
+
+    cudaCheckLastError( "CudaDesaturateFilter: Lightness kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaDesaturateFilter: Lightness kernel run failed" );
+}
+
+void
+CudaDesaturateFilter::desaturateLuminosity(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    // 32 = warp size, 8 * 32 = 256 threads
+    const dim3 threadsPerBlock(32, 8);
+    const dim3 numBlocks(
+        (src.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+
+    desaturateLuminosityKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), src.columns()
+        );
+
+    cudaCheckLastError( "CudaDesaturateFilter: Luminosity kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaDesaturateFilter: Luminosity kernel run failed" );
 }

@@ -5,7 +5,6 @@
  */
 
 #include "edetect.hxx"
-#include "IImageFilter.hxx"
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaImage.hxx"
 
@@ -15,6 +14,28 @@
 CudaImage::~CudaImage()
 {
     reset();
+}
+
+IImage*
+CudaImage::clone() const
+{
+    IImage* res = cloneImpl();
+    res->reset( mRows, mColumns, mFmt );
+
+    const unsigned int rowSize =
+        mColumns * Image::pixelSize( mFmt );
+    cudaCheckError(
+        cudaMemcpy2D(
+            res->data(), res->stride(), mData, mStride,
+            rowSize, mRows, cudaMemcpyDeviceToDevice ) );
+
+    return res;
+}
+
+IImage*
+CudaImage::cloneImpl() const
+{
+    return new CudaImage;
 }
 
 void
@@ -83,53 +104,4 @@ CudaImage::reset(
         mRows = mColumns = mStride = 0;
         mFmt = Image::FMT_INVALID;
     }
-}
-
-void
-CudaImage::swap(
-    IImage& oth
-    )
-{
-    oth.swap( *this );
-}
-
-void
-CudaImage::swap(
-    CudaImage& oth
-    )
-{
-    MemImage::swap( oth );
-}
-
-CudaImage&
-CudaImage::operator=(
-    const CudaImage& oth
-    )
-{
-    reset( oth.rows(), oth.columns(), oth.format() );
-
-    const unsigned int rowSize =
-        oth.columns() * Image::pixelSize( oth.format() );
-    cudaCheckError(
-        cudaMemcpy2D(
-            mData, mStride, oth.data(), oth.stride(),
-            rowSize, oth.rows(), cudaMemcpyDeviceToDevice ) );
-
-    return *this;
-}
-
-void
-CudaImage::apply(
-    IImageFilter& filter
-    )
-{
-    filter.filter( *this );
-}
-
-void
-CudaImage::duplicate(
-    IImage& dest
-    ) const
-{
-    dest = *this;
 }

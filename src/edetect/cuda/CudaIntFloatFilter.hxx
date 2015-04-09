@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
 #define CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
 
-#include "IImageFilter.hxx"
+#include "IIntFloatFilter.hxx"
 
 /**
  * @brief Converts integer-pixel images to
@@ -16,20 +16,13 @@
  * @author Jan Bobek
  */
 class CudaIntFloatFilter
-: public IImageFilter
+: public IIntFloatFilter
 {
-public:
-    /**
-     * @brief Applies the conversion to a CUDA image.
-     *
-     * @param[in,out] image
-     *   The image to convert.
-     */
-    void filter( CudaImage& image );
-
 protected:
-    /// Table of target formats by format
-    static const Image::Format FMT_TARGET[];
+    /// @copydoc IIntFloatFilter::convertInt2Float(IImage&, const IImage&)
+    void convertInt2Float( IImage& dest, const IImage& src );
+    /// @copydoc IIntFloatFilter::convertFloat2Int(IImage&, const IImage&)
+    void convertFloat2Int( IImage& dest, const IImage& src );
 };
 
 #endif /* !CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__ */

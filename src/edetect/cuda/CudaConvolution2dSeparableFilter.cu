@@ -16,13 +16,13 @@ __constant__ float cKernel[2 * CudaConvolution2dSeparableFilter::MAX_RADIUS + 1]
  * @brief CUDA kernel for one-dimensional
  *   convolution along rows.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -32,34 +32,38 @@ __constant__ float cKernel[2 * CudaConvolution2dSeparableFilter::MAX_RADIUS + 1]
  *   Radius of the kernel.
  */
 __global__ void
-convolve1dRows(
-    unsigned char* dst,
-    unsigned int dstStride,
-    const unsigned char* src,
-    unsigned int srcStride,
+convolve1dRowsKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
     unsigned int rows,
     unsigned int cols,
     unsigned int r
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
-        const size_t start = (col < r
-                              ? r - col : 0);
-        const size_t end = (cols <= col + r
-                            ? cols - col + r - 1
-                            : 2 * r);
+        const unsigned int start =
+            (col < r ? r - col : 0);
+        const unsigned int end =
+            (cols <= col + r
+             ? cols - col + r - 1
+             : 2 * r);
 
+        float* dstp =
+            (float*)(ddata + row * dstride)
+            + col;
         const float* srcp =
-            (const float*)(src + row * srcStride)
+            (const float*)(sdata + row * sstride)
             + (col - r + start);
 
-        size_t i;
+        unsigned int i;
         float x = 0.0f;
 
         for( i = 0; i < start; ++i )
@@ -69,8 +73,6 @@ convolve1dRows(
         for(; i <= 2 * r; ++i )
             x += *srcp * cKernel[i];
 
-        float* dstp = (float*)(dst + row * dstStride)
-            + col;
         *dstp = x;
     }
 }
@@ -79,13 +81,13 @@ convolve1dRows(
  * @brief CUDA kernel for one-dimensional
  *   convolution along columns.
  *
- * @param[out] dst
+ * @param[out] ddata
  *   The destination image data.
- * @param[in] dstStride
+ * @param[in] dstride
  *   Size of the row stride in destination data.
- * @param[in] src
+ * @param[in] sdata
  *   The source image data.
- * @param[in] srcStride
+ * @param[in] sstride
  *   Size of the row stride in source data.
  * @param[in] rows
  *   Number of rows in the image.
@@ -95,45 +97,47 @@ convolve1dRows(
  *   Radius of the kernel.
  */
 __global__ void
-convolve1dColumns(
-    unsigned char* dst,
-    unsigned int dstStride,
-    const unsigned char* src,
-    unsigned int srcStride,
+convolve1dColumnsKernel(
+    unsigned char* ddata,
+    unsigned int dstride,
+    const unsigned char* sdata,
+    unsigned int sstride,
     unsigned int rows,
     unsigned int cols,
     unsigned int r
     )
 {
-    const size_t col =
+    const unsigned int col =
         blockIdx.x * blockDim.x + threadIdx.x;
-    const size_t row =
+    const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
     if( row < rows && col < cols )
     {
-        const size_t start = (row < r
-                              ? r - row : 0);
-        const size_t end = (rows <= row + r
-                            ? rows - row + r - 1
-                            : 2 * r);
+        const unsigned int start =
+            (row < r ? r - row : 0);
+        const unsigned int end =
+            (rows <= row + r
+             ? rows - row + r - 1
+             : 2 * r);
 
-        const unsigned char* srcp = src
-            + (row - r + start) * srcStride
+        float* dstp =
+            (float*)(ddata + row * dstride)
+            + col;
+        const unsigned char* srcp = sdata
+            + (row - r + start) * sstride
             + col * sizeof(float);
 
-        size_t i;
+        unsigned int i;
         float x = 0.0f;
 
         for( i = 0; i < start; ++i )
             x += *(float*)srcp * cKernel[i];
-        for(; i < end; ++i, srcp += srcStride )
+        for(; i < end; ++i, srcp += sstride )
             x += *(float*)srcp * cKernel[i];
         for(; i <= 2 * r; ++i )
             x += *(float*)srcp * cKernel[i];
 
-        float* dstp = (float*)(dst + row * dstStride)
-            + col;
         *dstp = x;
     }
 }
@@ -141,87 +145,6 @@ convolve1dColumns(
 /*************************************************************************/
 /* CudaConvolution2dSeparableFilter                                      */
 /*************************************************************************/
-CudaConvolution2dSeparableFilter::CudaConvolution2dSeparableFilter()
-: mRowKernel( NULL ),
-  mRowKernelRadius( 0 ),
-  mColumnKernel( NULL ),
-  mColumnKernelRadius( 0 )
-{
-}
-
-void
-CudaConvolution2dSeparableFilter::filter(
-    CudaImage& image
-    )
-{
-    switch( image.format() )
-    {
-    case Image::FMT_GRAY_FLOAT32:
-        break;
-
-    default:
-    case Image::FMT_GRAY_UINT8:
-    case Image::FMT_RGB_UINT8:
-    case Image::FMT_RGB_FLOAT32:
-        throw std::runtime_error(
-            "CudaConvolution2dSeparableFilter: Unsupported image format" );
-    }
-
-    // 32 = warp size, 8 * 32 = 256 threads
-    const dim3 threadsPerBlock(32, 8);
-    const dim3 numBlocks(
-        (image.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
-        (image.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
-
-    CudaImage tempImage;
-    tempImage.reset( image.rows(), image.columns(),
-                     Image::FMT_GRAY_FLOAT32 );
-
-    cudaCheckError(
-        cudaMemcpyToSymbol(
-            cKernel, mRowKernel, (2 * mRowKernelRadius + 1) * sizeof(*mRowKernel),
-            0, cudaMemcpyHostToDevice ) );
-
-    convolve1dRows<<< numBlocks, threadsPerBlock >>>(
-        tempImage.data(), tempImage.stride(),
-        image.data(), image.stride(),
-        image.rows(), image.columns(), mRowKernelRadius );
-
-    cudaCheckLastError( "2D-separable-convolution row kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "2D-separable-convolution row kernel run failed" );
-
-    cudaCheckError(
-        cudaMemcpyToSymbol(
-            cKernel, mColumnKernel, (2 * mColumnKernelRadius + 1) * sizeof(*mColumnKernel),
-            0, cudaMemcpyHostToDevice ) );
-
-    convolve1dColumns<<< numBlocks, threadsPerBlock >>>(
-        image.data(), image.stride(),
-        tempImage.data(), tempImage.stride(),
-        tempImage.rows(), tempImage.columns(), mColumnKernelRadius );
-
-    cudaCheckLastError( "2D-separable-convolution column kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "2D-separable-convolution column kernel run failed" );
-}
-
-void
-CudaConvolution2dSeparableFilter::setParam(
-    const char* name,
-    const void* value
-    )
-{
-    if( !strcmp( name, "row-kernel" ) )
-        setRowKernel( (const float*)value, mRowKernelRadius );
-    else if( !strcmp( name, "row-kernel-radius" ) )
-        setRowKernel( mRowKernel, *(const unsigned int*)value );
-    else if( !strcmp( name, "column-kernel" ) )
-        setColumnKernel( (const float*)value, mColumnKernelRadius );
-    else if( !strcmp( name, "column-kernel-radius" ) )
-        setColumnKernel( mColumnKernel, *(const unsigned int*)value );
-    else
-        IImageFilter::setParam( name, value );
-}
-
 void
 CudaConvolution2dSeparableFilter::setRowKernel(
     const float* kernel,
@@ -232,8 +155,7 @@ CudaConvolution2dSeparableFilter::setRowKernel(
         throw std::invalid_argument(
             "CudaConvolution2dSeparableFilter: Row kernel radius too large" );
 
-    mRowKernel = kernel;
-    mRowKernelRadius = radius;
+    IConvolution2dSeparableFilter::setRowKernel( kernel, radius );
 }
 
 void
@@ -246,6 +168,61 @@ CudaConvolution2dSeparableFilter::setColumnKernel(
         throw std::invalid_argument(
             "CudaConvolution2dSeparableFilter: Column kernel radius too large" );
 
-    mColumnKernel = kernel;
-    mColumnKernelRadius = radius;
+    IConvolution2dSeparableFilter::setColumnKernel( kernel, radius );
+}
+
+void
+CudaConvolution2dSeparableFilter::convolveRows(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    // 32 = warp size, 8 * 32 = 256 threads
+    const dim3 threadsPerBlock(32, 8);
+    const dim3 numBlocks(
+        (src.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+
+    cudaCheckError(
+        cudaMemcpyToSymbol(
+            cKernel, mRowKernel, (2 * mRowKernelRadius + 1) * sizeof(*mRowKernel),
+            0, cudaMemcpyHostToDevice ) );
+
+    convolve1dRowsKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), src.columns(),
+        mRowKernelRadius
+        );
+
+    cudaCheckLastError( "CudaConvolution2dSeparableFilter: row kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaConvolution2dSeparableFilter: row kernel run failed" );
+}
+
+void
+CudaConvolution2dSeparableFilter::convolveColumns(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    // 32 = warp size, 8 * 32 = 256 threads
+    const dim3 threadsPerBlock(32, 8);
+    const dim3 numBlocks(
+        (src.columns() + threadsPerBlock.x - 1) / threadsPerBlock.x,
+        (src.rows() + threadsPerBlock.y - 1) / threadsPerBlock.y );
+
+    cudaCheckError(
+        cudaMemcpyToSymbol(
+            cKernel, mColumnKernel, (2 * mColumnKernelRadius + 1) * sizeof(*mColumnKernel),
+            0, cudaMemcpyHostToDevice ) );
+
+    convolve1dColumnsKernel<<< numBlocks, threadsPerBlock >>>(
+        dest.data(), dest.stride(),
+        src.data(), src.stride(),
+        src.rows(), src.columns(),
+        mColumnKernelRadius
+        );
+
+    cudaCheckLastError( "CudaConvolution2dSeparableFilter: column kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaConvolution2dSeparableFilter: column kernel run failed" );
 }

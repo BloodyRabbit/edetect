@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_CONVOLUTION_2D_FILTER_HXX__INCL__
 #define CUDA__CUDA_CONVOLUTION_2D_FILTER_HXX__INCL__
 
-#include "IImageFilter.hxx"
+#include "IConvolution2dFilter.hxx"
 
 /**
  * @brief Applies full 2D discrete convolution
@@ -16,42 +16,18 @@
  * @author Jan Bobek
  */
 class CudaConvolution2dFilter
-: public IImageFilter
+: public IConvolution2dFilter
 {
 public:
     /// The largest supported radius.
     static const unsigned int MAX_RADIUS = 32;
 
-    /**
-     * @brief Initializes the filter.
-     */
-    CudaConvolution2dFilter();
-
-    /**
-     * @brief Performs convolution on the image.
-     *
-     * @param[in] image
-     *   The image to convolve.
-     */
-    void filter( CudaImage& image );
-    /// @copydoc IImageFilter::setParam(const char*, const void*)
-    void setParam( const char* name, const void* value );
-
-    /**
-     * @brief Sets a new convolution kernel.
-     *
-     * @param[in] kernel
-     *   The new kernel.
-     * @param[in] radius
-     *   Radius of the new kernel.
-     */
+    /// @copydoc IConvolution2dFilter::setKernel(const float*, unsigned int)
     void setKernel( const float* kernel, unsigned int radius );
 
 protected:
-    /// The convolution kernel.
-    const float* mKernel;
-    /// Radius of the kernel.
-    unsigned int mRadius;
+    /// @copydoc IConvolution2dFilter::convolve(IImage&, const IImage&)
+    void convolve( IImage& dest, const IImage& src );
 };
 
 #endif /* !CUDA__CUDA_CONVOLUTION_2D_FILTER_HXX__INCL__ */

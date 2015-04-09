@@ -7,6 +7,7 @@
 #ifndef CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 #define CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
+#include "IKirschOperatorFilter.hxx"
 #include "cuda/CudaConvolution2dFilter.hxx"
 
 /**
@@ -15,32 +16,12 @@
  * @author Jan Bobek
  */
 class CudaKirschOperatorFilter
-: public IImageFilter
+: public IKirschOperatorFilter<
+    CudaConvolution2dFilter >
 {
-public:
-    /**
-     * @brief Initializes the Kirsch operator.
-     */
-    CudaKirschOperatorFilter();
-
-    /**
-     * @brief Applies the Kirsch operator to an image.
-     *
-     * @param[in,out] image
-     *   The image to apply the operator to.
-     */
-    void filter( CudaImage& image );
-
 protected:
-    /// Number of kernels used by Kirsch operator.
-    static const unsigned int KERNEL_COUNT = 8;
-    /// Radius of kernels used by Kirsch operator.
-    static const unsigned int KERNEL_RADIUS = 1;
-    /// The kernels used by Kirsch operator.
-    static const float KERNELS[KERNEL_COUNT][(2 * KERNEL_RADIUS + 1) * (2 * KERNEL_RADIUS + 1)];
-
-    /// The filters we use for each kernel.
-    CudaConvolution2dFilter mFilters[KERNEL_COUNT];
+    /// @copydoc IKirschOperatorFilter< T >::computeGradient( IImage*[KERNEL_COUNT] )
+    void computeGradient( IImage* images[KERNEL_COUNT] );
 };
 
 #endif /* !CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__ */
