@@ -18,6 +18,7 @@
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaSobelOperatorFilter.hxx"
+#include "cuda/CudaZeroCrossFilter.hxx"
 
 /*************************************************************************/
 /* CudaBackend                                                           */
@@ -54,6 +55,8 @@ CudaBackend::createFilter(
         return new LaplacianOfGaussianFilter< CudaConvolution2dFilter >;
     if( !strcmp( name, "sobel-operator" ) )
         return new CudaSobelOperatorFilter;
+    if( !strcmp( name, "zero-cross" ) )
+        return new CudaZeroCrossFilter;
 
     throw std::invalid_argument(
         "CudaBackend: Filter not implemented" );

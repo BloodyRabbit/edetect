@@ -44,6 +44,8 @@ cuda_add_library(
   "IKirschOperatorFilter.txx"
   "ISobelOperatorFilter.hxx"
   "ISobelOperatorFilter.txx"
+  "IZeroCrossFilter.hxx"
+  "IZeroCrossFilter.cxx"
   # Generic filter classes
   "GaussianBlurFilter.hxx"
   "GaussianBlurFilter.txx"
@@ -68,6 +70,8 @@ cuda_add_library(
   "cpu/CpuKirschOperatorFilter.cxx"
   "cpu/CpuSobelOperatorFilter.hxx"
   "cpu/CpuSobelOperatorFilter.cxx"
+  "cpu/CpuZeroCrossFilter.hxx"
+  "cpu/CpuZeroCrossFilter.cxx"
 
   # CUDA backend implementation
   "cuda/CudaBackend.hxx"
@@ -89,6 +93,8 @@ cuda_add_library(
   "cuda/CudaKirschOperatorFilter.cu"
   "cuda/CudaSobelOperatorFilter.hxx"
   "cuda/CudaSobelOperatorFilter.cu"
+  "cuda/CudaZeroCrossFilter.hxx"
+  "cuda/CudaZeroCrossFilter.cu"
   )
 target_link_libraries(
   "edetect"

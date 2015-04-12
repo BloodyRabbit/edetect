@@ -17,6 +17,7 @@
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuSobelOperatorFilter.hxx"
+#include "cpu/CpuZeroCrossFilter.hxx"
 
 /*************************************************************************/
 /* CpuBackend                                                            */
@@ -48,6 +49,8 @@ CpuBackend::createFilter(
         return new LaplacianOfGaussianFilter< CpuConvolution2dFilter >;
     if( !strcmp( name, "sobel-operator" ) )
         return new CpuSobelOperatorFilter;
+    if( !strcmp( name, "zero-cross" ) )
+        return new CpuZeroCrossFilter;
 
     throw std::invalid_argument(
         "CpuBackend: Filter not implemented" );
