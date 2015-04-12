@@ -11,6 +11,7 @@
 #include "cuda/CudaImage.hxx"
 
 #include "GaussianBlurFilter.hxx"
+#include "LaplacianOfGaussianFilter.hxx"
 #include "cuda/CudaConvolution2dFilter.hxx"
 #include "cuda/CudaConvolution2dSeparableFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
@@ -49,6 +50,8 @@ CudaBackend::createFilter(
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
+    if( !strcmp( name, "log" ) )
+        return new LaplacianOfGaussianFilter< CudaConvolution2dFilter >;
     if( !strcmp( name, "sobel-operator" ) )
         return new CudaSobelOperatorFilter;
 

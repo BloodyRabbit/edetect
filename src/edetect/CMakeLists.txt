@@ -47,6 +47,8 @@ cuda_add_library(
   # Generic filter classes
   "GaussianBlurFilter.hxx"
   "GaussianBlurFilter.txx"
+  "LaplacianOfGaussianFilter.hxx"
+  "LaplacianOfGaussianFilter.txx"
 
   # CPU backend implementation
   "cpu/CpuBackend.hxx"

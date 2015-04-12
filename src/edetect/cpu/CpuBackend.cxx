@@ -10,6 +10,7 @@
 #include "cpu/CpuImage.hxx"
 
 #include "GaussianBlurFilter.hxx"
+#include "LaplacianOfGaussianFilter.hxx"
 #include "cpu/CpuConvolution2dFilter.hxx"
 #include "cpu/CpuConvolution2dSeparableFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
@@ -43,6 +44,8 @@ CpuBackend::createFilter(
         return new CpuIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
+    if( !strcmp( name, "log" ) )
+        return new LaplacianOfGaussianFilter< CpuConvolution2dFilter >;
     if( !strcmp( name, "sobel-operator" ) )
         return new CpuSobelOperatorFilter;
 
