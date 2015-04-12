@@ -57,17 +57,23 @@ GaussianBlurFilter< F >::setRadius(
     unsigned int radius
     )
 {
-    const double sigma = radius / 1.5;
-    const double sigma2 = sigma * sigma;
+    const unsigned int origin = radius;
+    const unsigned int length = 2 * radius + 1;
+
+    const double sigma = radius / 2.5;
+    const double coef = -1.0 / (2.0 * sigma * sigma);
 
     delete mKernel;
-    mKernel = new float[2 * radius + 1];
+    mKernel = new float[length];
 
-    float sum = mKernel[radius] = 1.0f;
-    for( unsigned int i = 1; i <= radius; ++i )
-        sum += 2.0f * (mKernel[radius - i] = mKernel[radius + i] = exp( -(double)(i * i) / sigma2 ));
+    float sum = mKernel[origin] = 1.0f;
+    for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
+        sum += 2.0f *
+            (mKernel[origin - i] =
+             mKernel[origin + i] =
+             exp( coef * r2i ));
 
-    for( unsigned int i = 0; i < (2 * radius + 1); ++i )
+    for( unsigned int i = 0; i < length; ++i )
         mKernel[i] /= sum;
 
     mFilter.setRowKernel( mKernel, radius );
