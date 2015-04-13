@@ -16,6 +16,7 @@
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
+#include "cpu/CpuMarrHildrethOperatorFilter.hxx"
 #include "cpu/CpuSobelOperatorFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
@@ -47,6 +48,8 @@ CpuBackend::createFilter(
         return new CpuKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
         return new LaplacianOfGaussianFilter< CpuConvolution2dFilter >;
+    if( !strcmp( name, "marr-hildreth" ) )
+        return new CpuMarrHildrethOperatorFilter;
     if( !strcmp( name, "sobel-operator" ) )
         return new CpuSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )

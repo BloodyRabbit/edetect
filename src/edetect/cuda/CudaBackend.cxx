@@ -17,6 +17,7 @@
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
+#include "cuda/CudaMarrHildrethOperatorFilter.hxx"
 #include "cuda/CudaSobelOperatorFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
@@ -53,6 +54,8 @@ CudaBackend::createFilter(
         return new CudaKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
         return new LaplacianOfGaussianFilter< CudaConvolution2dFilter >;
+    if( !strcmp( name, "marr-hildreth" ) )
+        return new CudaMarrHildrethOperatorFilter;
     if( !strcmp( name, "sobel-operator" ) )
         return new CudaSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )
