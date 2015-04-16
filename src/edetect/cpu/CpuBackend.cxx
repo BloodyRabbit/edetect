@@ -36,6 +36,8 @@ CpuBackend::createFilter(
 {
     if( !strcmp( name, "convolution" ) )
         return new CpuConvolutionFilter;
+    if( !strcmp( name, "column-convolution" ) )
+        return new CpuColumnConvolutionFilter;
     if( !strcmp( name, "conv-2d-sep" ) )
         return new CpuConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
@@ -50,6 +52,8 @@ CpuBackend::createFilter(
         return new LaplacianOfGaussianFilter< CpuConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CpuMarrHildrethOperatorFilter;
+    if( !strcmp( name, "row-convolution" ) )
+        return new CpuRowConvolutionFilter;
     if( !strcmp( name, "sobel-operator" ) )
         return new CpuSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )

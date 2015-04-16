@@ -79,3 +79,83 @@ CpuConvolutionFilter::convolve(
             *dstp = x;
         }
 }
+
+/*************************************************************************/
+/* CpuRowConvolutionFilter                                               */
+/*************************************************************************/
+void
+CpuRowConvolutionFilter::convolve(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    for( unsigned int row = 0; row < src.rows(); ++row )
+        for( unsigned int col = 0; col < src.columns(); ++col )
+        {
+            const unsigned int start =
+                (col < mRadius ? mRadius - col : 0);
+            const unsigned int end =
+                (src.columns() <= col + mRadius
+                 ? src.columns() - col + mRadius - 1
+                 : 2 * mRadius);
+
+            float* dstp =
+                (float*)(dest.data() + row * dest.stride())
+                + col;
+            const float* srcp =
+                (const float*)(src.data() + row * src.stride())
+                + (col - mRadius + start);
+
+            unsigned int k;
+            float x = 0.0f;
+
+            for( k = 0; k < start; ++k )
+                x += *srcp * mKernel[k];
+            for(; k < end; ++k, ++srcp )
+                x += *srcp * mKernel[k];
+            for(; k <= 2 * mRadius; ++k )
+                x += *srcp * mKernel[k];
+
+            *dstp = x;
+        }
+}
+
+/*************************************************************************/
+/* CpuColumnConvolutionFilter                                            */
+/*************************************************************************/
+void
+CpuColumnConvolutionFilter::convolve(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    for( unsigned int row = 0; row < src.rows(); ++row )
+        for( unsigned int col = 0; col < src.columns(); ++col )
+        {
+            const unsigned int start =
+                (row < mRadius ? mRadius - row : 0);
+            const unsigned int end =
+                (src.rows() <= row + mRadius
+                 ? src.rows() - row + mRadius - 1
+                 : 2 * mRadius);
+
+            float* dstp =
+                (float*)(dest.data() + row * dest.stride())
+                + col;
+            const unsigned char* srcp = src.data()
+                + (row - mRadius + start) * src.stride()
+                + col * sizeof(float);
+
+            unsigned int i;
+            float x = 0.0f;
+
+            for( i = 0; i < start; ++i )
+                x += *(float*)srcp * mKernel[i];
+            for(; i < end; ++i, srcp += src.stride() )
+                x += *(float*)srcp * mKernel[i];
+            for(; i <= 2 * mRadius; ++i )
+                x += *(float*)srcp * mKernel[i];
+
+            *dstp = x;
+        }
+}
