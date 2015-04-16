@@ -25,14 +25,13 @@ SeparableConvolutionFilter< RF, CF >::setParam(
     const void* value
     )
 {
-    if( !strcmp( name, "row-kernel" ) )
-        mRowFilter.setParam( "kernel", value );
-    else if( !strcmp( name, "row-kernel-radius" ) )
-        mRowFilter.setParam( "radius", value );
-    else if( !strcmp( name, "column-kernel" ) )
-        mColumnFilter.setParam( "kernel", value );
-    else if( !strcmp( name, "column-kernel-radius" ) )
-        mColumnFilter.setParam( "radius", value );
+    static const char rpfx[] = { 'r', 'o', 'w', '-' };
+    static const char cpfx[] = { 'c', 'o', 'l', 'u', 'm', 'n', '-' };
+
+    if( !strncmp( name, rpfx, sizeof(rpfx) ) )
+        mRowFilter.setParam( name + sizeof(rpfx), value );
+    else if( !strncmp( name, cpfx, sizeof(cpfx) ) )
+        mColumnFilter.setParam( name + sizeof(cpfx), value );
     else
         IImageFilter::setParam( name, value );
 }
