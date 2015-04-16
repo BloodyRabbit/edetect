@@ -51,7 +51,7 @@ template< typename F >
 IKirschOperatorFilter< F >::IKirschOperatorFilter()
 {
     for( unsigned int i = 0; i < KERNEL_COUNT; ++i )
-        mFilters[i].setKernel( (const float*)&KERNELS[i], KERNEL_RADIUS );
+        mFilters[i].setKernel( KERNELS[i], KERNEL_RADIUS );
 }
 
 template< typename F >
