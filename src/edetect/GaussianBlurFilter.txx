@@ -16,7 +16,7 @@ GaussianBlurFilter< F >::GaussianBlurFilter()
 template< typename F >
 GaussianBlurFilter< F >::~GaussianBlurFilter()
 {
-    delete mKernel;
+    free( mKernel );
 }
 
 template< typename F >
@@ -63,8 +63,8 @@ GaussianBlurFilter< F >::setRadius(
     const double sigma = radius / 2.5;
     const double coef = -1.0 / (2.0 * sigma * sigma);
 
-    delete mKernel;
-    mKernel = new float[length];
+    mKernel = (float*)realloc(
+        mKernel, length * sizeof(*mKernel) );
 
     float sum = mKernel[origin] = 1.0f;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )

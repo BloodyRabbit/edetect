@@ -17,7 +17,7 @@ LaplacianOfGaussianFilter< F >::LaplacianOfGaussianFilter()
 template< typename F >
 LaplacianOfGaussianFilter< F >::~LaplacianOfGaussianFilter()
 {
-    delete mKernel;
+    free( mKernel );
 }
 
 template< typename F >
@@ -65,8 +65,8 @@ LaplacianOfGaussianFilter< F >::setRadius(
     const double coef1 = 2.0 * sigma * sigma;
     const double coef2 = -1.0 / coef1;
 
-    delete mKernel;
-    mKernel = new float[stride * stride];
+    mKernel = (float*)realloc(
+        mKernel, stride * stride * sizeof(*mKernel) );
 
     mKernel[origin] = -coef1;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
