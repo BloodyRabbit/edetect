@@ -14,7 +14,6 @@
 #include "LaplacianOfGaussianFilter.hxx"
 #include "SeparableConvolutionFilter.hxx"
 #include "cuda/CudaConvolutionFilter.hxx"
-#include "cuda/CudaConvolution2dSeparableFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
@@ -45,8 +44,6 @@ CudaBackend::createFilter(
         return new CudaConvolutionFilter;
     if( !strcmp( name, "column-convolution" ) )
         return new CudaColumnConvolutionFilter;
-    if( !strcmp( name, "conv-2d-sep" ) )
-        return new CudaConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )

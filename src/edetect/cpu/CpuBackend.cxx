@@ -13,7 +13,6 @@
 #include "LaplacianOfGaussianFilter.hxx"
 #include "SeparableConvolutionFilter.hxx"
 #include "cpu/CpuConvolutionFilter.hxx"
-#include "cpu/CpuConvolution2dSeparableFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
@@ -39,8 +38,6 @@ CpuBackend::createFilter(
         return new CpuConvolutionFilter;
     if( !strcmp( name, "column-convolution" ) )
         return new CpuColumnConvolutionFilter;
-    if( !strcmp( name, "conv-2d-sep" ) )
-        return new CpuConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CpuDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
