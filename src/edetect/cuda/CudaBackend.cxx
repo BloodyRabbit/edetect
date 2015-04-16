@@ -12,6 +12,7 @@
 
 #include "GaussianBlurFilter.hxx"
 #include "LaplacianOfGaussianFilter.hxx"
+#include "SeparableConvolutionFilter.hxx"
 #include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaConvolution2dSeparableFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
@@ -49,7 +50,10 @@ CudaBackend::createFilter(
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
-        return new GaussianBlurFilter< CudaConvolution2dSeparableFilter >;
+        return new GaussianBlurFilter<
+            SeparableConvolutionFilter<
+                CudaRowConvolutionFilter,
+                CudaColumnConvolutionFilter > >;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )

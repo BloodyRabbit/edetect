@@ -8,7 +8,8 @@
 #define CPU__CPU_SOBEL_OPERATOR_FILTER_HXX__INCL__
 
 #include "ISobelOperatorFilter.hxx"
-#include "cpu/CpuConvolution2dSeparableFilter.hxx"
+#include "SeparableConvolutionFilter.hxx"
+#include "cpu/CpuConvolutionFilter.hxx"
 
 /**
  * @brief Applies Sobel operator to the image.
@@ -17,7 +18,9 @@
  */
 class CpuSobelOperatorFilter
 : public ISobelOperatorFilter<
-    CpuConvolution2dSeparableFilter >
+    SeparableConvolutionFilter<
+        CpuRowConvolutionFilter,
+        CpuColumnConvolutionFilter > >
 {
 protected:
     /// @copydoc ISobelOperatorFilter< F >::computeGradient(IImage&, const IImage&)
