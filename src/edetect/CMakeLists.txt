@@ -53,6 +53,8 @@ cuda_add_library(
   "GaussianBlurFilter.txx"
   "LaplacianOfGaussianFilter.hxx"
   "LaplacianOfGaussianFilter.txx"
+  "SeparableConvolutionFilter.hxx"
+  "SeparableConvolutionFilter.txx"
 
   # CPU backend implementation
   "cpu/CpuBackend.hxx"
