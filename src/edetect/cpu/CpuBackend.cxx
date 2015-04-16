@@ -11,7 +11,7 @@
 
 #include "GaussianBlurFilter.hxx"
 #include "LaplacianOfGaussianFilter.hxx"
-#include "cpu/CpuConvolution2dFilter.hxx"
+#include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuConvolution2dSeparableFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
@@ -34,8 +34,8 @@ CpuBackend::createFilter(
     const char* name
     )
 {
-    if( !strcmp( name, "conv-2d" ) )
-        return new CpuConvolution2dFilter;
+    if( !strcmp( name, "convolution" ) )
+        return new CpuConvolutionFilter;
     if( !strcmp( name, "conv-2d-sep" ) )
         return new CpuConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
@@ -47,7 +47,7 @@ CpuBackend::createFilter(
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
-        return new LaplacianOfGaussianFilter< CpuConvolution2dFilter >;
+        return new LaplacianOfGaussianFilter< CpuConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CpuMarrHildrethOperatorFilter;
     if( !strcmp( name, "sobel-operator" ) )

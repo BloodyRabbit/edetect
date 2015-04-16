@@ -1,18 +1,18 @@
 /** @file
- * @brief Definition of CpuConvolution2dFilter class.
+ * @brief Definition of CpuConvolutionFilter class.
  *
  * @author Jan Bobek
  */
 
 #include "edetect.hxx"
 #include "IImage.hxx"
-#include "cpu/CpuConvolution2dFilter.hxx"
+#include "cpu/CpuConvolutionFilter.hxx"
 
 /*************************************************************************/
-/* CpuConvolution2dFilter                                               */
+/* CpuConvolutionFilter                                                  */
 /*************************************************************************/
 void
-CpuConvolution2dFilter::convolve(
+CpuConvolutionFilter::convolve(
     IImage& dest,
     const IImage& src
     )

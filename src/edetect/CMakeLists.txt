@@ -32,8 +32,8 @@ cuda_add_library(
   "IImageFilter.hxx"
   "IImageFilter.ixx"
   # Filter interface classes
-  "IConvolution2dFilter.hxx"
-  "IConvolution2dFilter.cxx"
+  "IConvolutionFilter.hxx"
+  "IConvolutionFilter.cxx"
   "IConvolution2dSeparableFilter.hxx"
   "IConvolution2dSeparableFilter.cxx"
   "IDesaturateFilter.hxx"
@@ -60,8 +60,8 @@ cuda_add_library(
   "cpu/CpuImage.hxx"
   "cpu/CpuImage.cxx"
   # CPU-backed filters
-  "cpu/CpuConvolution2dFilter.hxx"
-  "cpu/CpuConvolution2dFilter.cxx"
+  "cpu/CpuConvolutionFilter.hxx"
+  "cpu/CpuConvolutionFilter.cxx"
   "cpu/CpuConvolution2dSeparableFilter.hxx"
   "cpu/CpuConvolution2dSeparableFilter.cxx"
   "cpu/CpuDesaturateFilter.hxx"
@@ -85,8 +85,8 @@ cuda_add_library(
   "cuda/CudaImage.hxx"
   "cuda/CudaImage.cxx"
   # CUDA-backed filters
-  "cuda/CudaConvolution2dFilter.hxx"
-  "cuda/CudaConvolution2dFilter.cu"
+  "cuda/CudaConvolutionFilter.hxx"
+  "cuda/CudaConvolutionFilter.cu"
   "cuda/CudaConvolution2dSeparableFilter.hxx"
   "cuda/CudaConvolution2dSeparableFilter.cu"
   "cuda/CudaDesaturateFilter.hxx"

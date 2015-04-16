@@ -1,28 +1,28 @@
 /** @file
- * @brief Declaration of class IConvolution2dFilter.
+ * @brief Declaration of class IConvolutionFilter.
  *
  * @author Jan Bobek
  * @since 11th April 2015
  */
 
-#ifndef ICONVOLUTION_2D_FILTER_HXX__INCL__
-#define ICONVOLUTION_2D_FILTER_HXX__INCL__
+#ifndef ICONVOLUTION_FILTER_HXX__INCL__
+#define ICONVOLUTION_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
 /**
- * @brief Interface of a 2D discrete convolution filter.
+ * @brief Interface of a discrete convolution filter.
  *
  * @author Jan Bobek
  */
-class IConvolution2dFilter
+class IConvolutionFilter
 : public IImageFilter
 {
 public:
     /**
      * @brief Initializes the filter.
      */
-    IConvolution2dFilter();
+    IConvolutionFilter();
 
     /**
      * @brief Performs convolution on the image.
@@ -46,7 +46,7 @@ public:
 
 protected:
     /**
-     * @brief Performs 2D discrete convolution.
+     * @brief Performs discrete convolution.
      *
      * @param[out] dest
      *   Where to place the results.
@@ -61,4 +61,4 @@ protected:
     unsigned int mRadius;
 };
 
-#endif /* !ICONVOLUTION_2D_FILTER_HXX__INCL__ */
+#endif /* !ICONVOLUTION_FILTER_HXX__INCL__ */

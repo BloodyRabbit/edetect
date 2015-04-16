@@ -8,7 +8,7 @@
 #define CPU__CPU_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IKirschOperatorFilter.hxx"
-#include "cpu/CpuConvolution2dFilter.hxx"
+#include "cpu/CpuConvolutionFilter.hxx"
 
 /**
  * @brief Applies Kirsch operator to the image.
@@ -17,7 +17,7 @@
  */
 class CpuKirschOperatorFilter
 : public IKirschOperatorFilter<
-    CpuConvolution2dFilter >
+    CpuConvolutionFilter >
 {
 protected:
     /// @copydoc IKirschOperatorFilter< T >::computeGradient( IImage*[KERNEL_COUNT] )

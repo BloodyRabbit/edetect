@@ -8,7 +8,7 @@
 #define CUDA__CUDA_MARR_HILDRETH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IMarrHildrethOperatorFilter.hxx"
-#include "cuda/CudaConvolution2dFilter.hxx"
+#include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
 /**
@@ -18,7 +18,7 @@
  */
 class CudaMarrHildrethOperatorFilter
 : public IMarrHildrethOperatorFilter<
-    CudaConvolution2dFilter,
+    CudaConvolutionFilter,
     CudaZeroCrossFilter >
 {
 protected:

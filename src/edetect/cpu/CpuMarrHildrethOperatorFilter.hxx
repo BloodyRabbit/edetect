@@ -8,7 +8,7 @@
 #define CPU__CPU_MARR_HILDRETH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IMarrHildrethOperatorFilter.hxx"
-#include "cpu/CpuConvolution2dFilter.hxx"
+#include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
 /**
@@ -18,7 +18,7 @@
  */
 class CpuMarrHildrethOperatorFilter
 : public IMarrHildrethOperatorFilter<
-    CpuConvolution2dFilter,
+    CpuConvolutionFilter,
     CpuZeroCrossFilter >
 {
 protected:

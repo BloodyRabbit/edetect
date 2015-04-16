@@ -1,16 +1,16 @@
 /** @file
- * @brief Definition of CudaConvolution2dFilter class.
+ * @brief Definition of CudaConvolutionFilter class.
  *
  * @author Jan Bobek
  */
 
 #include "edetect.hxx"
 #include "IImage.hxx"
-#include "cuda/CudaConvolution2dFilter.hxx"
+#include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaError.hxx"
 
 /// The convolution kernel.
-__constant__ float cKernel[(2 * CudaConvolution2dFilter::MAX_RADIUS + 1) * (2 * CudaConvolution2dFilter::MAX_RADIUS + 1)];
+__constant__ float cKernel[(2 * CudaConvolutionFilter::MAX_RADIUS + 1) * (2 * CudaConvolutionFilter::MAX_RADIUS + 1)];
 
 /**
  * @brief CUDA kernel performing 2D discrete convolution.
@@ -105,23 +105,23 @@ convolve2dKernel(
 }
 
 /*************************************************************************/
-/* CudaConvolution2dFilter                                               */
+/* CudaConvolutionFilter                                                 */
 /*************************************************************************/
 void
-CudaConvolution2dFilter::setKernel(
+CudaConvolutionFilter::setKernel(
     const float* kernel,
     unsigned int radius
     )
 {
     if( MAX_RADIUS < radius )
         throw std::invalid_argument(
-            "CudaConvolution2dFilter: Convolution kernel too large" );
+            "CudaConvolutionFilter: Convolution kernel too large" );
 
-    IConvolution2dFilter::setKernel( kernel, radius );
+    IConvolutionFilter::setKernel( kernel, radius );
 }
 
 void
-CudaConvolution2dFilter::convolve(
+CudaConvolutionFilter::convolve(
     IImage& dest,
     const IImage& src
     )
@@ -144,6 +144,6 @@ CudaConvolution2dFilter::convolve(
         mRadius
         );
 
-    cudaCheckLastError( "CudaConvolution2dFilter: kernel launch failed" );
-    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaConvolution2dFilter: kernel run failed" );
+    cudaCheckLastError( "CudaConvolutionFilter: kernel launch failed" );
+    cudaMsgCheckError( cudaDeviceSynchronize(), "CudaConvolutionFilter: kernel run failed" );
 }

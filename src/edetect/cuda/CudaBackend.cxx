@@ -12,7 +12,7 @@
 
 #include "GaussianBlurFilter.hxx"
 #include "LaplacianOfGaussianFilter.hxx"
-#include "cuda/CudaConvolution2dFilter.hxx"
+#include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaConvolution2dSeparableFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
@@ -40,8 +40,8 @@ CudaBackend::createFilter(
     const char* name
     )
 {
-    if( !strcmp( name, "conv-2d" ) )
-        return new CudaConvolution2dFilter;
+    if( !strcmp( name, "convolution" ) )
+        return new CudaConvolutionFilter;
     if( !strcmp( name, "conv-2d-sep" ) )
         return new CudaConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
@@ -53,7 +53,7 @@ CudaBackend::createFilter(
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
-        return new LaplacianOfGaussianFilter< CudaConvolution2dFilter >;
+        return new LaplacianOfGaussianFilter< CudaConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CudaMarrHildrethOperatorFilter;
     if( !strcmp( name, "sobel-operator" ) )

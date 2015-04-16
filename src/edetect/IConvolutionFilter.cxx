@@ -1,25 +1,25 @@
 /** @file
- * @brief Definition of class IConvolution2dFilter.
+ * @brief Definition of class IConvolutionFilter.
  *
  * @author Jan Bobek
  * @since 11th April 2015
  */
 
 #include "edetect.hxx"
-#include "IConvolution2dFilter.hxx"
+#include "IConvolutionFilter.hxx"
 #include "IImage.hxx"
 
 /*************************************************************************/
-/* IConvolution2dFilter                                                  */
+/* IConvolutionFilter                                                    */
 /*************************************************************************/
-IConvolution2dFilter::IConvolution2dFilter()
+IConvolutionFilter::IConvolutionFilter()
 : mKernel( NULL ),
   mRadius( 0 )
 {
 }
 
 void
-IConvolution2dFilter::filter(
+IConvolutionFilter::filter(
     IImage& image
     )
 {
@@ -33,7 +33,7 @@ IConvolution2dFilter::filter(
     case Image::FMT_RGB_UINT8:
     case Image::FMT_RGB_FLOAT32:
         throw std::runtime_error(
-            "IConvolution2dFilter: Unsupported image format" );
+            "IConvolutionFilter: Unsupported image format" );
     }
 
     IImage* output = image.cloneImpl();
@@ -47,7 +47,7 @@ IConvolution2dFilter::filter(
 }
 
 void
-IConvolution2dFilter::setParam(
+IConvolutionFilter::setParam(
     const char* name,
     const void* value
     )
@@ -61,7 +61,7 @@ IConvolution2dFilter::setParam(
 }
 
 void
-IConvolution2dFilter::setKernel(
+IConvolutionFilter::setKernel(
     const float* kernel,
     unsigned int radius
     )

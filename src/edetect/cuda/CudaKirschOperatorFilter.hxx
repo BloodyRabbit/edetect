@@ -8,7 +8,7 @@
 #define CUDA__CUDA_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IKirschOperatorFilter.hxx"
-#include "cuda/CudaConvolution2dFilter.hxx"
+#include "cuda/CudaConvolutionFilter.hxx"
 
 /**
  * @brief Applies Kirsch operator to the image.
@@ -17,7 +17,7 @@
  */
 class CudaKirschOperatorFilter
 : public IKirschOperatorFilter<
-    CudaConvolution2dFilter >
+    CudaConvolutionFilter >
 {
 protected:
     /// @copydoc IKirschOperatorFilter< T >::computeGradient( IImage*[KERNEL_COUNT] )
