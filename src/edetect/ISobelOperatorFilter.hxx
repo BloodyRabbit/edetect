@@ -9,13 +9,14 @@
 #define ISOBEL_OPERATOR_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
+#include "SeparableConvolutionFilter.hxx"
 
 /**
  * @brief Interface of a Sobel operator filter.
  *
  * @author Jan Bobek
  */
-template< typename SCF >
+template< typename RCF, typename CCF >
 class ISobelOperatorFilter
 : public IImageFilter
 {
@@ -46,9 +47,9 @@ protected:
     virtual void computeGradient( IImage& vert, const IImage& horz ) = 0;
 
     /// The filter we use for vertical edges.
-    SCF mVertFilter;
+    SeparableConvolutionFilter< RCF, CCF > mVertFilter;
     /// The filter we use for horizontal edges.
-    SCF mHorzFilter;
+    SeparableConvolutionFilter< RCF, CCF > mHorzFilter;
 
     /// Radius of both Sobel kernels.
     static const unsigned int KERNEL_RADIUS = 1;

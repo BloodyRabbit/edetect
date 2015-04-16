@@ -8,7 +8,6 @@
 #define CUDA__CUDA_SOBEL_OPERATOR_FILTER_HXX__INCL__
 
 #include "ISobelOperatorFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
 #include "cuda/CudaConvolutionFilter.hxx"
 
 /**
@@ -18,9 +17,8 @@
  */
 class CudaSobelOperatorFilter
 : public ISobelOperatorFilter<
-    SeparableConvolutionFilter<
-        CudaRowConvolutionFilter,
-        CudaColumnConvolutionFilter > >
+    CudaRowConvolutionFilter,
+    CudaColumnConvolutionFilter >
 {
 protected:
     /// @copydoc ISobelOperatorFilter< F >::computeGradient(IImage&, const IImage&)
