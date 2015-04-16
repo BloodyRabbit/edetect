@@ -9,50 +9,6 @@
 /* LaplacianOfGaussianFilter< CF >                                       */
 /*************************************************************************/
 template< typename CF >
-LaplacianOfGaussianFilter< CF >::LaplacianOfGaussianFilter()
-: mKernel( NULL )
-{
-}
-
-template< typename CF >
-LaplacianOfGaussianFilter< CF >::~LaplacianOfGaussianFilter()
-{
-    free( mKernel );
-}
-
-template< typename CF >
-void
-LaplacianOfGaussianFilter< CF >::filter(
-    IImage& image
-    )
-{
-    mFilter.filter( image );
-}
-
-template< typename CF >
-void
-LaplacianOfGaussianFilter< CF >::setParam(
-    const char* name,
-    const void* value
-    )
-{
-    if( !strcmp( name, "radius" ) )
-    {
-        char* endptr;
-        unsigned int radius =
-            strtoul( (const char*)value, &endptr, 10 );
-
-        if( *endptr )
-            throw std::invalid_argument(
-                "LaplacianOfGaussianFilter: Invalid radius value" );
-
-        setRadius( radius );
-    }
-    else
-        IImageFilter::setParam( name, value );
-}
-
-template< typename CF >
 void
 LaplacianOfGaussianFilter< CF >::setRadius(
     unsigned int radius
