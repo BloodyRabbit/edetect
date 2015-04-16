@@ -15,7 +15,7 @@
  *
  * @author Jan Bobek
  */
-template< typename F >
+template< typename CF >
 class IKirschOperatorFilter
 : public IImageFilter
 {
@@ -53,7 +53,7 @@ protected:
         ) = 0;
 
     /// The filters we use for each kernel.
-    F mFilters[KERNEL_COUNT];
+    CF mFilters[KERNEL_COUNT];
 };
 
 #include "IKirschOperatorFilter.txx"

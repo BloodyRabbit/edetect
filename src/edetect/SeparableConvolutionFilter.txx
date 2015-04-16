@@ -6,11 +6,11 @@
  */
 
 /*************************************************************************/
-/* SeparableConvolutionFilter< RF, CF >                                  */
+/* SeparableConvolutionFilter< RCF, CCF >                                */
 /*************************************************************************/
-template< typename RF, typename CF >
+template< typename RCF, typename CCF >
 void
-SeparableConvolutionFilter< RF, CF >::filter(
+SeparableConvolutionFilter< RCF, CCF >::filter(
     IImage& image
     )
 {
@@ -18,9 +18,9 @@ SeparableConvolutionFilter< RF, CF >::filter(
     mColumnFilter.filter( image );
 }
 
-template< typename RF, typename CF >
+template< typename RCF, typename CCF >
 void
-SeparableConvolutionFilter< RF, CF >::setParam(
+SeparableConvolutionFilter< RCF, CCF >::setParam(
     const char* name,
     const void* value
     )
@@ -36,9 +36,9 @@ SeparableConvolutionFilter< RF, CF >::setParam(
         IImageFilter::setParam( name, value );
 }
 
-template< typename RF, typename CF >
+template< typename RCF, typename CCF >
 void
-SeparableConvolutionFilter< RF, CF >::setRowKernel(
+SeparableConvolutionFilter< RCF, CCF >::setRowKernel(
     const float* kernel,
     unsigned int radius
     )
@@ -46,9 +46,9 @@ SeparableConvolutionFilter< RF, CF >::setRowKernel(
     mRowFilter.setKernel( kernel, radius );
 }
 
-template< typename RF, typename CF >
+template< typename RCF, typename CCF >
 void
-SeparableConvolutionFilter< RF, CF >::setColumnKernel(
+SeparableConvolutionFilter< RCF, CCF >::setColumnKernel(
     const float* kernel,
     unsigned int radius
     )

@@ -5,32 +5,32 @@
  */
 
 /*************************************************************************/
-/* GaussianBlurFilter< F >                                               */
+/* GaussianBlurFilter< SCF >                                             */
 /*************************************************************************/
-template< typename F >
-GaussianBlurFilter< F >::GaussianBlurFilter()
+template< typename SCF >
+GaussianBlurFilter< SCF >::GaussianBlurFilter()
 : mKernel( NULL )
 {
 }
 
-template< typename F >
-GaussianBlurFilter< F >::~GaussianBlurFilter()
+template< typename SCF >
+GaussianBlurFilter< SCF >::~GaussianBlurFilter()
 {
     free( mKernel );
 }
 
-template< typename F >
+template< typename SCF >
 void
-GaussianBlurFilter< F >::filter(
+GaussianBlurFilter< SCF >::filter(
     IImage& image
     )
 {
     mFilter.filter( image );
 }
 
-template< typename F >
+template< typename SCF >
 void
-GaussianBlurFilter< F >::setParam(
+GaussianBlurFilter< SCF >::setParam(
     const char* name,
     const void* value
     )
@@ -51,9 +51,9 @@ GaussianBlurFilter< F >::setParam(
         IImageFilter::setParam( name, value );
 }
 
-template< typename F >
+template< typename SCF >
 void
-GaussianBlurFilter< F >::setRadius(
+GaussianBlurFilter< SCF >::setRadius(
     unsigned int radius
     )
 {

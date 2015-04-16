@@ -8,11 +8,11 @@
 #include "IImage.hxx"
 
 /*************************************************************************/
-/* IKirschOperatorFilter< F >                                            */
+/* IKirschOperatorFilter< CF >                                           */
 /*************************************************************************/
-template< typename F >
+template< typename CF >
 const float
-IKirschOperatorFilter< F >::KERNELS[KERNEL_COUNT][(2 * KERNEL_RADIUS + 1) * (2 * KERNEL_RADIUS + 1)] =
+IKirschOperatorFilter< CF >::KERNELS[KERNEL_COUNT][(2 * KERNEL_RADIUS + 1) * (2 * KERNEL_RADIUS + 1)] =
 {
     { -3.0f, -3.0f,  5.0f,
       -3.0f,  0.0f,  5.0f,
@@ -47,16 +47,16 @@ IKirschOperatorFilter< F >::KERNELS[KERNEL_COUNT][(2 * KERNEL_RADIUS + 1) * (2 *
       -3.0f,  5.0f,  5.0f },
 };
 
-template< typename F >
-IKirschOperatorFilter< F >::IKirschOperatorFilter()
+template< typename CF >
+IKirschOperatorFilter< CF >::IKirschOperatorFilter()
 {
     for( unsigned int i = 0; i < KERNEL_COUNT; ++i )
         mFilters[i].setKernel( KERNELS[i], KERNEL_RADIUS );
 }
 
-template< typename F >
+template< typename CF >
 void
-IKirschOperatorFilter< F >::filter(
+IKirschOperatorFilter< CF >::filter(
     IImage& image
     )
 {

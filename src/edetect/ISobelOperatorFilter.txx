@@ -8,24 +8,24 @@
 #include "IImage.hxx"
 
 /*************************************************************************/
-/* ISobelOperatorFilter< F >                                             */
+/* ISobelOperatorFilter< SCF >                                           */
 /*************************************************************************/
-template< typename T >
+template< typename SCF >
 const float
-ISobelOperatorFilter< T >::KERNEL_1_0_1[] =
+ISobelOperatorFilter< SCF >::KERNEL_1_0_1[] =
 {
     -1.0f, 0.0f, 1.0f
 };
 
-template< typename T >
+template< typename SCF >
 const float
-ISobelOperatorFilter< T >::KERNEL_1_2_1[] =
+ISobelOperatorFilter< SCF >::KERNEL_1_2_1[] =
 {
     1.0f, 2.0f, 1.0f
 };
 
-template< typename F >
-ISobelOperatorFilter< F >::ISobelOperatorFilter()
+template< typename SCF >
+ISobelOperatorFilter< SCF >::ISobelOperatorFilter()
 {
     mVertFilter.setRowKernel(
         KERNEL_1_0_1, KERNEL_RADIUS );
@@ -38,9 +38,9 @@ ISobelOperatorFilter< F >::ISobelOperatorFilter()
         KERNEL_1_0_1, KERNEL_RADIUS );
 }
 
-template< typename F >
+template< typename SCF >
 void
-ISobelOperatorFilter< F >::filter(
+ISobelOperatorFilter< SCF >::filter(
     IImage& image
     )
 {

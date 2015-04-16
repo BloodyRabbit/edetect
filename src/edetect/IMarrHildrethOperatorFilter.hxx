@@ -16,7 +16,7 @@
  *
  * @author Jan Bobek
  */
-template< typename F1, typename F2 >
+template< typename CF, typename ZCF >
 class IMarrHildrethOperatorFilter
 : public IImageFilter
 {
@@ -59,9 +59,9 @@ protected:
     virtual void mergeEdges( IImage& dest, const IImage& src ) = 0;
 
     /// The LoG filters.
-    LaplacianOfGaussianFilter< F1 > mLogFilt1, mLogFilt2;
+    LaplacianOfGaussianFilter< CF > mLogFilt1, mLogFilt2;
     /// The zero-crossing filter.
-    F2 mZeroCrossFilt;
+    ZCF mZeroCrossFilt;
 };
 
 #include "IMarrHildrethOperatorFilter.txx"

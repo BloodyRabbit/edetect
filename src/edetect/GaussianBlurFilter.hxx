@@ -14,7 +14,7 @@
  *
  * @author Jan Bobek
  */
-template< typename F >
+template< typename SCF >
 class GaussianBlurFilter
 : public IImageFilter
 {
@@ -47,7 +47,7 @@ protected:
     /// The generated kernel.
     float* mKernel;
     /// The convolution filter we are delegating to.
-    F mFilter;
+    SCF mFilter;
 };
 
 #include "GaussianBlurFilter.txx"

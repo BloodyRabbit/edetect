@@ -16,7 +16,7 @@
  *
  * @author Jan Bobek
  */
-template< typename F >
+template< typename CF >
 class LaplacianOfGaussianFilter
 : public IImageFilter
 {
@@ -49,10 +49,10 @@ public:
     void setRadius( unsigned int radius );
 
 protected:
-    /// Convolution filter we delegate to.
-    F mFilter;
     /// The generated kernel.
     float* mKernel;
+    /// Convolution filter we delegate to.
+    CF mFilter;
 };
 
 #include "LaplacianOfGaussianFilter.txx"

@@ -16,7 +16,7 @@
  *
  * @author Jan Bobek
  */
-template< typename RF, typename CF >
+template< typename RCF, typename CCF >
 class SeparableConvolutionFilter
 : public IImageFilter
 {
@@ -52,9 +52,9 @@ public:
 
 protected:
     /// The row convolution filter.
-    RF mRowFilter;
+    RCF mRowFilter;
     /// The column convolution filter.
-    CF mColumnFilter;
+    CCF mColumnFilter;
 };
 
 #include "SeparableConvolutionFilter.txx"

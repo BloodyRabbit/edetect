@@ -15,7 +15,7 @@
  *
  * @author Jan Bobek
  */
-template< typename F >
+template< typename SCF >
 class ISobelOperatorFilter
 : public IImageFilter
 {
@@ -46,9 +46,9 @@ protected:
     virtual void computeGradient( IImage& vert, const IImage& horz ) = 0;
 
     /// The filter we use for vertical edges.
-    F mVertFilter;
+    SCF mVertFilter;
     /// The filter we use for horizontal edges.
-    F mHorzFilter;
+    SCF mHorzFilter;
 
     /// Radius of both Sobel kernels.
     static const unsigned int KERNEL_RADIUS = 1;

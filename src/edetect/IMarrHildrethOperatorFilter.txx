@@ -6,11 +6,11 @@
  */
 
 /*************************************************************************/
-/* IMarrHildrethOperatorFilter< F1, F2 >                                 */
+/* IMarrHildrethOperatorFilter< CF, ZCF >                                */
 /*************************************************************************/
-template< typename F1, typename F2 >
+template< typename CF, typename ZCF >
 void
-IMarrHildrethOperatorFilter< F1, F2 >::filter(
+IMarrHildrethOperatorFilter< CF, ZCF >::filter(
     IImage& image
     )
 {
@@ -38,9 +38,9 @@ IMarrHildrethOperatorFilter< F1, F2 >::filter(
     delete dup;
 }
 
-template< typename F1, typename F2 >
+template< typename CF, typename ZCF >
 void
-IMarrHildrethOperatorFilter< F1, F2 >::setParam(
+IMarrHildrethOperatorFilter< CF, ZCF >::setParam(
     const char* name,
     const void* value
     )
@@ -73,18 +73,18 @@ IMarrHildrethOperatorFilter< F1, F2 >::setParam(
         IImageFilter::setParam( name, value );
 }
 
-template< typename F1, typename F2 >
+template< typename CF, typename ZCF >
 void
-IMarrHildrethOperatorFilter< F1, F2 >::setRadius1(
+IMarrHildrethOperatorFilter< CF, ZCF >::setRadius1(
     unsigned int radius
     )
 {
     mLogFilt1.setRadius( radius );
 }
 
-template< typename F1, typename F2 >
+template< typename CF, typename ZCF >
 void
-IMarrHildrethOperatorFilter< F1, F2 >::setRadius2(
+IMarrHildrethOperatorFilter< CF, ZCF >::setRadius2(
     unsigned int radius
     )
 {

@@ -6,32 +6,32 @@
  */
 
 /*************************************************************************/
-/* LaplacianOfGaussianFilter< F >                                        */
+/* LaplacianOfGaussianFilter< CF >                                       */
 /*************************************************************************/
-template< typename F >
-LaplacianOfGaussianFilter< F >::LaplacianOfGaussianFilter()
+template< typename CF >
+LaplacianOfGaussianFilter< CF >::LaplacianOfGaussianFilter()
 : mKernel( NULL )
 {
 }
 
-template< typename F >
-LaplacianOfGaussianFilter< F >::~LaplacianOfGaussianFilter()
+template< typename CF >
+LaplacianOfGaussianFilter< CF >::~LaplacianOfGaussianFilter()
 {
     free( mKernel );
 }
 
-template< typename F >
+template< typename CF >
 void
-LaplacianOfGaussianFilter< F >::filter(
+LaplacianOfGaussianFilter< CF >::filter(
     IImage& image
     )
 {
     mFilter.filter( image );
 }
 
-template< typename F >
+template< typename CF >
 void
-LaplacianOfGaussianFilter< F >::setParam(
+LaplacianOfGaussianFilter< CF >::setParam(
     const char* name,
     const void* value
     )
@@ -52,9 +52,9 @@ LaplacianOfGaussianFilter< F >::setParam(
         IImageFilter::setParam( name, value );
 }
 
-template< typename F >
+template< typename CF >
 void
-LaplacianOfGaussianFilter< F >::setRadius(
+LaplacianOfGaussianFilter< CF >::setRadius(
     unsigned int radius
     )
 {
