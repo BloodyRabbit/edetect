@@ -10,12 +10,11 @@
 #include "IConvolutionFilter.hxx"
 
 /**
- * @brief Applies full 2D discrete convolution
- *   to the image.
+ * @brief Interface of a CUDA-backed convolution filter.
  *
  * @author Jan Bobek
  */
-class CudaConvolutionFilter
+class ICudaConvolutionFilter
 : public IConvolutionFilter
 {
 public:
@@ -24,9 +23,44 @@ public:
 
     /// @copydoc IConvolutionFilter::setKernel(const float*, unsigned int)
     void setKernel( const float* kernel, unsigned int radius );
+};
 
+/**
+ * @brief Applies 2D discrete convolution to the image.
+ *
+ * @author Jan Bobek
+ */
+class CudaConvolutionFilter
+: public ICudaConvolutionFilter
+{
 protected:
-    /// @copydoc IConvolutionFilter::convolve(IImage&, const IImage&)
+    /// @copydoc ICudaConvolutionFilter::convolve(IImage&, const IImage&)
+    void convolve( IImage& dest, const IImage& src );
+};
+
+/**
+ * @brief Applies 1D discrete row convolution to the image.
+ *
+ * @author Jan Bobek
+ */
+class CudaRowConvolutionFilter
+: public ICudaConvolutionFilter
+{
+protected:
+    /// @copydoc ICudaConvolutionFilter::convolve(IImage&, const IImage&)
+    void convolve( IImage& dest, const IImage& src );
+};
+
+/**
+ * @brief Applies 1D discrete column convolution to the image.
+ *
+ * @author Jan Bobek
+ */
+class CudaColumnConvolutionFilter
+: public ICudaConvolutionFilter
+{
+protected:
+    /// @copydoc ICudaConvolutionFilter::convolve(IImage&, const IImage&)
     void convolve( IImage& dest, const IImage& src );
 };
 

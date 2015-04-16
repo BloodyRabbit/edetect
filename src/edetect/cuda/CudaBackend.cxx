@@ -42,6 +42,8 @@ CudaBackend::createFilter(
 {
     if( !strcmp( name, "convolution" ) )
         return new CudaConvolutionFilter;
+    if( !strcmp( name, "column-convolution" ) )
+        return new CudaColumnConvolutionFilter;
     if( !strcmp( name, "conv-2d-sep" ) )
         return new CudaConvolution2dSeparableFilter;
     if( !strcmp( name, "desaturate" ) )
@@ -56,6 +58,8 @@ CudaBackend::createFilter(
         return new LaplacianOfGaussianFilter< CudaConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CudaMarrHildrethOperatorFilter;
+    if( !strcmp( name, "row-convolution" ) )
+        return new CudaRowConvolutionFilter;
     if( !strcmp( name, "sobel-operator" ) )
         return new CudaSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )
