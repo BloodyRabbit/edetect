@@ -42,15 +42,15 @@ CpuBackend::createFilter(
         return new CpuDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
         return new GaussianBlurFilter<
-            SeparableConvolutionFilter<
-                CpuRowConvolutionFilter,
-                CpuColumnConvolutionFilter > >;
+            CpuRowConvolutionFilter,
+            CpuColumnConvolutionFilter >;
     if( !strcmp( name, "int-float" ) )
         return new CpuIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
-        return new LaplacianOfGaussianFilter< CpuConvolutionFilter >;
+        return new LaplacianOfGaussianFilter<
+            CpuConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CpuMarrHildrethOperatorFilter;
     if( !strcmp( name, "row-convolution" ) )

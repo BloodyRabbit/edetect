@@ -5,11 +5,11 @@
  */
 
 /*************************************************************************/
-/* GaussianBlurFilter< SCF >                                             */
+/* GaussianBlurFilter< RCF, CCF >                                        */
 /*************************************************************************/
-template< typename SCF >
+template< typename RCF, typename CCF >
 void
-GaussianBlurFilter< SCF >::setRadius(
+GaussianBlurFilter< RCF, CCF >::setRadius(
     unsigned int radius
     )
 {

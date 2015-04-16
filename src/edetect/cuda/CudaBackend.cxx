@@ -48,15 +48,15 @@ CudaBackend::createFilter(
         return new CudaDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
         return new GaussianBlurFilter<
-            SeparableConvolutionFilter<
-                CudaRowConvolutionFilter,
-                CudaColumnConvolutionFilter > >;
+            CudaRowConvolutionFilter,
+            CudaColumnConvolutionFilter >;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
     if( !strcmp( name, "log" ) )
-        return new LaplacianOfGaussianFilter< CudaConvolutionFilter >;
+        return new LaplacianOfGaussianFilter<
+            CudaConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
         return new CudaMarrHildrethOperatorFilter;
     if( !strcmp( name, "row-convolution" ) )
