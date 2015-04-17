@@ -41,9 +41,9 @@ CpuBackend::createFilter(
     if( !strcmp( name, "desaturate" ) )
         return new CpuDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
-        return new GaussianBlurFilter<
-            CpuRowConvolutionFilter,
-            CpuColumnConvolutionFilter >;
+        return new SeparableConvolutionFilter<
+            GaussianBlurFilter< CpuRowConvolutionFilter >,
+            GaussianBlurFilter< CpuColumnConvolutionFilter > >;
     if( !strcmp( name, "int-float" ) )
         return new CpuIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )

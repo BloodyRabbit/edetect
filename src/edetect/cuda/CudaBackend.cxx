@@ -47,9 +47,9 @@ CudaBackend::createFilter(
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
     if( !strcmp( name, "gaussian-blur" ) )
-        return new GaussianBlurFilter<
-            CudaRowConvolutionFilter,
-            CudaColumnConvolutionFilter >;
+        return new SeparableConvolutionFilter<
+            GaussianBlurFilter< CudaRowConvolutionFilter >,
+            GaussianBlurFilter< CudaColumnConvolutionFilter > >;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )

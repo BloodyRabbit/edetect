@@ -8,18 +8,15 @@
 #define GAUSSIAN_BLUR_FILTER_HXX__INCL__
 
 #include "IGeneratedKernelFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
 
 /**
  * @brief Applies Gaussian blur to the image.
  *
  * @author Jan Bobek
  */
-template< typename RCF, typename CCF >
+template< typename CF >
 class GaussianBlurFilter
-: public IGeneratedKernelFilter<
-    SeparableConvolutionFilter<
-        RCF, CCF > >
+: public IGeneratedKernelFilter< CF >
 {
 public:
     /**
@@ -29,12 +26,8 @@ public:
 
 protected:
     // Improves readability
-    using IGeneratedKernelFilter<
-        SeparableConvolutionFilter<
-            RCF, CCF > >::mKernel;
-    using IGeneratedKernelFilter<
-        SeparableConvolutionFilter<
-            RCF, CCF > >::mFilter;
+    using IGeneratedKernelFilter< CF >::mKernel;
+    using IGeneratedKernelFilter< CF >::mFilter;
 };
 
 #include "GaussianBlurFilter.txx"

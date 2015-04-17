@@ -5,11 +5,11 @@
  */
 
 /*************************************************************************/
-/* GaussianBlurFilter< RCF, CCF >                                        */
+/* GaussianBlurFilter< CF >                                              */
 /*************************************************************************/
-template< typename RCF, typename CCF >
+template< typename CF >
 void
-GaussianBlurFilter< RCF, CCF >::setRadius(
+GaussianBlurFilter< CF >::setRadius(
     unsigned int radius
     )
 {
@@ -32,6 +32,5 @@ GaussianBlurFilter< RCF, CCF >::setRadius(
     for( unsigned int i = 0; i < length; ++i )
         mKernel[i] /= sum;
 
-    mFilter.setRowKernel( mKernel, radius );
-    mFilter.setColumnKernel( mKernel, radius );
+    mFilter.setKernel( mKernel, radius );
 }
