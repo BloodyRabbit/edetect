@@ -51,7 +51,7 @@ CpuBackend::createFilter(
     if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CpuConvolutionFilter >;
-    if( !strcmp( name, "marr-hildreth" ) )
+    if( !strcmp( name, "marr-hildreth-operator" ) )
         return new CpuMarrHildrethOperatorFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CpuRowConvolutionFilter;

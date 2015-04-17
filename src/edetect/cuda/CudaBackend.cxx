@@ -57,7 +57,7 @@ CudaBackend::createFilter(
     if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CudaConvolutionFilter >;
-    if( !strcmp( name, "marr-hildreth" ) )
+    if( !strcmp( name, "marr-hildreth-operator" ) )
         return new CudaMarrHildrethOperatorFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CudaRowConvolutionFilter;
