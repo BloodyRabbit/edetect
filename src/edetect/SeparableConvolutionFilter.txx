@@ -33,7 +33,10 @@ SeparableConvolutionFilter< RCF, CCF >::setParam(
     else if( !strncmp( name, cpfx, sizeof(cpfx) ) )
         mColumnFilter.setParam( name + sizeof(cpfx), value );
     else
-        IImageFilter::setParam( name, value );
+    {
+        mRowFilter.setParam( name, value );
+        mColumnFilter.setParam( name, value );
+    }
 }
 
 template< typename RCF, typename CCF >
