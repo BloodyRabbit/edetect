@@ -48,7 +48,7 @@ CpuBackend::createFilter(
         return new CpuIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
-    if( !strcmp( name, "log" ) )
+    if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CpuConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )

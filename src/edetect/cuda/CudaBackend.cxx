@@ -54,7 +54,7 @@ CudaBackend::createFilter(
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
-    if( !strcmp( name, "log" ) )
+    if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CudaConvolutionFilter >;
     if( !strcmp( name, "marr-hildreth" ) )
