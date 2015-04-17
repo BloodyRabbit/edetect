@@ -49,6 +49,8 @@ cuda_add_library(
   "IZeroCrossFilter.hxx"
   "IZeroCrossFilter.cxx"
   # Generic filter classes
+  "DerivativeOfGaussianFilter.hxx"
+  "DerivativeOfGaussianFilter.txx"
   "GaussianBlurFilter.hxx"
   "GaussianBlurFilter.txx"
   "LaplacianOfGaussianFilter.hxx"
