@@ -9,8 +9,8 @@
 /* LaplacianOfGaussianFilter< CF >                                       */
 /*************************************************************************/
 template< typename CF >
-void
-LaplacianOfGaussianFilter< CF >::setRadius(
+float*
+LaplacianOfGaussianFilter< CF >::generateKernel(
     unsigned int radius
     )
 {
@@ -21,37 +21,36 @@ LaplacianOfGaussianFilter< CF >::setRadius(
     const double coef1 = 2.0 * sigma * sigma;
     const double coef2 = -1.0 / coef1;
 
-    mKernel = (float*)realloc(
-        mKernel, stride * stride * sizeof(*mKernel) );
+    float* const kernel = new float[stride * stride];
 
-    mKernel[origin] = -coef1;
+    kernel[origin] = -coef1;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
     {
-        (mKernel[origin - i] =
-         mKernel[origin - i * stride] =
-         mKernel[origin + i] =
-         mKernel[origin + i * stride] =
+        (kernel[origin - i] =
+         kernel[origin - i * stride] =
+         kernel[origin + i] =
+         kernel[origin + i * stride] =
          (r2i - coef1) * exp( coef2 * r2i ));
 
-        (mKernel[origin - i * (stride - 1)] =
-         mKernel[origin - i * (stride + 1)] =
-         mKernel[origin + i * (stride - 1)] =
-         mKernel[origin + i * (stride + 1)] =
+        (kernel[origin - i * (stride - 1)] =
+         kernel[origin - i * (stride + 1)] =
+         kernel[origin + i * (stride - 1)] =
+         kernel[origin + i * (stride + 1)] =
          (2 * r2i - coef1) * exp( coef2 * (2 * r2i) ));
 
         for( unsigned int j = i + 1, r2ij = r2i + j * j; j <= radius; r2ij += 1 + 2 * j++ )
-            (mKernel[origin - i * stride - j] =
-             mKernel[origin - i * stride + j] =
-             mKernel[origin + i * stride - j] =
-             mKernel[origin + i * stride + j] =
+            (kernel[origin - i * stride - j] =
+             kernel[origin - i * stride + j] =
+             kernel[origin + i * stride - j] =
+             kernel[origin + i * stride + j] =
 
-             mKernel[origin - j * stride - i] =
-             mKernel[origin - j * stride + i] =
-             mKernel[origin + j * stride - i] =
-             mKernel[origin + j * stride + i] =
+             kernel[origin - j * stride - i] =
+             kernel[origin - j * stride + i] =
+             kernel[origin + j * stride - i] =
+             kernel[origin + j * stride + i] =
 
              (r2ij - coef1) * exp( coef2 * r2ij ));
     }
 
-    mFilter.setKernel( mKernel, radius );
+    return kernel;
 }

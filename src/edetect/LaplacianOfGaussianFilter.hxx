@@ -20,19 +20,9 @@ template< typename CF >
 class LaplacianOfGaussianFilter
 : public IGeneratedKernelFilter< CF >
 {
-public:
-    /**
-     * @brief Sets radius of the LoG kernel.
-     *
-     * @param[in] radius
-     *   The desired kernel radius.
-     */
-    void setRadius( unsigned int radius );
-
 protected:
-    // Improves readability
-    using IGeneratedKernelFilter< CF >::mKernel;
-    using IGeneratedKernelFilter< CF >::mFilter;
+    /// @copydoc IGeneratedKernelFilter< CF >::generateKernel( radius )
+    float* generateKernel( unsigned int radius );
 };
 
 #include "LaplacianOfGaussianFilter.txx"

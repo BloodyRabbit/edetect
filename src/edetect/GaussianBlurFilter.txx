@@ -8,8 +8,8 @@
 /* GaussianBlurFilter< CF >                                              */
 /*************************************************************************/
 template< typename CF >
-void
-GaussianBlurFilter< CF >::setRadius(
+float*
+GaussianBlurFilter< CF >::generateKernel(
     unsigned int radius
     )
 {
@@ -19,18 +19,17 @@ GaussianBlurFilter< CF >::setRadius(
     const double sigma = radius / 2.5;
     const double coef = -1.0 / (2.0 * sigma * sigma);
 
-    mKernel = (float*)realloc(
-        mKernel, length * sizeof(*mKernel) );
+    float* const kernel = new float[length];
 
-    float sum = mKernel[origin] = 1.0f;
+    float sum = kernel[origin] = 1.0f;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
         sum += 2.0f *
-            (mKernel[origin - i] =
-             mKernel[origin + i] =
+            (kernel[origin - i] =
+             kernel[origin + i] =
              exp( coef * r2i ));
 
     for( unsigned int i = 0; i < length; ++i )
-        mKernel[i] /= sum;
+        kernel[i] /= sum;
 
-    mFilter.setKernel( mKernel, radius );
+    return kernel;
 }

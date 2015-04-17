@@ -43,9 +43,20 @@ public:
     /**
      * @brief Sets radius of the generated kernel.
      */
-    virtual void setRadius( unsigned int radius ) = 0;
+    void setRadius( unsigned int radius );
 
 protected:
+    /**
+     * @brief Generates the kernel.
+     *
+     * @param[in] radius
+     *   Radius of the kernel to generate.
+     *
+     * @return
+     *   The generated kernel.
+     */
+    virtual float* generateKernel( unsigned int radius ) = 0;
+
     /// The generated kernel.
     float* mKernel;
     /// The convolution filter we are delegating to.

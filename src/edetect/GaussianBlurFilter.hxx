@@ -18,16 +18,9 @@ template< typename CF >
 class GaussianBlurFilter
 : public IGeneratedKernelFilter< CF >
 {
-public:
-    /**
-     * @brief Sets radius of the Gaussian kernel.
-     */
-    void setRadius( unsigned int radius );
-
 protected:
-    // Improves readability
-    using IGeneratedKernelFilter< CF >::mKernel;
-    using IGeneratedKernelFilter< CF >::mFilter;
+    /// @copydoc IGeneratedKernelFilter< CF >::generateKernel( radius )
+    float* generateKernel( unsigned int radius );
 };
 
 #include "GaussianBlurFilter.txx"

@@ -17,7 +17,7 @@ IGeneratedKernelFilter< CF >::IGeneratedKernelFilter()
 template< typename CF >
 IGeneratedKernelFilter< CF >::~IGeneratedKernelFilter()
 {
-    free( mKernel );
+    delete[] mKernel;
 }
 
 template< typename CF >
@@ -50,4 +50,15 @@ IGeneratedKernelFilter< CF >::setParam(
     }
     else
         IImageFilter::setParam( name, value );
+}
+
+template< typename CF >
+void
+IGeneratedKernelFilter< CF >::setRadius(
+    unsigned int radius
+    )
+{
+    delete[] mKernel;
+    mKernel = generateKernel( radius );
+    mFilter.setKernel( mKernel, radius );
 }
