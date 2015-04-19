@@ -15,6 +15,7 @@
 #include "SeparableConvolutionFilter.hxx"
 #include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
+#include "cuda/CudaEuclideanNormFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaMarrHildrethOperatorFilter.hxx"
@@ -46,6 +47,8 @@ CudaBackend::createFilter(
         return new CudaColumnConvolutionFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
+    if( !strcmp( name, "euclidean-norm" ) )
+        return new CudaEuclideanNormFilter;
     if( !strcmp( name, "gaussian-blur" ) )
         return new SeparableConvolutionFilter<
             GaussianBlurFilter< CudaRowConvolutionFilter >,

@@ -14,6 +14,7 @@
 #include "SeparableConvolutionFilter.hxx"
 #include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
+#include "cpu/CpuEuclideanNormFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuMarrHildrethOperatorFilter.hxx"
@@ -40,6 +41,8 @@ CpuBackend::createFilter(
         return new CpuColumnConvolutionFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CpuDesaturateFilter;
+    if( !strcmp( name, "euclidean-norm" ) )
+        return new CpuEuclideanNormFilter;
     if( !strcmp( name, "gaussian-blur" ) )
         return new SeparableConvolutionFilter<
             GaussianBlurFilter< CpuRowConvolutionFilter >,
