@@ -19,6 +19,7 @@ class IImageFilter;
  */
 class ImageBackend
 {
+    friend class ImageFilterBuilder;
 public:
     /**
      * @brief Initializes an image backend.

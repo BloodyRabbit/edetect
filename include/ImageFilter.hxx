@@ -10,6 +10,7 @@
 
 class Image;
 class ImageBackend;
+class ImageFilterBuilder;
 
 class IImageFilter;
 
@@ -37,6 +38,18 @@ public:
     ImageFilter(
         ImageBackend& backend, const char* name,
         unsigned int nparams = 0, ...
+        );
+    /**
+     * @brief Initializes the filter.
+     *
+     * @param[in] backend
+     *   Backend of the filter.
+     * @param[in] builder
+     *   A filter builder.
+     */
+    ImageFilter(
+        ImageBackend& backend,
+        ImageFilterBuilder& builder
         );
     /**
      * @brief Destroys the filter.

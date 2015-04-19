@@ -23,6 +23,7 @@ cuda_add_library(
   "Image.cxx"
   "ImageBackend.cxx"
   "ImageFilter.cxx"
+  "ImageFilterBuilder.cxx"
   "ImageLoader.hxx"
   "ImageLoader.cxx"
   # Internal interface classes
@@ -31,6 +32,7 @@ cuda_add_library(
   "IImageBackend.hxx"
   "IImageFilter.hxx"
   "IImageFilter.ixx"
+  "IImageFilterBuilder.hxx"
   # Filter interface classes
   "IConvolutionFilter.hxx"
   "IConvolutionFilter.cxx"
@@ -59,6 +61,8 @@ cuda_add_library(
   "LaplacianOfGaussianFilter.txx"
   "SeparableConvolutionFilter.hxx"
   "SeparableConvolutionFilter.txx"
+  "StringFilterBuilder.hxx"
+  "StringFilterBuilder.cxx"
 
   # CPU backend implementation
   "cpu/CpuBackend.hxx"

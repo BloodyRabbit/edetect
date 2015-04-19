@@ -9,6 +9,7 @@
 #include "Image.hxx"
 #include "ImageBackend.hxx"
 #include "ImageFilter.hxx"
+#include "ImageFilterBuilder.hxx"
 
 #include "IImageFilter.hxx"
 
@@ -37,6 +38,14 @@ ImageFilter::ImageFilter(
     }
 
     va_end( ap );
+}
+
+ImageFilter::ImageFilter(
+    ImageBackend& backend,
+    ImageFilterBuilder& builder
+    )
+: mFilter( builder.buildFilter( backend ) )
+{
 }
 
 ImageFilter::~ImageFilter()
