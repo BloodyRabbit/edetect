@@ -13,6 +13,7 @@
 #include <cstdlib>
 #include <cstring>
 
+#include <list>
 #include <sstream>
 #include <stdexcept>
 #include <string>
