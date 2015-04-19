@@ -19,9 +19,6 @@ class IImageFilter;
  */
 class ImageBackend
 {
-    friend class Image;
-    friend class ImageFilter;
-
 public:
     /**
      * @brief Initializes an image backend.
@@ -35,7 +32,6 @@ public:
      */
     ~ImageBackend();
 
-protected:
     /**
      * @brief Creates an image backed by the backend.
      *
@@ -54,6 +50,7 @@ protected:
      */
     IImageFilter* createFilter( const char* name );
 
+protected:
     /// Implementation of the image backend.
     IImageBackend* mBackend;
 };

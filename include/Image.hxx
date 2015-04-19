@@ -20,7 +20,6 @@ class IImage;
 class Image
 {
     friend class ImageFilter;
-
 public:
     /**
      * @brief An enum representing supported image formats.
