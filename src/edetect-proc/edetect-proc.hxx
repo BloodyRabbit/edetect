@@ -18,5 +18,6 @@
 #include "Image.hxx"
 #include "ImageBackend.hxx"
 #include "ImageFilter.hxx"
+#include "ImageFilterBuilder.hxx"
 
 #endif /* !EDETECT_PROC_HXX__INCL__ */

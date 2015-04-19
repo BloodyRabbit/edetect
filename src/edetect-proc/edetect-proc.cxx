@@ -5,66 +5,6 @@
  */
 
 #include "edetect-proc.hxx"
-#include "ImageFilterPipeline.hxx"
-
-void
-buildPipeline(
-    char* pipestr,
-    ImageBackend& backend,
-    ImageFilterPipeline& pipeline
-    )
-{
-    bool param, cont;
-    size_t a, b;
-    ImageFilter* filt;
-
-    fprintf( stderr, "Building pipeline `%s':\n",
-             pipestr );
-    cont = true;
-
-    while( cont )
-    {
-        a = strcspn( pipestr, ",:=" );
-        if( '=' == pipestr[a] )
-            throw std::invalid_argument(
-                "Malformed filter name: unexpected `='" );
-
-        param = (':' == pipestr[a]);
-        cont = ('\0' != pipestr[a]);
-        pipestr[a] = '\0';
-
-        fprintf( stderr, "  Creating filter `%s'\n",
-                 pipestr );
-        filt = new ImageFilter( backend, pipestr );
-        pipestr += a + 1;
-
-        while( param )
-        {
-            a = strcspn( pipestr, ",:=" );
-            if( '=' != pipestr[a] )
-                throw std::invalid_argument(
-                    "Malformed filter parameter: missing value" );
-
-            b = strcspn( &pipestr[a + 1], ",:=" );
-            if( '=' == pipestr[a + b + 1] )
-                throw std::invalid_argument(
-                    "Malformed filter parameter: unexpected `=' in value" );
-
-            param = (':' == pipestr[a + b + 1]);
-            cont = ('\0' != pipestr[a + b + 1]);
-            pipestr[a] = pipestr[a + b + 1] = '\0';
-
-            fprintf( stderr, "    Setting parameter `%s' to `%s'\n",
-                     pipestr, &pipestr[a + 1] );
-            filt->setParam( pipestr, &pipestr[a + 1] );
-            pipestr += a + b + 2;
-        }
-
-        pipeline.add( filt );
-    }
-
-    fputs( "Pipeline built successfully\n\n", stderr );
-}
 
 int
 main(
@@ -74,7 +14,7 @@ main(
 {
     if( argc < 3 || !(argc % 2) )
     {
-        fprintf( stderr, "Usage: %s <backend> <pipeline> [<infile> <outfile> ...]\n",
+        fprintf( stderr, "Usage: %s <backend> <filter> [<infile> <outfile> ...]\n",
                  argv[0] );
         return EXIT_FAILURE;
     }
@@ -84,8 +24,9 @@ main(
         fprintf( stderr, "Initializing backend `%s'\n", argv[1] );
         ImageBackend backend( argv[1] );
 
-        ImageFilterPipeline pipeline;
-        buildPipeline( argv[2], backend, pipeline );
+        fprintf( stderr, "Building filter `%s'\n", argv[2] );
+        ImageFilterBuilder builder( argv[2] );
+        ImageFilter filter( backend, builder );
 
         argc -= 3;
         argv += 3;
@@ -103,7 +44,7 @@ main(
                      image.rows(),
                      image.pixelSize() );
 
-            pipeline.filter( image );
+            filter.filter( image );
 
             image.save( argv[1] );
             fprintf( stderr,
