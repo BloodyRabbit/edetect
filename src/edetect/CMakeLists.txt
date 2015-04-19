@@ -38,6 +38,8 @@ cuda_add_library(
   "IConvolutionFilter.cxx"
   "IDesaturateFilter.hxx"
   "IDesaturateFilter.cxx"
+  "IDualInputFilter.hxx"
+  "IDualInputFilter.cxx"
   "IGeneratedKernelFilter.hxx"
   "IGeneratedKernelFilter.txx"
   "IIntFloatFilter.hxx"
