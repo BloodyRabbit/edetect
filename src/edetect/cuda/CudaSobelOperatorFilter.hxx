@@ -21,7 +21,7 @@ class CudaSobelOperatorFilter
     CudaColumnConvolutionFilter >
 {
 protected:
-    /// @copydoc ISobelOperatorFilter< F >::computeGradient(IImage&, const IImage&)
+    /// @copydoc ISobelOperatorFilter< RCF, CCF >::computeGradient(IImage&, const IImage&)
     void computeGradient( IImage& vert, const IImage& horz );
 };
 

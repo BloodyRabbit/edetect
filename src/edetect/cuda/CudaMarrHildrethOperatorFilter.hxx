@@ -22,7 +22,7 @@ class CudaMarrHildrethOperatorFilter
     CudaZeroCrossFilter >
 {
 protected:
-    /// @copydoc IMarrHildrethOperatorFilter< F >::mergeEdges(IImage&, const IImage&)
+    /// @copydoc IMarrHildrethOperatorFilter< CF, ZCF >::mergeEdges(IImage&, const IImage&)
     void mergeEdges( IImage& dest, const IImage& src );
 };
 

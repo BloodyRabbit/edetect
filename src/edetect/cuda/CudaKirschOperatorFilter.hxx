@@ -20,7 +20,7 @@ class CudaKirschOperatorFilter
     CudaConvolutionFilter >
 {
 protected:
-    /// @copydoc IKirschOperatorFilter< T >::computeGradient( IImage*[KERNEL_COUNT] )
+    /// @copydoc IKirschOperatorFilter< CF >::computeGradient( IImage*[KERNEL_COUNT] )
     void computeGradient( IImage* images[KERNEL_COUNT] );
 };
 
