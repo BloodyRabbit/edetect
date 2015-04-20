@@ -5,29 +5,49 @@
  */
 
 #include "edetect.hxx"
+#include "IImage.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
 
 /*************************************************************************/
 /* CpuKirschOperatorFilter                                               */
 /*************************************************************************/
 void
-CpuKirschOperatorFilter::computeGradient(
-    IImage* images[KERNEL_COUNT]
+CpuKirschOperatorFilter::applyKirschOperator(
+    IImage& dest,
+    const IImage& src
     )
 {
-    for( unsigned int row = 0; row < images[0]->rows(); ++row )
-    {
-        float* srcp[KERNEL_COUNT];
-        for( unsigned int i = 0; i < KERNEL_COUNT; ++i )
-            srcp[i] = (float*)(images[i]->data() + row * images[i]->stride());
-
-        for( unsigned int col = 0; col < images[0]->columns(); ++col )
+    for( unsigned int row = 0; row < src.rows(); ++row )
+        for( unsigned int col = 0; col < src.columns(); ++col )
         {
-            float x = std::abs( srcp[0][col] );
-            for( unsigned int i = 1; i < KERNEL_COUNT; ++i )
-                x = std::max( x, std::abs( srcp[i][col] ) );
+            float* const dstp =
+                (float*)(dest.data() + row * dest.stride()) + col;
+            const unsigned char* const srcp =
+                src.data() + row * src.stride() + col * sizeof(float);
 
-            srcp[0][col] = x;
+            const float* const tp =
+                (const float*)(0 < row ? srcp - src.stride() : srcp);
+            const float* const mp =
+                (const float*)srcp;
+            const float* const bp =
+                (const float*)(row + 1 < src.rows() ? srcp + src.stride() : srcp);
+
+            const int li = (0 < col ? -1 : 0);
+            const int ri = (col + 1 < src.columns() ? 1 : 0);
+
+            float x =
+                5.0f * (tp[li] + tp[ 0] + tp[ri]) -
+                3.0f * (mp[li] + mp[ri] + bp[li] + bp[0] + bp[ri]);
+
+            float a = fabs(x);
+            a = fmaxf( a, fabs( x += 8.0f * (mp[ri] - tp[li]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (bp[ri] - tp[ 0]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (bp[ 0] - tp[ri]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (bp[li] - mp[ri]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (mp[li] - bp[ri]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (tp[li] - bp[ 0]) ) );
+            a = fmaxf( a, fabs( x += 8.0f * (tp[ 0] - bp[li]) ) );
+
+            *dstp = a;
         }
-    }
 }

@@ -15,16 +15,10 @@
  *
  * @author Jan Bobek
  */
-template< typename CF >
 class IKirschOperatorFilter
 : public IImageFilter
 {
 public:
-    /**
-     * @brief Initializes the Kirsch operator.
-     */
-    IKirschOperatorFilter();
-
     /**
      * @brief Applies the Kirsch operator to an image.
      *
@@ -34,28 +28,15 @@ public:
     void filter( IImage& image );
 
 protected:
-    /// Number of kernels used by Kirsch operator.
-    static const unsigned int KERNEL_COUNT = 8;
-    /// Radius of kernels used by Kirsch operator.
-    static const unsigned int KERNEL_RADIUS = 1;
-    /// The kernels used by Kirsch operator.
-    static const float KERNELS[KERNEL_COUNT][(2 * KERNEL_RADIUS + 1) * (2 * KERNEL_RADIUS + 1)];
-
     /**
-     * @brief Computes the gradient as given
-     *   by the Kirsch operator.
+     * @brief Applies the Kirsch operator to the image.
      *
-     * @param[in,out] images
-     *   The images to compute the gradient from.
+     * @param[out] dest
+     *   Where to place the results.
+     * @param[in] src
+     *   The source image data.
      */
-    virtual void computeGradient(
-        IImage* images[KERNEL_COUNT]
-        ) = 0;
-
-    /// The filters we use for each kernel.
-    CF mFilters[KERNEL_COUNT];
+    virtual void applyKirschOperator( IImage& dest, const IImage& src ) = 0;
 };
-
-#include "IKirschOperatorFilter.txx"
 
 #endif /* !IKIRSCH_OPERATOR_FILTER_HXX__INCL__ */

@@ -47,7 +47,7 @@ cuda_add_library(
   "IIntFloatFilter.hxx"
   "IIntFloatFilter.cxx"
   "IKirschOperatorFilter.hxx"
-  "IKirschOperatorFilter.txx"
+  "IKirschOperatorFilter.cxx"
   "IMarrHildrethOperatorFilter.hxx"
   "IMarrHildrethOperatorFilter.txx"
   "IMultiplyFilter.hxx"

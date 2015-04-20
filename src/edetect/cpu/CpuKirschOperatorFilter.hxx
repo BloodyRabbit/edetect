@@ -8,7 +8,6 @@
 #define CPU__CPU_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IKirschOperatorFilter.hxx"
-#include "cpu/CpuConvolutionFilter.hxx"
 
 /**
  * @brief Applies Kirsch operator to the image.
@@ -16,12 +15,11 @@
  * @author Jan Bobek
  */
 class CpuKirschOperatorFilter
-: public IKirschOperatorFilter<
-    CpuConvolutionFilter >
+: public IKirschOperatorFilter
 {
 protected:
-    /// @copydoc IKirschOperatorFilter< T >::computeGradient( IImage*[KERNEL_COUNT] )
-    void computeGradient( IImage* images[KERNEL_COUNT] );
+    /// @copydoc IKirschOperatorFilter::applyKirschOperator(IImage&, const IImage&)
+    void applyKirschOperator( IImage& dest, const IImage& src );
 };
 
 #endif /* !CPU__CPU_KIRSCH_OPERATOR_FILTER_HXX__INCL__ */
