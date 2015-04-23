@@ -25,15 +25,15 @@ StringFilterBuilderImpl::parseFilter(
     IImageFilter* filter;
 
     name = &mStr[idx];
-    nlen = strcspn( name, ",:=()" );
+    nlen = strcspn( name, ",:={}" );
     if( '=' == name[nlen] )
         throw std::invalid_argument(
             "Malformed filter name: unexpected `='" );
-    else if( '(' == name[nlen] )
+    else if( '{' == name[nlen] )
     {
         if( 0 < nlen )
             throw std::invalid_argument(
-                "Malformed filter name: unexpected `('" );
+                "Malformed filter name: unexpected `{'" );
 
         filter = parsePipeline( backend, ++idx );
     }
@@ -56,13 +56,13 @@ StringFilterBuilderImpl::parseParams(
     unsigned int& idx
     )
 {
-    char x, *name, *value;
-    unsigned int nlen, vlen;
+    char x, *name, *strval, *endp;
+    unsigned int nlen, vlen, intval;
 
     while( ':' == mStr[idx] )
     {
         name = &mStr[++idx];
-        nlen = strcspn( name, ",:=()" );
+        nlen = strcspn( name, ",:={}" );
         if( '=' != name[nlen] )
             throw std::invalid_argument(
                 "Malformed filter parameter: missing value" );
@@ -70,26 +70,32 @@ StringFilterBuilderImpl::parseParams(
         name[nlen] = '\0';
         idx += nlen + 1;
 
-        value = &mStr[idx];
-        vlen = strcspn( value, ",:=()" );
-        if( '=' == value[vlen] )
+        strval = &mStr[idx];
+        vlen = strcspn( strval, ",:={}" );
+        if( '=' == strval[vlen] )
             throw std::invalid_argument(
                 "Malformed filter parameter: unexpected `=' in value" );
-        else if( '(' == value[vlen] )
+        else if( '{' == strval[vlen] )
         {
             if( 0 < vlen )
                 throw std::invalid_argument(
-                    "Malformed filter parameter: unexpected '(' in value" );
+                    "Malformed filter parameter: unexpected '{' in value" );
 
             filter.setParam(
                 name, parsePipeline( backend, ++idx ) );
         }
         else
         {
-            x = value[vlen], value[vlen] = '\0';
-            filter.setParam( name, value );
-            value[vlen] = x;
+            x = strval[vlen], strval[vlen] = '\0';
 
+            /* try to convert to integer */
+            intval = strtoul( strval, &endp, 10 );
+            if( !*endp )
+                filter.setParam( name, intval );
+            else
+                filter.setParam( name, strval );
+
+            strval[vlen] = x;
             idx += vlen;
         }
 
@@ -112,9 +118,9 @@ StringFilterBuilderImpl::parsePipeline(
             parseFilter( backend, idx ) );
     } while( ',' == mStr[idx++] );
 
-    if( ')' != mStr[idx - 1] )
+    if( '}' != mStr[idx - 1] )
         throw std::invalid_argument(
-            "Malformed pipeline: missing `)'" );
+            "Malformed pipeline: missing `}'" );
 
     return pipeline;
 }
