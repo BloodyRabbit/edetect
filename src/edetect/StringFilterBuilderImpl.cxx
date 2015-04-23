@@ -14,6 +14,30 @@
 /*************************************************************************/
 /* StringFilterBuilderImpl                                               */
 /*************************************************************************/
+StringFilterBuilderImpl::StringFilterBuilderImpl(
+    char* str
+    )
+: mStr( str )
+{
+}
+
+IImageFilter*
+StringFilterBuilderImpl::buildFilter(
+    IImageBackend& backend
+    )
+{
+    unsigned int idx;
+    IImageFilter* filter;
+
+    idx = 0;
+    filter = parseFilter( backend, idx );
+    if( '\0' != mStr[idx] )
+        throw std::runtime_error(
+            "Malformed description string: parsing incomplete" );
+
+    return filter;
+}
+
 IImageFilter*
 StringFilterBuilderImpl::parseFilter(
     IImageBackend& backend,
@@ -173,28 +197,4 @@ StringFilterBuilderImpl::parsePipeline(
             "Malformed pipeline: missing `}'" );
 
     return pipeline;
-}
-
-StringFilterBuilderImpl::StringFilterBuilderImpl(
-    char* str
-    )
-: mStr( str )
-{
-}
-
-IImageFilter*
-StringFilterBuilderImpl::buildFilter(
-    IImageBackend& backend
-    )
-{
-    unsigned int idx;
-    IImageFilter* filter;
-
-    idx = 0;
-    filter = parseFilter( backend, idx );
-    if( '\0' != mStr[idx] )
-        throw std::runtime_error(
-            "Malformed description string: parsing incomplete" );
-
-    return filter;
 }

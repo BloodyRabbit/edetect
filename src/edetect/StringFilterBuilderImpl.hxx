@@ -21,12 +21,7 @@ class StringFilterBuilderImpl
 : public IImageFilterBuilder
 {
 public:
-    /**
-     * @brief Initializes the string filter builder.
-     *
-     * @param[in] str
-     *   The description string.
-     */
+    /// @copydoc StringFilterBuilder::StringFilterBuilder(char*)
     StringFilterBuilderImpl( char* str );
 
     /// @copydoc IImageFilterBuilder::buildFilter(IImageBackend&)
