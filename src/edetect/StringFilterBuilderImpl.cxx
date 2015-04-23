@@ -9,13 +9,13 @@
 #include "IImageBackend.hxx"
 #include "IImageFilter.hxx"
 #include "ImageFilterPipeline.hxx"
-#include "StringFilterBuilder.hxx"
+#include "StringFilterBuilderImpl.hxx"
 
 /*************************************************************************/
-/* StringFilterBuilder                                                   */
+/* StringFilterBuilderImpl                                               */
 /*************************************************************************/
 IImageFilter*
-StringFilterBuilder::parseFilter(
+StringFilterBuilderImpl::parseFilter(
     IImageBackend& backend,
     unsigned int& idx
     )
@@ -50,7 +50,7 @@ StringFilterBuilder::parseFilter(
 }
 
 void
-StringFilterBuilder::parseParams(
+StringFilterBuilderImpl::parseParams(
     IImageBackend& backend,
     IImageFilter& filter,
     unsigned int& idx
@@ -98,7 +98,7 @@ StringFilterBuilder::parseParams(
 }
 
 ImageFilterPipeline*
-StringFilterBuilder::parsePipeline(
+StringFilterBuilderImpl::parsePipeline(
     IImageBackend& backend,
     unsigned int& idx
     )
@@ -119,7 +119,7 @@ StringFilterBuilder::parsePipeline(
     return pipeline;
 }
 
-StringFilterBuilder::StringFilterBuilder(
+StringFilterBuilderImpl::StringFilterBuilderImpl(
     char* str
     )
 : mStr( str )
@@ -127,7 +127,7 @@ StringFilterBuilder::StringFilterBuilder(
 }
 
 IImageFilter*
-StringFilterBuilder::buildFilter(
+StringFilterBuilderImpl::buildFilter(
     IImageBackend& backend
     )
 {

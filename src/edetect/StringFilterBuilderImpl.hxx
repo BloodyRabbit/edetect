@@ -1,12 +1,12 @@
 /** @file
- * @brief Declaration of class StringFilterBuilder.
+ * @brief Declaration of class StringFilterBuilderImpl.
  *
  * @author Jan Bobek
  * @since 19th April 2015
  */
 
-#ifndef STRING_FILTER_BUILDER_HXX__INCL__
-#define STRING_FILTER_BUILDER_HXX__INCL__
+#ifndef STRING_FILTER_BUILDER_IMPL_HXX__INCL__
+#define STRING_FILTER_BUILDER_IMPL_HXX__INCL__
 
 #include "IImageFilterBuilder.hxx"
 
@@ -17,7 +17,7 @@ class ImageFilterPipeline;
  *
  * @author Jan Bobek
  */
-class StringFilterBuilder
+class StringFilterBuilderImpl
 : public IImageFilterBuilder
 {
 public:
@@ -27,12 +27,12 @@ public:
      * @param[in] str
      *   The description string.
      */
-    StringFilterBuilder( char* str );
+    StringFilterBuilderImpl( char* str );
 
-protected:
     /// @copydoc IImageFilterBuilder::buildFilter(IImageBackend&)
     IImageFilter* buildFilter( IImageBackend& backend );
 
+protected:
     /**
      * @brief Produces a filter by parsing
      *   the description string.
@@ -85,4 +85,4 @@ protected:
     char* mStr;
 };
 
-#endif /* !STRING_FILTER_BUILDER_HXX__INCL__ */
+#endif /* !STRING_FILTER_BUILDER_IMPL_HXX__INCL__ */

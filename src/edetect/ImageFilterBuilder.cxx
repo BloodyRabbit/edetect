@@ -10,7 +10,7 @@
 #include "ImageFilterBuilder.hxx"
 
 #include "IImageFilterBuilder.hxx"
-#include "StringFilterBuilder.hxx"
+#include "StringFilterBuilderImpl.hxx"
 
 /*************************************************************************/
 /* ImageFilterBuilder                                                    */
@@ -18,7 +18,7 @@
 ImageFilterBuilder::ImageFilterBuilder(
     char* str
     )
-: mBuilder( new StringFilterBuilder( str ) )
+: mBuilder( new StringFilterBuilderImpl( str ) )
 {
 }
 

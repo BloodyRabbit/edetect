@@ -67,8 +67,8 @@ cuda_add_library(
   "LaplacianOfGaussianFilter.txx"
   "SeparableConvolutionFilter.hxx"
   "SeparableConvolutionFilter.txx"
-  "StringFilterBuilder.hxx"
-  "StringFilterBuilder.cxx"
+  "StringFilterBuilderImpl.hxx"
+  "StringFilterBuilderImpl.cxx"
 
   # CPU backend implementation
   "cpu/CpuBackend.hxx"
