@@ -11,16 +11,17 @@
 template< typename CF >
 float*
 DerivativeOfGaussianFilter< CF >::generateKernel(
-    unsigned int radius
+    unsigned int radius,
+    unsigned int& length
     )
 {
     const unsigned int origin = radius;
-    const unsigned int length = 2 * radius + 1;
+    length = 2 * radius + 1;
 
     const double sigma = radius / 2.5;
     const double coef = -1.0 / (2.0 * sigma * sigma);
 
-    float* const kernel = new float[length];
+    float* const kernel = (float*)malloc( length * sizeof(*kernel) );
 
     float sum = kernel[origin] = 0.0f;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )

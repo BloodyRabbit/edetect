@@ -14,8 +14,13 @@
 /*************************************************************************/
 IConvolutionFilter::IConvolutionFilter()
 : mKernel( NULL ),
-  mRadius( 0 )
+  mLength( 0 )
 {
+}
+
+IConvolutionFilter::~IConvolutionFilter()
+{
+    free( (void*)mKernel );
 }
 
 void
@@ -53,13 +58,13 @@ IConvolutionFilter::setParamVa(
     )
 {
     const float* kernel;
-    unsigned int radius;
+    unsigned int length;
 
     if( !strcmp( name, "kernel" ) )
     {
         kernel = va_arg( ap, const float* );
-        radius = va_arg( ap, unsigned int );
-        setKernel( kernel, radius );
+        length = va_arg( ap, unsigned int );
+        setKernel( kernel, length );
     }
     else
         IImageFilter::setParamVa( name, ap );
@@ -68,9 +73,10 @@ IConvolutionFilter::setParamVa(
 void
 IConvolutionFilter::setKernel(
     const float* kernel,
-    unsigned int radius
+    unsigned int length
     )
 {
+    free( (void*)mKernel );
     mKernel = kernel;
-    mRadius = radius;
+    mLength = length;
 }

@@ -9,18 +9,6 @@
 /* IGeneratedKernelFilter< CF >                                          */
 /*************************************************************************/
 template< typename CF >
-IGeneratedKernelFilter< CF >::IGeneratedKernelFilter()
-: mKernel( NULL )
-{
-}
-
-template< typename CF >
-IGeneratedKernelFilter< CF >::~IGeneratedKernelFilter()
-{
-    delete[] mKernel;
-}
-
-template< typename CF >
 void
 IGeneratedKernelFilter< CF >::filter(
     IImage& image
@@ -53,7 +41,7 @@ IGeneratedKernelFilter< CF >::setRadius(
     unsigned int radius
     )
 {
-    delete[] mKernel;
-    mKernel = generateKernel( radius );
-    mFilter.setKernel( mKernel, radius );
+    unsigned int length;
+    float* kernel = generateKernel( radius, length );
+    mFilter.setKernel( kernel, length );
 }

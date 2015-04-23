@@ -36,19 +36,19 @@ public:
      *
      * @param[in] kernel
      *   The row kernel.
-     * @param[in] radius
-     *   Radius of the row kernel.
+     * @param[in] length
+     *   Length of the row kernel.
      */
-    void setRowKernel( const float* kernel, unsigned int radius );
+    void setRowKernel( const float* kernel, unsigned int length );
     /**
      * @brief Sets the column kernel.
      *
      * @param[in] kernel
      *   The column kernel.
-     * @param[in] radius
-     *   Radius of the column kernel.
+     * @param[in] length
+     *   Length of the column kernel.
      */
-    void setColumnKernel( const float* kernel, unsigned int radius );
+    void setColumnKernel( const float* kernel, unsigned int length );
 
 protected:
     /// The row convolution filter.

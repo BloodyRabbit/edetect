@@ -11,17 +11,19 @@
 template< typename CF >
 float*
 LaplacianOfGaussianFilter< CF >::generateKernel(
-    unsigned int radius
+    unsigned int radius,
+    unsigned int& length
     )
 {
     const unsigned int stride = 2 * radius + 1;
     const unsigned int origin = radius * (stride + 1);
+    length = stride * stride;
 
     const double sigma = radius / 2.5;
     const double coef1 = 2.0 * sigma * sigma;
     const double coef2 = -1.0 / coef1;
 
-    float* const kernel = new float[stride * stride];
+    float* const kernel = (float*)malloc( length * sizeof(*kernel) );
 
     kernel[origin] = -coef1;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )

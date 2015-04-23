@@ -20,9 +20,11 @@ class ICudaConvolutionFilter
 public:
     /// The largest supported radius.
     static const unsigned int MAX_RADIUS = 32;
+    /// The largest supported length.
+    static const unsigned int MAX_LENGTH = (2 * MAX_RADIUS + 1) * (2 * MAX_RADIUS + 1);
 
     /// @copydoc IConvolutionFilter::setKernel(const float*, unsigned int)
-    void setKernel( const float* kernel, unsigned int radius );
+    void setKernel( const float* kernel, unsigned int length );
 };
 
 /**

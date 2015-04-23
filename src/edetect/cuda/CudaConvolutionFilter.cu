@@ -10,7 +10,7 @@
 #include "cuda/CudaError.hxx"
 
 /// The convolution kernel.
-__constant__ float cKernel[(2 * ICudaConvolutionFilter::MAX_RADIUS + 1) * (2 * ICudaConvolutionFilter::MAX_RADIUS + 1)];
+__constant__ float cKernel[ICudaConvolutionFilter::MAX_LENGTH];
 
 /**
  * @brief CUDA kernel performing 2D discrete convolution.
@@ -240,14 +240,14 @@ convolveColumnsKernel(
 void
 ICudaConvolutionFilter::setKernel(
     const float* kernel,
-    unsigned int radius
+    unsigned int length
     )
 {
-    if( MAX_RADIUS < radius )
+    if( MAX_LENGTH < length )
         throw std::invalid_argument(
             "ICudaConvolutionFilter: Convolution kernel too large" );
 
-    IConvolutionFilter::setKernel( kernel, radius );
+    IConvolutionFilter::setKernel( kernel, length );
 }
 
 /*************************************************************************/
@@ -267,14 +267,14 @@ CudaConvolutionFilter::convolve(
 
     cudaCheckError(
         cudaMemcpyToSymbol(
-            cKernel, mKernel, (2 * mRadius + 1) * (2 * mRadius + 1) * sizeof(*mKernel),
+            cKernel, mKernel, mLength * sizeof(*mKernel),
             0, cudaMemcpyHostToDevice ) );
 
     convolveKernel<<< numBlocks, threadsPerBlock >>>(
         dest.data(), dest.stride(),
         src.data(), src.stride(),
         src.rows(), src.columns(),
-        mRadius
+        ((unsigned int)std::sqrt( mLength ) - 1) / 2
         );
 
     cudaCheckLastError( "CudaConvolutionFilter: kernel launch failed" );
@@ -298,14 +298,14 @@ CudaRowConvolutionFilter::convolve(
 
     cudaCheckError(
         cudaMemcpyToSymbol(
-            cKernel, mKernel, (2 * mRadius + 1) * sizeof(*mKernel),
+            cKernel, mKernel, mLength * sizeof(*mKernel),
             0, cudaMemcpyHostToDevice ) );
 
     convolveRowsKernel<<< numBlocks, threadsPerBlock >>>(
         dest.data(), dest.stride(),
         src.data(), src.stride(),
         src.rows(), src.columns(),
-        mRadius
+        (mLength - 1) / 2
         );
 
     cudaCheckLastError( "CudaRowConvolutionFilter: kernel launch failed" );
@@ -329,14 +329,14 @@ CudaColumnConvolutionFilter::convolve(
 
     cudaCheckError(
         cudaMemcpyToSymbol(
-            cKernel, mKernel, (2 * mRadius + 1) * sizeof(*mKernel),
+            cKernel, mKernel, mLength * sizeof(*mKernel),
             0, cudaMemcpyHostToDevice ) );
 
     convolveColumnsKernel<<< numBlocks, threadsPerBlock >>>(
         dest.data(), dest.stride(),
         src.data(), src.stride(),
         src.rows(), src.columns(),
-        mRadius
+        (mLength - 1) / 2
         );
 
     cudaCheckLastError( "CudaColumnConvolutionFilter: column kernel launch failed" );

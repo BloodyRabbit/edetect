@@ -23,6 +23,10 @@ public:
      * @brief Initializes the filter.
      */
     IConvolutionFilter();
+    /**
+     * @brief Frees the kernel.
+     */
+    ~IConvolutionFilter();
 
     /**
      * @brief Performs convolution on the image.
@@ -39,10 +43,10 @@ public:
      *
      * @param[in] kernel
      *   The new kernel.
-     * @param[in] radius
-     *   Radius of the new kernel.
+     * @param[in] length
+     *   Length of the new kernel.
      */
-    virtual void setKernel( const float* kernel, unsigned int radius );
+    virtual void setKernel( const float* kernel, unsigned int length );
 
 protected:
     /**
@@ -57,8 +61,8 @@ protected:
 
     /// The convolution kernel.
     const float* mKernel;
-    /// Radius of the kernel.
-    unsigned int mRadius;
+    /// Length of the kernel.
+    unsigned int mLength;
 };
 
 #endif /* !ICONVOLUTION_FILTER_HXX__INCL__ */

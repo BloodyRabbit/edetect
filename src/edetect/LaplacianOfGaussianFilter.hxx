@@ -21,8 +21,8 @@ class LaplacianOfGaussianFilter
 : public IGeneratedKernelFilter< CF >
 {
 protected:
-    /// @copydoc IGeneratedKernelFilter< CF >::generateKernel( radius )
-    float* generateKernel( unsigned int radius );
+    /// @copydoc IGeneratedKernelFilter< CF >::generateKernel(unsigned int, unsigned int&)
+    float* generateKernel( unsigned int radius, unsigned int& length );
 };
 
 #include "LaplacianOfGaussianFilter.txx"

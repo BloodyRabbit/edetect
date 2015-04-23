@@ -48,18 +48,18 @@ template< typename RCF, typename CCF >
 void
 SeparableConvolutionFilter< RCF, CCF >::setRowKernel(
     const float* kernel,
-    unsigned int radius
+    unsigned int length
     )
 {
-    mRowFilter.setKernel( kernel, radius );
+    mRowFilter.setKernel( kernel, length );
 }
 
 template< typename RCF, typename CCF >
 void
 SeparableConvolutionFilter< RCF, CCF >::setColumnKernel(
     const float* kernel,
-    unsigned int radius
+    unsigned int length
     )
 {
-    mColumnFilter.setKernel( kernel, radius );
+    mColumnFilter.setKernel( kernel, length );
 }

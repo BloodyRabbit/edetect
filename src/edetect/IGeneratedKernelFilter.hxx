@@ -22,15 +22,6 @@ class IGeneratedKernelFilter
 {
 public:
     /**
-     * @brief Initializes the filter.
-     */
-    IGeneratedKernelFilter();
-    /**
-     * @brief Frees the generated kernel.
-     */
-    ~IGeneratedKernelFilter();
-
-    /**
      * @brief Applies the generated kernel to the image.
      *
      * @param[in,out] image
@@ -51,14 +42,17 @@ protected:
      *
      * @param[in] radius
      *   Radius of the kernel to generate.
+     * @param[out] length
+     *   Length of the generated kernel.
      *
      * @return
      *   The generated kernel.
      */
-    virtual float* generateKernel( unsigned int radius ) = 0;
+    virtual float* generateKernel(
+        unsigned int radius,
+        unsigned int& length
+        ) = 0;
 
-    /// The generated kernel.
-    float* mKernel;
     /// The convolution filter we are delegating to.
     CF mFilter;
 };
