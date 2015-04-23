@@ -52,8 +52,6 @@ cuda_add_library(
   "IMarrHildrethOperatorFilter.txx"
   "IMultiplyFilter.hxx"
   "IMultiplyFilter.cxx"
-  "ISobelOperatorFilter.hxx"
-  "ISobelOperatorFilter.txx"
   "IZeroCrossFilter.hxx"
   "IZeroCrossFilter.cxx"
   # Generic filter classes
@@ -90,8 +88,6 @@ cuda_add_library(
   "cpu/CpuMarrHildrethOperatorFilter.cxx"
   "cpu/CpuMultiplyFilter.hxx"
   "cpu/CpuMultiplyFilter.cxx"
-  "cpu/CpuSobelOperatorFilter.hxx"
-  "cpu/CpuSobelOperatorFilter.cxx"
   "cpu/CpuZeroCrossFilter.hxx"
   "cpu/CpuZeroCrossFilter.cxx"
 
@@ -117,8 +113,6 @@ cuda_add_library(
   "cuda/CudaMarrHildrethOperatorFilter.cu"
   "cuda/CudaMultiplyFilter.hxx"
   "cuda/CudaMultiplyFilter.cu"
-  "cuda/CudaSobelOperatorFilter.hxx"
-  "cuda/CudaSobelOperatorFilter.cu"
   "cuda/CudaZeroCrossFilter.hxx"
   "cuda/CudaZeroCrossFilter.cu"
   )

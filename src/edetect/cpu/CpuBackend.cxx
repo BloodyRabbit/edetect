@@ -19,7 +19,6 @@
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuMarrHildrethOperatorFilter.hxx"
 #include "cpu/CpuMultiplyFilter.hxx"
-#include "cpu/CpuSobelOperatorFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -61,8 +60,6 @@ CpuBackend::createFilter(
         return new CpuMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CpuRowConvolutionFilter;
-    if( !strcmp( name, "sobel-operator" ) )
-        return new CpuSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )
         return new CpuZeroCrossFilter;
 

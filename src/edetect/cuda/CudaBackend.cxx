@@ -20,7 +20,6 @@
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaMarrHildrethOperatorFilter.hxx"
 #include "cuda/CudaMultiplyFilter.hxx"
-#include "cuda/CudaSobelOperatorFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -67,8 +66,6 @@ CudaBackend::createFilter(
         return new CudaMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CudaRowConvolutionFilter;
-    if( !strcmp( name, "sobel-operator" ) )
-        return new CudaSobelOperatorFilter;
     if( !strcmp( name, "zero-cross" ) )
         return new CudaZeroCrossFilter;
 
