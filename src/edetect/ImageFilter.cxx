@@ -28,13 +28,10 @@ ImageFilter::ImageFilter(
     va_start( ap, nparams );
 
     const char* pname;
-    const void* pval;
     while( nparams-- )
     {
         pname = va_arg( ap, const char* );
-        pval = va_arg( ap, const void* );
-
-        setParam( pname, pval );
+        setParamVa( pname, ap );
     }
 
     va_end( ap );
@@ -64,8 +61,20 @@ ImageFilter::filter(
 void
 ImageFilter::setParam(
     const char* name,
-    const void* value
+    ...
     )
 {
-    mFilter->setParam( name, value );
+    va_list ap;
+    va_start( ap, name );
+    setParamVa( name, ap );
+    va_end( ap );
+}
+
+void
+ImageFilter::setParamVa(
+    const char* name,
+    va_list ap
+    )
+{
+    mFilter->setParamVa( name, ap );
 }

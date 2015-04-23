@@ -25,8 +25,10 @@ public:
 
     /// @copydoc ImageFilter::filter(Image&)
     virtual void filter( IImage& image ) = 0;
-    /// @copydoc ImageFilter::setParam(const char*, const void*)
-    virtual void setParam( const char* name, const void* value );
+    /// @copydoc ImageFilter::setParam(const char*, ...)
+    void setParam( const char* name, ... );
+    /// @copydoc ImageFilter::setParamVa(const char*, va_list)
+    virtual void setParamVa( const char* name, va_list ap );
 };
 
 #include "IImageFilter.ixx"

@@ -44,17 +44,25 @@ IDualInputFilter::filter(
 }
 
 void
-IDualInputFilter::setParam(
+IDualInputFilter::setParamVa(
     const char* name,
-    const void* value
+    va_list ap
     )
 {
+    IImageFilter* filter;
+
     if( !strcmp( name, "first" ) )
-        setFirst( (IImageFilter*)value );
+    {
+        filter = va_arg( ap, IImageFilter* );
+        setFirst( filter );
+    }
     else if( !strcmp( name, "second" ) )
-        setSecond( (IImageFilter*)value );
+    {
+        filter = va_arg( ap, IImageFilter* );
+        setSecond( filter );
+    }
     else
-        IImageFilter::setParam( name, value );
+        IImageFilter::setParamVa( name, ap );
 }
 
 void

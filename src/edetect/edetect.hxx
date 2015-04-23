@@ -21,4 +21,8 @@
 #include <cuda_runtime.h>
 #include <FreeImagePlus.h>
 
+#ifndef va_copy
+#   define va_copy __va_copy
+#endif /* !va_copy */
+
 #endif /* !EDETECT_HXX__INCL__ */

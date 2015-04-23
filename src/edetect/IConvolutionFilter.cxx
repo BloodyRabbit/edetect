@@ -47,17 +47,22 @@ IConvolutionFilter::filter(
 }
 
 void
-IConvolutionFilter::setParam(
+IConvolutionFilter::setParamVa(
     const char* name,
-    const void* value
+    va_list ap
     )
 {
+    const float* kernel;
+    unsigned int radius;
+
     if( !strcmp( name, "kernel" ) )
-        setKernel( (const float*)value, mRadius );
-    else if( !strcmp( name, "radius" ) )
-        setKernel( mKernel, *(const unsigned int*)value );
+    {
+        kernel = va_arg( ap, const float* );
+        radius = va_arg( ap, unsigned int );
+        setKernel( kernel, radius );
+    }
     else
-        IImageFilter::setParam( name, value );
+        IImageFilter::setParamVa( name, ap );
 }
 
 void

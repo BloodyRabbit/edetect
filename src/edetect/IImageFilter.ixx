@@ -16,8 +16,21 @@ IImageFilter::~IImageFilter()
 inline
 void
 IImageFilter::setParam(
+    const char* name,
+    ...
+    )
+{
+    va_list ap;
+    va_start( ap, name );
+    setParamVa( name, ap );
+    va_end( ap );
+}
+
+inline
+void
+IImageFilter::setParamVa(
     const char*,
-    const void*
+    va_list
     )
 {
     throw std::invalid_argument(

@@ -57,14 +57,16 @@ IDesaturateFilter::filter(
 }
 
 void
-IDesaturateFilter::setParam(
+IDesaturateFilter::setParamVa(
     const char* name,
-    const void* value
+    va_list ap
     )
 {
+    const char* strval;
+
     if( !strcmp( name, "method" ) )
     {
-        const char* strval = (const char*)value;
+        strval = va_arg( ap, const char* );
 
         if( !strcmp( strval, "average" ) )
             setMethod( METHOD_AVERAGE );
@@ -77,7 +79,7 @@ IDesaturateFilter::setParam(
                 "IDesaturateFilter: Method not implemented" );
     }
     else
-        IImageFilter::setParam( name, value );
+        IImageFilter::setParamVa( name, ap );
 }
 
 void

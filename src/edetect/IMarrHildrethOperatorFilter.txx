@@ -40,16 +40,19 @@ IMarrHildrethOperatorFilter< CF, ZCF >::filter(
 
 template< typename CF, typename ZCF >
 void
-IMarrHildrethOperatorFilter< CF, ZCF >::setParam(
+IMarrHildrethOperatorFilter< CF, ZCF >::setParamVa(
     const char* name,
-    const void* value
+    va_list ap
     )
 {
+    char* endptr;
+    const char* strval;
+    unsigned int radius;
+
     if( !strcmp( name, "radius1" ) )
     {
-        char* endptr;
-        unsigned int radius =
-            strtoul( (const char*)value, &endptr, 10 );
+        strval = va_arg( ap, const char* );
+        radius = strtoul( strval, &endptr, 10 );
 
         if( *endptr )
             throw std::invalid_argument(
@@ -59,9 +62,8 @@ IMarrHildrethOperatorFilter< CF, ZCF >::setParam(
     }
     else if( !strcmp( name, "radius2" ) )
     {
-        char* endptr;
-        unsigned int radius =
-            strtoul( (const char*)value, &endptr, 10 );
+        strval = va_arg( ap, const char* );
+        radius = strtoul( strval, &endptr, 10 );
 
         if( *endptr )
             throw std::invalid_argument(
@@ -70,7 +72,7 @@ IMarrHildrethOperatorFilter< CF, ZCF >::setParam(
         setRadius2( radius );
     }
     else
-        IImageFilter::setParam( name, value );
+        IImageFilter::setParamVa( name, ap );
 }
 
 template< typename CF, typename ZCF >

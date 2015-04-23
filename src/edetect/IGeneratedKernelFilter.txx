@@ -31,16 +31,19 @@ IGeneratedKernelFilter< CF >::filter(
 
 template< typename CF >
 void
-IGeneratedKernelFilter< CF >::setParam(
+IGeneratedKernelFilter< CF >::setParamVa(
     const char* name,
-    const void* value
+    va_list ap
     )
 {
+    char* endptr;
+    const char* strval;
+    unsigned int radius;
+
     if( !strcmp( name, "radius" ) )
     {
-        char* endptr;
-        unsigned int radius =
-            strtoul( (const char*)value, &endptr, 10 );
+        strval = va_arg( ap, const char* );
+        radius = strtoul( strval, &endptr, 10 );
 
         if( *endptr )
             throw std::invalid_argument(
@@ -49,7 +52,7 @@ IGeneratedKernelFilter< CF >::setParam(
         setRadius( radius );
     }
     else
-        IImageFilter::setParam( name, value );
+        IImageFilter::setParamVa( name, ap );
 }
 
 template< typename CF >

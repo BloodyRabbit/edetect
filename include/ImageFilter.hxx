@@ -68,10 +68,19 @@ public:
      *
      * @param[in] name
      *   Name of the parameter.
-     * @param[in] value
-     *   Value of the parameter.
+     * @param[in] ...
+     *   Value(s) of the parameter.
      */
-    void setParam( const char* name, const void* value );
+    void setParam( const char* name, ... );
+    /**
+     * @brief Sets a parameter to a given value.
+     *
+     * @param[in] name
+     *   Name of the parameter.
+     * @param[in] ap
+     *   A vararg list of parameter value(s).
+     */
+    void setParamVa( const char* name, va_list ap );
 
 protected:
     /// Implementation of the filter.

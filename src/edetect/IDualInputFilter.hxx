@@ -38,8 +38,8 @@ public:
 
     /// @copydoc IImageFilter::filter(IImage&)
     void filter( IImage& image );
-    /// @copydoc IImageFilter::setParam(const char*, const void*)
-    void setParam( const char* name, const void* value );
+    /// @copydoc IImageFilter::setParamVa(const char*, va_list ap)
+    void setParamVa( const char* name, va_list ap );
 
     /**
      * @brief Sets the first input filter.
