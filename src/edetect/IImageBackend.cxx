@@ -20,12 +20,26 @@ IImageBackend::createFilter(
     const char* name
     )
 {
+    if( !strcmp( name, "row-gaussian-blur" ) )
+        return new GeneratedKernelFilter< GaussianKernel >(
+            createFilter( "row-convolution" ) );
+
+    if( !strcmp( name, "column-gaussian-blur" ) )
+        return new GeneratedKernelFilter< GaussianKernel >(
+            createFilter( "column-convolution" ) );
+
     if( !strcmp( name, "gaussian-blur" ) )
         return new SeparableConvolutionFilter(
-            new GeneratedKernelFilter< GaussianKernel >(
-                createFilter( "row-convolution" ) ),
-            new GeneratedKernelFilter< GaussianKernel >(
-                createFilter( "column-convolution" ) ) );
+            createFilter( "row-gaussian-blur" ),
+            createFilter( "column-gaussian-blur" ) );
+
+    if( !strcmp( name, "row-derivative-of-gaussian" ) )
+        return new GeneratedKernelFilter< DerivativeOfGaussianKernel >(
+            createFilter( "row-convolution" ) );
+
+    if( !strcmp( name, "column-derivative-of-gaussian" ) )
+        return new GeneratedKernelFilter< DerivativeOfGaussianKernel >(
+            createFilter( "column-convolution" ) );
 
     if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new GeneratedKernelFilter< LaplacianOfGaussianKernel >(
