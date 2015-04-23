@@ -16,9 +16,9 @@
 /* ImageFilterBuilder                                                    */
 /*************************************************************************/
 ImageFilterBuilder::ImageFilterBuilder(
-    char* str
+    IImageFilterBuilder* builder
     )
-: mBuilder( new StringFilterBuilderImpl( str ) )
+: mBuilder( builder )
 {
 }
 
@@ -33,4 +33,14 @@ ImageFilterBuilder::buildFilter(
     )
 {
     return mBuilder->buildFilter( *backend.mBackend );
+}
+
+/*************************************************************************/
+/* StringFilterBuilder                                                   */
+/*************************************************************************/
+StringFilterBuilder::StringFilterBuilder(
+    char* str
+    )
+: ImageFilterBuilder( new StringFilterBuilderImpl( str ) )
+{
 }

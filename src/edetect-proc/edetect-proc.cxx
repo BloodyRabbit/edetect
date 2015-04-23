@@ -25,7 +25,7 @@ main(
         ImageBackend backend( argv[1] );
 
         fprintf( stderr, "Building filter `%s'\n", argv[2] );
-        ImageFilterBuilder builder( argv[2] );
+        StringFilterBuilder builder( argv[2] );
         ImageFilter filter( backend, builder );
 
         argc -= 3;
