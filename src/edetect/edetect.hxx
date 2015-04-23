@@ -20,6 +20,7 @@
 
 #include <cuda_runtime.h>
 #include <FreeImagePlus.h>
+#include <tinyxml2.h>
 
 #ifndef va_copy
 #   define va_copy __va_copy

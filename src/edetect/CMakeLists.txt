@@ -30,6 +30,8 @@ cuda_add_library(
   "ImageFilterPipeline.cxx"
   "StringFilterBuilderImpl.hxx"
   "StringFilterBuilderImpl.cxx"
+  "XmlFilterBuilderImpl.hxx"
+  "XmlFilterBuilderImpl.cxx"
   # Internal interface classes
   "IImage.hxx"
   "IImage.ixx"
@@ -111,4 +113,5 @@ cuda_add_library(
 target_link_libraries(
   "edetect"
   "freeimageplus"
+  "tinyxml2"
   )

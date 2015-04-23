@@ -11,6 +11,7 @@
 
 #include "IImageFilterBuilder.hxx"
 #include "StringFilterBuilderImpl.hxx"
+#include "XmlFilterBuilderImpl.hxx"
 
 /*************************************************************************/
 /* ImageFilterBuilder                                                    */
@@ -42,5 +43,15 @@ StringFilterBuilder::StringFilterBuilder(
     char* str
     )
 : ImageFilterBuilder( new StringFilterBuilderImpl( str ) )
+{
+}
+
+/*************************************************************************/
+/* XmlFilterBuilder                                                      */
+/*************************************************************************/
+XmlFilterBuilder::XmlFilterBuilder(
+    const char* filename
+    )
+: ImageFilterBuilder( new XmlFilterBuilderImpl( filename ) )
 {
 }

@@ -68,4 +68,22 @@ public:
     StringFilterBuilder( char* str );
 };
 
+/**
+ * @brief A XML-based image filter builder.
+ *
+ * @author Jan Bobek
+ */
+class XmlFilterBuilder
+: public ImageFilterBuilder
+{
+public:
+    /**
+     * @brief Initializes the XML filter builder.
+     *
+     * @param[in] filename
+     *   Name of the XML configuration file.
+     */
+    XmlFilterBuilder( const char* filename );
+};
+
 #endif /* !IMAGE_FILTER_BUILDER_HXX__INCL__ */
