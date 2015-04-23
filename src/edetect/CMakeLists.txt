@@ -57,6 +57,8 @@ cuda_add_library(
   "DerivativeOfGaussianFilter.txx"
   "GaussianBlurFilter.hxx"
   "GaussianBlurFilter.txx"
+  "GaussianKernel.hxx"
+  "GaussianKernel.cxx"
   "ImageFilterPipeline.hxx"
   "ImageFilterPipeline.cxx"
   "LaplacianOfGaussianFilter.hxx"
