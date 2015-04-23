@@ -14,7 +14,7 @@ main(
 {
     if( argc < 3 || !(argc % 2) )
     {
-        fprintf( stderr, "Usage: %s <backend> <filter> [<infile> <outfile> ...]\n",
+        fprintf( stderr, "Usage: %s <backend> <filter.xml> [<infile> <outfile> ...]\n",
                  argv[0] );
         return EXIT_FAILURE;
     }
@@ -24,8 +24,8 @@ main(
         fprintf( stderr, "Initializing backend `%s'\n", argv[1] );
         ImageBackend backend( argv[1] );
 
-        fprintf( stderr, "Building filter `%s'\n", argv[2] );
-        StringFilterBuilder builder( argv[2] );
+        fprintf( stderr, "Loading filter definition from `%s'\n", argv[2] );
+        XmlFilterBuilder builder( argv[2] );
         ImageFilter filter( backend, builder );
 
         argc -= 3;
