@@ -6,8 +6,8 @@
  */
 
 #include "edetect.hxx"
-#include "IDesaturateFilter.hxx"
 #include "IImage.hxx"
+#include "filters/IDesaturateFilter.hxx"
 
 /*************************************************************************/
 /* IDesaturateFilter                                                     */

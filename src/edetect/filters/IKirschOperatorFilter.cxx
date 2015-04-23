@@ -1,19 +1,19 @@
 /** @file
- * @brief Definition of class IZeroCrossFilter.
+ * @brief Definition of class IKirschOperatorFilter.
  *
  * @author Jan Bobek
- * @since 12th April 2015
+ * @since 11th April 2015
  */
 
 #include "edetect.hxx"
 #include "IImage.hxx"
-#include "IZeroCrossFilter.hxx"
+#include "filters/IKirschOperatorFilter.hxx"
 
 /*************************************************************************/
-/* IZeroCrossFilter                                                      */
+/* IKirschOperatorFilter                                                 */
 /*************************************************************************/
 void
-IZeroCrossFilter::filter(
+IKirschOperatorFilter::filter(
     IImage& image
     )
 {
@@ -24,18 +24,17 @@ IZeroCrossFilter::filter(
 
     default:
     case Image::FMT_GRAY_UINT8:
-    case Image::FMT_RGB_FLOAT32:
     case Image::FMT_RGB_UINT8:
+    case Image::FMT_RGB_FLOAT32:
         throw std::runtime_error(
-            "IZeroCrossFilter: Unsupported image format" );
+            "IKirschOperatorFilter: Unsupported image format" );
     }
 
     IImage* output = image.cloneImpl();
     output->reset( image.rows(), image.columns(),
                    Image::FMT_GRAY_FLOAT32 );
 
-    detectZeroCross( *output, image );
-
+    applyKirschOperator( *output, image );
     image.swap( *output );
     delete output;
 }

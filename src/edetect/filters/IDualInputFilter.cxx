@@ -6,8 +6,8 @@
  */
 
 #include "edetect.hxx"
-#include "IDualInputFilter.hxx"
 #include "IImage.hxx"
+#include "filters/IDualInputFilter.hxx"
 
 /*************************************************************************/
 /* IDualInputFilter                                                      */

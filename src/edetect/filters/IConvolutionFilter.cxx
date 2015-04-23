@@ -6,8 +6,8 @@
  */
 
 #include "edetect.hxx"
-#include "IConvolutionFilter.hxx"
 #include "IImage.hxx"
+#include "filters/IConvolutionFilter.hxx"
 
 /*************************************************************************/
 /* IConvolutionFilter                                                    */

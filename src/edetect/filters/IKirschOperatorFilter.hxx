@@ -5,8 +5,8 @@
  * @since 11th April 2015
  */
 
-#ifndef IKIRSCH_OPERATOR_FILTER_HXX__INCL__
-#define IKIRSCH_OPERATOR_FILTER_HXX__INCL__
+#ifndef FILTERS__IKIRSCH_OPERATOR_FILTER_HXX__INCL__
+#define FILTERS__IKIRSCH_OPERATOR_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -39,4 +39,4 @@ protected:
     virtual void applyKirschOperator( IImage& dest, const IImage& src ) = 0;
 };
 
-#endif /* !IKIRSCH_OPERATOR_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IKIRSCH_OPERATOR_FILTER_HXX__INCL__ */

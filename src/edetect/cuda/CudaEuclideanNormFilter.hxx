@@ -8,7 +8,7 @@
 #ifndef CUDA_EUCLIDEAN_NORM_FILTER_HXX__INCL__
 #define CUDA_EUCLIDEAN_NORM_FILTER_HXX__INCL__
 
-#include "IEuclideanNormFilter.hxx"
+#include "filters/IEuclideanNormFilter.hxx"
 
 /**
  * @brief CUDA-backed filter which computes

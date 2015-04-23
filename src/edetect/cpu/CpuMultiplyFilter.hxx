@@ -8,7 +8,7 @@
 #ifndef CPU_MULTIPLY_FILTER_HXX__INCL__
 #define CPU_MULTIPLY_FILTER_HXX__INCL__
 
-#include "IMultiplyFilter.hxx"
+#include "filters/IMultiplyFilter.hxx"
 
 /**
  * @brief CPU-backed filter which multiplies

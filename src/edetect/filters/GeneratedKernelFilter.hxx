@@ -5,8 +5,8 @@
  * @since 16th April 2015
  */
 
-#ifndef GENERATED_KERNEL_FILTER_HXX__INCL__
-#define GENERATED_KERNEL_FILTER_HXX__INCL__
+#ifndef FILTERS__GENERATED_KERNEL_FILTER_HXX__INCL__
+#define FILTERS__GENERATED_KERNEL_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -60,6 +60,6 @@ protected:
     K mKernel;
 };
 
-#include "GeneratedKernelFilter.txx"
+#include "filters/GeneratedKernelFilter.txx"
 
-#endif /* !GENERATED_KERNEL_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__GENERATED_KERNEL_FILTER_HXX__INCL__ */

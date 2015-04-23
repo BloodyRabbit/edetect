@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
 #define CUDA__CUDA_INT_FLOAT_FILTER_HXX__INCL__
 
-#include "IIntFloatFilter.hxx"
+#include "filters/IIntFloatFilter.hxx"
 
 /**
  * @brief Converts integer-pixel images to

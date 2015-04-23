@@ -8,7 +8,7 @@
 #ifndef CPU_EUCLIDEAN_NORM_FILTER_HXX__INCL__
 #define CPU_EUCLIDEAN_NORM_FILTER_HXX__INCL__
 
-#include "IEuclideanNormFilter.hxx"
+#include "filters/IEuclideanNormFilter.hxx"
 
 /**
  * @brief CPU-backed filter which computes

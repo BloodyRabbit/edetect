@@ -7,7 +7,7 @@
 #ifndef CPU__CPU_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 #define CPU__CPU_KIRSCH_OPERATOR_FILTER_HXX__INCL__
 
-#include "IKirschOperatorFilter.hxx"
+#include "filters/IKirschOperatorFilter.hxx"
 
 /**
  * @brief Applies Kirsch operator to the image.

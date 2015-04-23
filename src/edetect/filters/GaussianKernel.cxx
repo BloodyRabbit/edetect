@@ -6,7 +6,7 @@
  */
 
 #include "edetect.hxx"
-#include "GaussianKernel.hxx"
+#include "filters/GaussianKernel.hxx"
 
 /*************************************************************************/
 /* GaussianKernel                                                        */

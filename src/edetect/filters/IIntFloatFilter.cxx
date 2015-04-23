@@ -6,7 +6,8 @@
  */
 
 #include "edetect.hxx"
-#include "IIntFloatFilter.hxx"
+#include "IImage.hxx"
+#include "filters/IIntFloatFilter.hxx"
 
 /*************************************************************************/
 /* IIntFloatFilter                                                       */

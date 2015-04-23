@@ -6,6 +6,7 @@
  */
 
 #include "edetect.hxx"
+#include "IImage.hxx"
 #include "CpuIntFloatFilter.hxx"
 
 /*************************************************************************/

@@ -8,7 +8,7 @@
 #ifndef CUDA__CUDA_ZERO_CROSS_FILTER_HXX__INCL__
 #define CUDA__CUDA_ZERO_CROSS_FILTER_HXX__INCL__
 
-#include "IZeroCrossFilter.hxx"
+#include "filters/IZeroCrossFilter.hxx"
 
 /**
  * @brief CUDA-backed zero-crossing

@@ -8,7 +8,7 @@
 #ifndef CPU__CPU_ZERO_CROSS_FILTER_HXX__INCL__
 #define CPU__CPU_ZERO_CROSS_FILTER_HXX__INCL__
 
-#include "IZeroCrossFilter.hxx"
+#include "filters/IZeroCrossFilter.hxx"
 
 /**
  * @brief CPU-backed zero-crossing

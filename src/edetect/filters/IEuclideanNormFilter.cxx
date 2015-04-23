@@ -7,7 +7,7 @@
 
 #include "edetect.hxx"
 #include "IImage.hxx"
-#include "IEuclideanNormFilter.hxx"
+#include "filters/IEuclideanNormFilter.hxx"
 
 /*************************************************************************/
 /* IEuclideanNormFilter                                                  */

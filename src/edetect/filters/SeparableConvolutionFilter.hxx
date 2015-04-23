@@ -5,8 +5,8 @@
  * @since 16th April 2015
  */
 
-#ifndef SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__
-#define SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__
+#ifndef FILTERS__SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__
+#define FILTERS__SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -54,4 +54,4 @@ protected:
     IImageFilter* mColumnFilter;
 };
 
-#endif /* !SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__ */

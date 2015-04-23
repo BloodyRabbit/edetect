@@ -5,8 +5,8 @@
  * @since 23th April 2015
  */
 
-#ifndef GAUSSIAN_KERNEL_HXX__INCL__
-#define GAUSSIAN_KERNEL_HXX__INCL__
+#ifndef FILTERS__GAUSSIAN_KERNEL_HXX__INCL__
+#define FILTERS__GAUSSIAN_KERNEL_HXX__INCL__
 
 /**
  * @brief Generates a common 1D Gaussian kernel.
@@ -74,4 +74,4 @@ public:
     float* operator()( unsigned int radius, unsigned int& length );
 };
 
-#endif /* !GAUSSIAN_KERNEL_HXX__INCL__ */
+#endif /* !FILTERS__GAUSSIAN_KERNEL_HXX__INCL__ */

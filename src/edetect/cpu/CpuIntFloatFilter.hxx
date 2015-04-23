@@ -8,7 +8,7 @@
 #ifndef CPU__CPU_INT_FLOAT_FILTER_HXX__INCL__
 #define CPU__CPU_INT_FLOAT_FILTER_HXX__INCL__
 
-#include "IIntFloatFilter.hxx"
+#include "filters/IIntFloatFilter.hxx"
 
 /**
  * @brief A CPU-backed integer-pixel/float-pixel

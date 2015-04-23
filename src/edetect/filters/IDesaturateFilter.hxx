@@ -5,8 +5,8 @@
  * @since 9th April 2015
  */
 
-#ifndef IDESATURATE_FILTER_HXX__INCL__
-#define IDESATURATE_FILTER_HXX__INCL__
+#ifndef FILTERS__IDESATURATE_FILTER_HXX__INCL__
+#define FILTERS__IDESATURATE_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -83,4 +83,4 @@ protected:
     Method mMethod;
 };
 
-#endif /* !IDESATURATE_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IDESATURATE_FILTER_HXX__INCL__ */

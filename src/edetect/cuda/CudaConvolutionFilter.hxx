@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_CONVOLUTION_FILTER_HXX__INCL__
 #define CUDA__CUDA_CONVOLUTION_FILTER_HXX__INCL__
 
-#include "IConvolutionFilter.hxx"
+#include "filters/IConvolutionFilter.hxx"
 
 /**
  * @brief Interface of a CUDA-backed convolution filter.

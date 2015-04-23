@@ -8,7 +8,7 @@
 #ifndef CPU__CPU_DESATURATE_FILTER_HXX__INCL__
 #define CPU__CPU_DESATURATE_FILTER_HXX__INCL__
 
-#include "IDesaturateFilter.hxx"
+#include "filters/IDesaturateFilter.hxx"
 
 /**
  * @brief A CPU-backed desaturation filter.

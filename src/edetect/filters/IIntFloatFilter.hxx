@@ -5,10 +5,10 @@
  * @since 9th April 2015
  */
 
-#ifndef IINT_FLOAT_FILTER_HXX__INCL__
-#define IINT_FLOAT_FILTER_HXX__INCL__
+#ifndef FILTERS__IINT_FLOAT_FILTER_HXX__INCL__
+#define FILTERS__IINT_FLOAT_FILTER_HXX__INCL__
 
-#include "IImage.hxx"
+#include "Image.hxx"
 #include "IImageFilter.hxx"
 
 /**
@@ -48,4 +48,4 @@ protected:
     static const Image::Format FMT_TARGET[];
 };
 
-#endif /* !IINT_FLOAT_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IINT_FLOAT_FILTER_HXX__INCL__ */

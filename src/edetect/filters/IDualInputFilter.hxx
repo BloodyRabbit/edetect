@@ -5,8 +5,8 @@
  * @since 19th April 2015
  */
 
-#ifndef IDUAL_INPUT_FILTER_HXX__INCL__
-#define IDUAL_INPUT_FILTER_HXX__INCL__
+#ifndef FILTERS__IDUAL_INPUT_FILTER_HXX__INCL__
+#define FILTERS__IDUAL_INPUT_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -73,4 +73,4 @@ protected:
     IImageFilter* mSecond;
 };
 
-#endif /* !IDUAL_INPUT_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IDUAL_INPUT_FILTER_HXX__INCL__ */

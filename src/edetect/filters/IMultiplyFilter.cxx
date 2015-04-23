@@ -7,7 +7,7 @@
 
 #include "edetect.hxx"
 #include "IImage.hxx"
-#include "IMultiplyFilter.hxx"
+#include "filters/IMultiplyFilter.hxx"
 
 /*************************************************************************/
 /* IMultiplyFilter                                                       */

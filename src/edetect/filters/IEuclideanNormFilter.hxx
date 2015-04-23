@@ -1,27 +1,27 @@
 /** @file
- * @brief Declaration of class IMultiplyFilter.
+ * @brief Declaration of class IEuclideanNormFilter.
  *
  * @author Jan Bobek
  * @since 19th April 2015
  */
 
-#ifndef IMULTIPLY_FILTER_HXX__INCL__
-#define IMULTIPLY_FILTER_HXX__INCL__
+#ifndef FILTERS__IEUCLIDEAN_NORM_FILTER_HXX__INCL__
+#define FILTERS__IEUCLIDEAN_NORM_FILTER_HXX__INCL__
 
-#include "IDualInputFilter.hxx"
+#include "filters/IDualInputFilter.hxx"
 
 /**
  * @brief Interface of a filter which
- *   multiplies the image with another.
+ *   computes the Euclidean norm.
  *
  * @author Jan Bobek
  */
-class IMultiplyFilter
+class IEuclideanNormFilter
 : public IDualInputFilter
 {
 public:
     /// @copydoc IDualInputFilter::IDualInputFilter(IImageFilter*, IImageFilter*)
-    IMultiplyFilter(
+    IEuclideanNormFilter(
         IImageFilter* first = NULL,
         IImageFilter* second = NULL
         );
@@ -30,4 +30,4 @@ public:
     void filter( IImage& image );
 };
 
-#endif /* !IMULTIPLY_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IEUCLIDEAN_NORM_FILTER_HXX__INCL__ */

@@ -8,9 +8,9 @@
 #include "edetect.hxx"
 #include "IImageBackend.hxx"
 
-#include "GaussianKernel.hxx"
-#include "GeneratedKernelFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
+#include "filters/GaussianKernel.hxx"
+#include "filters/GeneratedKernelFilter.hxx"
+#include "filters/SeparableConvolutionFilter.hxx"
 
 /*************************************************************************/
 /* IImageBackend                                                         */

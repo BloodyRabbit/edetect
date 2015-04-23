@@ -7,7 +7,7 @@
 #ifndef CPU__CPU_CONVOLUTION_FILTER_HXX__INCL__
 #define CPU__CPU_CONVOLUTION_FILTER_HXX__INCL__
 
-#include "IConvolutionFilter.hxx"
+#include "filters/IConvolutionFilter.hxx"
 
 /**
  * @brief CPU-backed 2D discrete convolution filter.

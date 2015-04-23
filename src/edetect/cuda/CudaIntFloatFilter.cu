@@ -5,6 +5,7 @@
  */
 
 #include "edetect.hxx"
+#include "IImage.hxx"
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 

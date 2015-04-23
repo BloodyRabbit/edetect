@@ -8,7 +8,7 @@
 #ifndef CUDA_MULTIPLY_FILTER_HXX__INCL__
 #define CUDA_MULTIPLY_FILTER_HXX__INCL__
 
-#include "IMultiplyFilter.hxx"
+#include "filters/IMultiplyFilter.hxx"
 
 /**
  * @brief CUDA-backed filter which multiplies

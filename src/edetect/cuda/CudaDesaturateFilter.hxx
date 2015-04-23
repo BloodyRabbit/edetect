@@ -7,7 +7,7 @@
 #ifndef CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__
 #define CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__
 
-#include "IDesaturateFilter.hxx"
+#include "filters/IDesaturateFilter.hxx"
 
 /**
  * @brief Desaturates the image (converts

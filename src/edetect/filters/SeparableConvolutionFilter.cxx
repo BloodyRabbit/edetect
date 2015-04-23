@@ -6,8 +6,7 @@
  */
 
 #include "edetect.hxx"
-#include "IConvolutionFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
+#include "filters/SeparableConvolutionFilter.hxx"
 
 /*************************************************************************/
 /* SeparableConvolutionFilter                                            */

@@ -5,8 +5,8 @@
  * @since 12th April 2015
  */
 
-#ifndef IZERO_CROSS_FILTER_HXX__INCL__
-#define IZERO_CROSS_FILTER_HXX__INCL__
+#ifndef FILTERS__IZERO_CROSS_FILTER_HXX__INCL__
+#define FILTERS__IZERO_CROSS_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -35,4 +35,4 @@ protected:
     virtual void detectZeroCross( IImage& dest, const IImage& src ) = 0;
 };
 
-#endif /* !IZERO_CROSS_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__IZERO_CROSS_FILTER_HXX__INCL__ */

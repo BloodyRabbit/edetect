@@ -5,8 +5,8 @@
  * @since 11th April 2015
  */
 
-#ifndef ICONVOLUTION_FILTER_HXX__INCL__
-#define ICONVOLUTION_FILTER_HXX__INCL__
+#ifndef FILTERS__ICONVOLUTION_FILTER_HXX__INCL__
+#define FILTERS__ICONVOLUTION_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -65,4 +65,4 @@ protected:
     unsigned int mLength;
 };
 
-#endif /* !ICONVOLUTION_FILTER_HXX__INCL__ */
+#endif /* !FILTERS__ICONVOLUTION_FILTER_HXX__INCL__ */
