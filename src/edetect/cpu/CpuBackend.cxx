@@ -17,7 +17,6 @@
 #include "cpu/CpuEuclideanNormFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
-#include "cpu/CpuMarrHildrethOperatorFilter.hxx"
 #include "cpu/CpuMultiplyFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
@@ -54,8 +53,6 @@ CpuBackend::createFilter(
     if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CpuConvolutionFilter >;
-    if( !strcmp( name, "marr-hildreth-operator" ) )
-        return new CpuMarrHildrethOperatorFilter;
     if( !strcmp( name, "multiply" ) )
         return new CpuMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )

@@ -18,7 +18,6 @@
 #include "cuda/CudaEuclideanNormFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
-#include "cuda/CudaMarrHildrethOperatorFilter.hxx"
 #include "cuda/CudaMultiplyFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
@@ -60,8 +59,6 @@ CudaBackend::createFilter(
     if( !strcmp( name, "laplacian-of-gaussian" ) )
         return new LaplacianOfGaussianFilter<
             CudaConvolutionFilter >;
-    if( !strcmp( name, "marr-hildreth-operator" ) )
-        return new CudaMarrHildrethOperatorFilter;
     if( !strcmp( name, "multiply" ) )
         return new CudaMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )
