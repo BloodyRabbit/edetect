@@ -10,9 +10,6 @@
 #include "cuda/CudaError.hxx"
 #include "cuda/CudaImage.hxx"
 
-#include "GaussianKernel.hxx"
-#include "GeneratedKernelFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
 #include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaEuclideanNormFilter.hxx"
@@ -48,19 +45,10 @@ CudaBackend::createFilter(
         return new CudaDesaturateFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CudaEuclideanNormFilter;
-    if( !strcmp( name, "gaussian-blur" ) )
-        return new SeparableConvolutionFilter(
-            new GeneratedKernelFilter< GaussianKernel >(
-                new CudaRowConvolutionFilter ),
-            new GeneratedKernelFilter< GaussianKernel >(
-                new CudaColumnConvolutionFilter ) );
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
-    if( !strcmp( name, "laplacian-of-gaussian" ) )
-        return new GeneratedKernelFilter< LaplacianOfGaussianKernel >(
-            new CudaConvolutionFilter );
     if( !strcmp( name, "multiply" ) )
         return new CudaMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )
@@ -68,6 +56,5 @@ CudaBackend::createFilter(
     if( !strcmp( name, "zero-cross" ) )
         return new CudaZeroCrossFilter;
 
-    throw std::invalid_argument(
-        "CudaBackend: Filter not implemented" );
+    return IImageBackend::createFilter( name );
 }

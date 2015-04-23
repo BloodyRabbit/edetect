@@ -30,6 +30,7 @@ cuda_add_library(
   "IImage.hxx"
   "IImage.ixx"
   "IImageBackend.hxx"
+  "IImageBackend.cxx"
   "IImageFilter.hxx"
   "IImageFilter.ixx"
   "IImageFilterBuilder.hxx"

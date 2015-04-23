@@ -9,9 +9,6 @@
 #include "cpu/CpuBackend.hxx"
 #include "cpu/CpuImage.hxx"
 
-#include "GaussianKernel.hxx"
-#include "GeneratedKernelFilter.hxx"
-#include "SeparableConvolutionFilter.hxx"
 #include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuEuclideanNormFilter.hxx"
@@ -42,19 +39,10 @@ CpuBackend::createFilter(
         return new CpuDesaturateFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CpuEuclideanNormFilter;
-    if( !strcmp( name, "gaussian-blur" ) )
-        return new SeparableConvolutionFilter(
-            new GeneratedKernelFilter< GaussianKernel >(
-                new CpuRowConvolutionFilter ),
-            new GeneratedKernelFilter< GaussianKernel >(
-                new CpuColumnConvolutionFilter ) );
     if( !strcmp( name, "int-float" ) )
         return new CpuIntFloatFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
-    if( !strcmp( name, "laplacian-of-gaussian" ) )
-        return new GeneratedKernelFilter< LaplacianOfGaussianKernel >(
-            new CpuConvolutionFilter );
     if( !strcmp( name, "multiply" ) )
         return new CpuMultiplyFilter;
     if( !strcmp( name, "row-convolution" ) )
@@ -62,6 +50,5 @@ CpuBackend::createFilter(
     if( !strcmp( name, "zero-cross" ) )
         return new CpuZeroCrossFilter;
 
-    throw std::invalid_argument(
-        "CpuBackend: Filter not implemented" );
+    return IImageBackend::createFilter( name );
 }

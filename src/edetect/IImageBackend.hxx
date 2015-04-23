@@ -27,7 +27,7 @@ public:
     /// @copydoc ImageBackend::createImage()
     virtual IImage* createImage() = 0;
     /// @copydoc ImageBackend::createFilter(const char*)
-    virtual IImageFilter* createFilter( const char* name ) = 0;
+    virtual IImageFilter* createFilter( const char* name );
 };
 
 #endif /* !IIMAGE_BACKEND_HXX__INCL__ */
