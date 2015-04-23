@@ -25,10 +25,16 @@ StringFilterBuilderImpl::parseFilter(
     IImageFilter* filter;
 
     name = &mStr[idx];
-    nlen = strcspn( name, ",:={}" );
+    nlen = strcspn( name, ",:=[]{}" );
     if( '=' == name[nlen] )
         throw std::invalid_argument(
             "Malformed filter name: unexpected `='" );
+    else if( '[' == name[nlen] )
+        throw std::invalid_argument(
+            "Malformed filter name: unexpeced `['" );
+    else if( ']' == name[nlen] )
+        throw std::invalid_argument(
+            "Malformed filter name: unexpected `]'" );
     else if( '{' == name[nlen] )
     {
         if( 0 < nlen )
@@ -56,13 +62,14 @@ StringFilterBuilderImpl::parseParams(
     unsigned int& idx
     )
 {
+    float* arrval;
     char x, *name, *strval, *endp;
     unsigned int nlen, vlen, intval;
 
     while( ':' == mStr[idx] )
     {
         name = &mStr[++idx];
-        nlen = strcspn( name, ",:={}" );
+        nlen = strcspn( name, ",:=[]{}" );
         if( '=' != name[nlen] )
             throw std::invalid_argument(
                 "Malformed filter parameter: missing value" );
@@ -71,10 +78,22 @@ StringFilterBuilderImpl::parseParams(
         idx += nlen + 1;
 
         strval = &mStr[idx];
-        vlen = strcspn( strval, ",:={}" );
+        vlen = strcspn( strval, ",:=[]{}" );
         if( '=' == strval[vlen] )
             throw std::invalid_argument(
                 "Malformed filter parameter: unexpected `=' in value" );
+        else if( '[' == strval[vlen] )
+        {
+            if( 0 < vlen )
+                throw std::invalid_argument(
+                    "Malformed filter parameter: unexpected '[' in value" );
+
+            arrval = parseList( intval, ++idx );
+            filter.setParam( name, arrval, intval );
+        }
+        else if( ']' == strval[vlen] )
+            throw std::invalid_argument(
+                "Malformed filter parameter: unexpected `]' in value" );
         else if( '{' == strval[vlen] )
         {
             if( 0 < vlen )
@@ -101,6 +120,37 @@ StringFilterBuilderImpl::parseParams(
 
         name[nlen] = '=';
     }
+}
+
+float*
+StringFilterBuilderImpl::parseList(
+    unsigned int& length,
+    unsigned int& idx
+    )
+{
+    char* endp;
+    float* arrval;
+    unsigned int capacity;
+
+    length = 0, capacity = 4;
+    arrval = (float*)malloc( capacity * sizeof(*arrval) );
+
+    do
+    {
+        if( capacity <= length )
+            arrval = (float*)realloc( arrval, (capacity *= 2) * sizeof(*arrval) );
+
+        arrval[length] = strtod( &mStr[idx], &endp );
+        if( ']' != *endp && !isspace( *endp ) )
+            throw std::invalid_argument(
+                "Malformed array: Invalid value encountered" );
+
+        ++length;
+        idx += endp - &mStr[idx] + 1;
+    } while( ']' != *endp );
+
+    arrval = (float*)realloc( arrval, length * sizeof(*arrval) );
+    return arrval;
 }
 
 ImageFilterPipeline*

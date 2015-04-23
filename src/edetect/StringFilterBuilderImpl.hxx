@@ -65,6 +65,22 @@ protected:
         unsigned int& idx
         );
     /**
+     * @brief Produces a list by parsing
+     *   the description string.
+     *
+     * @param[out] length
+     *   Length of the list.
+     * @param[in,out] idx
+     *   Index in the description string.
+     *
+     * @return
+     *   The parsed list.
+     */
+    float* parseList(
+        unsigned int& length,
+        unsigned int& idx
+        );
+    /**
      * @brief Produces a pipeline by parsing
      *   the description string.
      *
