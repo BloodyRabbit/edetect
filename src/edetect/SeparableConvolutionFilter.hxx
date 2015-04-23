@@ -16,11 +16,27 @@
  *
  * @author Jan Bobek
  */
-template< typename RCF, typename CCF >
 class SeparableConvolutionFilter
 : public IImageFilter
 {
 public:
+    /**
+     * @brief Initializes the filter.
+     *
+     * @param[in] rowFilter
+     *   The row convolution filter to use.
+     * @param[in] columnFilter
+     *   The column convolution filter to use.
+     */
+    SeparableConvolutionFilter(
+        IImageFilter* rowFilter,
+        IImageFilter* columnFilter
+        );
+    /**
+     * @brief Releases the filters.
+     */
+    ~SeparableConvolutionFilter();
+
     /**
      * @brief Performs convolution on the image.
      *
@@ -31,32 +47,11 @@ public:
     /// @copydoc IImageFilter::setParamVa(const char*, va_list ap)
     void setParamVa( const char* name, va_list ap );
 
-    /**
-     * @brief Sets the row kernel.
-     *
-     * @param[in] kernel
-     *   The row kernel.
-     * @param[in] length
-     *   Length of the row kernel.
-     */
-    void setRowKernel( const float* kernel, unsigned int length );
-    /**
-     * @brief Sets the column kernel.
-     *
-     * @param[in] kernel
-     *   The column kernel.
-     * @param[in] length
-     *   Length of the column kernel.
-     */
-    void setColumnKernel( const float* kernel, unsigned int length );
-
 protected:
     /// The row convolution filter.
-    RCF mRowFilter;
+    IImageFilter* mRowFilter;
     /// The column convolution filter.
-    CCF mColumnFilter;
+    IImageFilter* mColumnFilter;
 };
-
-#include "SeparableConvolutionFilter.txx"
 
 #endif /* !SEPARABLE_CONVOLUTION_FILTER_HXX__INCL__ */

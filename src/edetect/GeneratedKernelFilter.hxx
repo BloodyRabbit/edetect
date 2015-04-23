@@ -1,12 +1,12 @@
 /** @file
- * @brief Declaration of class IGeneratedKernelFilter.
+ * @brief Declaration of class GeneratedKernelFilter.
  *
  * @author Jan Bobek
  * @since 16th April 2015
  */
 
-#ifndef IGENERATED_KERNEL_FILTER_HXX__INCL__
-#define IGENERATED_KERNEL_FILTER_HXX__INCL__
+#ifndef GENERATED_KERNEL_FILTER_HXX__INCL__
+#define GENERATED_KERNEL_FILTER_HXX__INCL__
 
 #include "IImageFilter.hxx"
 
@@ -16,11 +16,28 @@
  *
  * @author Jan Bobek
  */
-template< typename CF >
-class IGeneratedKernelFilter
+template< typename K >
+class GeneratedKernelFilter
 : public IImageFilter
 {
 public:
+    /**
+     * @brief Initializes the filter.
+     *
+     * @param[in] filter
+     *   The convolution filter to use.
+     * @param[in,opt] kernel
+     *   The kernel to use.
+     */
+    GeneratedKernelFilter(
+        IImageFilter* filter,
+        K kernel = K()
+        );
+    /**
+     * @brief Releases the filter.
+     */
+    ~GeneratedKernelFilter();
+
     /**
      * @brief Applies the generated kernel to the image.
      *
@@ -37,26 +54,12 @@ public:
     void setRadius( unsigned int radius );
 
 protected:
-    /**
-     * @brief Generates the kernel.
-     *
-     * @param[in] radius
-     *   Radius of the kernel to generate.
-     * @param[out] length
-     *   Length of the generated kernel.
-     *
-     * @return
-     *   The generated kernel.
-     */
-    virtual float* generateKernel(
-        unsigned int radius,
-        unsigned int& length
-        ) = 0;
-
     /// The convolution filter we are delegating to.
-    CF mFilter;
+    IImageFilter* mFilter;
+    /// The kernel generator.
+    K mKernel;
 };
 
-#include "IGeneratedKernelFilter.txx"
+#include "GeneratedKernelFilter.txx"
 
-#endif /* !IGENERATED_KERNEL_FILTER_HXX__INCL__ */
+#endif /* !GENERATED_KERNEL_FILTER_HXX__INCL__ */
