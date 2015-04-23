@@ -45,30 +45,16 @@ IMarrHildrethOperatorFilter< CF, ZCF >::setParamVa(
     va_list ap
     )
 {
-    char* endptr;
-    const char* strval;
     unsigned int radius;
 
     if( !strcmp( name, "radius1" ) )
     {
-        strval = va_arg( ap, const char* );
-        radius = strtoul( strval, &endptr, 10 );
-
-        if( *endptr )
-            throw std::invalid_argument(
-                "IMarrHildrethOperatorFilter: Invalid radius1 value" );
-
+        radius = va_arg( ap, unsigned int );
         setRadius1( radius );
     }
     else if( !strcmp( name, "radius2" ) )
     {
-        strval = va_arg( ap, const char* );
-        radius = strtoul( strval, &endptr, 10 );
-
-        if( *endptr )
-            throw std::invalid_argument(
-                "IMarrHildrethOperatorFilter: Invalid radius2 value" );
-
+        radius = va_arg( ap, unsigned int );
         setRadius2( radius );
     }
     else

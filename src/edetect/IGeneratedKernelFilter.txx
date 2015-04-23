@@ -36,19 +36,11 @@ IGeneratedKernelFilter< CF >::setParamVa(
     va_list ap
     )
 {
-    char* endptr;
-    const char* strval;
     unsigned int radius;
 
     if( !strcmp( name, "radius" ) )
     {
-        strval = va_arg( ap, const char* );
-        radius = strtoul( strval, &endptr, 10 );
-
-        if( *endptr )
-            throw std::invalid_argument(
-                "IGeneratedKernelFilter: Invalid radius value" );
-
+        radius = va_arg( ap, unsigned int );
         setRadius( radius );
     }
     else
