@@ -14,6 +14,7 @@
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaEuclideanNormFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
+#include "cuda/CudaInvertFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaMultiplyFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
@@ -47,6 +48,8 @@ CudaBackend::createFilter(
         return new CudaEuclideanNormFilter;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
+    if( !strcmp( name, "invert" ) )
+        return new CudaInvertFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CudaKirschOperatorFilter;
     if( !strcmp( name, "multiply" ) )

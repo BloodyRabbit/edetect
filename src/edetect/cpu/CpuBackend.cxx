@@ -13,6 +13,7 @@
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuEuclideanNormFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
+#include "cpu/CpuInvertFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuMultiplyFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
@@ -41,6 +42,8 @@ CpuBackend::createFilter(
         return new CpuEuclideanNormFilter;
     if( !strcmp( name, "int-float" ) )
         return new CpuIntFloatFilter;
+    if( !strcmp( name, "invert" ) )
+        return new CpuInvertFilter;
     if( !strcmp( name, "kirsch-operator" ) )
         return new CpuKirschOperatorFilter;
     if( !strcmp( name, "multiply" ) )
