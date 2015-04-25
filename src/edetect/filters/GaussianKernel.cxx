@@ -58,7 +58,7 @@ DerivativeOfGaussianKernel::operator()(
     float sum = kernel[origin] = 0.0f;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
     {
-        kernel[origin + i] = exp( coef * r2i );
+        kernel[origin + i] = i * exp( coef * r2i );
         kernel[origin - i] = -kernel[origin + i];
 
         sum += kernel[origin + i];
