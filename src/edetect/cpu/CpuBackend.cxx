@@ -16,6 +16,7 @@
 #include "cpu/CpuInvertFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuMultiplyFilter.hxx"
+#include "cpu/CpuNonmaxSuppressionFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -48,6 +49,8 @@ CpuBackend::createFilter(
         return new CpuKirschOperatorFilter;
     if( !strcmp( name, "multiply" ) )
         return new CpuMultiplyFilter;
+    if( !strcmp( name, "nonmax-suppression" ) )
+        return new CpuNonmaxSuppressionFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CpuRowConvolutionFilter;
     if( !strcmp( name, "zero-cross" ) )

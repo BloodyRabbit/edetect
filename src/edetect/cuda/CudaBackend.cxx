@@ -17,6 +17,7 @@
 #include "cuda/CudaInvertFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaMultiplyFilter.hxx"
+#include "cuda/CudaNonmaxSuppressionFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -54,6 +55,8 @@ CudaBackend::createFilter(
         return new CudaKirschOperatorFilter;
     if( !strcmp( name, "multiply" ) )
         return new CudaMultiplyFilter;
+    if( !strcmp( name, "nonmax-suppression" ) )
+        return new CudaNonmaxSuppressionFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CudaRowConvolutionFilter;
     if( !strcmp( name, "zero-cross" ) )

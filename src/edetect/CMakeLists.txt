@@ -56,6 +56,8 @@ cuda_add_library(
   "filters/IInvertFilter.cxx"
   "filters/IKirschOperatorFilter.hxx"
   "filters/IKirschOperatorFilter.cxx"
+  "filters/INonmaxSuppressionFilter.hxx"
+  "filters/INonmaxSuppressionFilter.cxx"
   "filters/IMultiplyFilter.hxx"
   "filters/IMultiplyFilter.cxx"
   "filters/IZeroCrossFilter.hxx"
@@ -88,6 +90,8 @@ cuda_add_library(
   "cpu/CpuKirschOperatorFilter.cxx"
   "cpu/CpuMultiplyFilter.hxx"
   "cpu/CpuMultiplyFilter.cxx"
+  "cpu/CpuNonmaxSuppressionFilter.hxx"
+  "cpu/CpuNonmaxSuppressionFilter.cxx"
   "cpu/CpuZeroCrossFilter.hxx"
   "cpu/CpuZeroCrossFilter.cxx"
 
@@ -113,6 +117,8 @@ cuda_add_library(
   "cuda/CudaKirschOperatorFilter.cu"
   "cuda/CudaMultiplyFilter.hxx"
   "cuda/CudaMultiplyFilter.cu"
+  "cuda/CudaNonmaxSuppressionFilter.hxx"
+  "cuda/CudaNonmaxSuppressionFilter.cu"
   "cuda/CudaZeroCrossFilter.hxx"
   "cuda/CudaZeroCrossFilter.cu"
   )
