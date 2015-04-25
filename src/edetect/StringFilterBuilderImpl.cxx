@@ -55,7 +55,7 @@ StringFilterBuilderImpl::parseFilter(
             "Malformed filter name: unexpected `='" );
     else if( '[' == name[nlen] )
         throw std::invalid_argument(
-            "Malformed filter name: unexpeced `['" );
+            "Malformed filter name: unexpected `['" );
     else if( ']' == name[nlen] )
         throw std::invalid_argument(
             "Malformed filter name: unexpected `]'" );
@@ -87,6 +87,7 @@ StringFilterBuilderImpl::parseParams(
     )
 {
     float* arrval;
+    double realval;
     char x, *name, *strval, *endp;
     unsigned int nlen, vlen, intval;
 
@@ -131,10 +132,10 @@ StringFilterBuilderImpl::parseParams(
         {
             x = strval[vlen], strval[vlen] = '\0';
 
-            /* try to convert to integer */
-            intval = strtoul( strval, &endp, 10 );
-            if( !*endp )
+            if( (intval = strtoul( strval, &endp, 10 )), !*endp )
                 filter.setParam( name, intval );
+            else if( (realval = strtod( strval, &endp )), !*endp )
+                filter.setParam( name, realval );
             else
                 filter.setParam( name, strval );
 

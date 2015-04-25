@@ -128,13 +128,14 @@ XmlFilterBuilderImpl::parseParamText(
     )
 {
     unsigned int intval;
-    const char* strval, *endp;
+    double realval;
+    char* endp;
+    const char* strval = txt.Value();
 
-    strval = txt.Value();
-    intval = strtoul( strval, (char**)&endp, 10 );
-
-    if( !*endp )
+    if( (intval = strtoul( strval, &endp, 10 )), !*endp )
         filter.setParam( name, intval );
+    else if( (realval = strtod( strval, &endp )), !*endp )
+        filter.setParam( name, realval );
     else
         filter.setParam( name, strval );
 }
@@ -173,18 +174,20 @@ XmlFilterBuilderImpl::parseArrayText(
     const tinyxml2::XMLText& txt
     )
 {
-    const char* endp = txt.Value();
+    char* endp;
+    const char* strval = txt.Value();
 
     do
     {
         if( capacity <= length )
             arrval = (float*)realloc( arrval, (capacity *= 2) * sizeof(*arrval) );
 
-        arrval[length] = strtod( endp, (char**)&endp );
+        arrval[length] = strtod( strval, &endp );
         if( *endp && !isspace( *endp ) )
             throw std::invalid_argument(
                 "Malformed array element: Invalid value encountered" );
 
+        strval = endp;
         ++length;
     } while( *endp );
 }
