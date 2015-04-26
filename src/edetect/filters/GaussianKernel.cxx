@@ -22,18 +22,13 @@ GaussianKernel::operator()(
 
     const double sigma = radius / 2.5;
     const double coef = -1.0 / (2.0 * sigma * sigma);
+    const double norm = 1.0 / (sigma * std::sqrt( 2.0 * M_PI ));
 
     float* const kernel = (float*)malloc( length * sizeof(*kernel) );
 
-    float sum = kernel[origin] = 1.0f;
+    kernel[origin] = norm;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
-        sum += 2.0f *
-            (kernel[origin - i] =
-             kernel[origin + i] =
-             exp( coef * r2i ));
-
-    for( unsigned int i = 0; i < length; ++i )
-        kernel[i] /= sum;
+        kernel[origin - i] = kernel[origin + i] = norm * exp( coef * r2i );
 
     return kernel;
 }
