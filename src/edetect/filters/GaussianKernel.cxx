@@ -47,20 +47,13 @@ DerivativeOfGaussianKernel::operator()(
 
     const double sigma = radius / 2.5;
     const double coef = -1.0 / (2.0 * sigma * sigma);
+    const double norm = 1.0 / (sigma * sigma);
 
     float* const kernel = (float*)malloc( length * sizeof(*kernel) );
 
-    float sum = kernel[origin] = 0.0f;
+    kernel[origin] = 0.0f;
     for( unsigned int i = 1, r2i = 1; i <= radius; r2i += 1 + 2 * i++ )
-    {
-        kernel[origin + i] = i * exp( coef * r2i );
-        kernel[origin - i] = -kernel[origin + i];
-
-        sum += kernel[origin + i];
-    }
-
-    for( unsigned int i = 0; i < length; ++i )
-        kernel[i] /= sum;
+        kernel[origin - i] = -(kernel[origin + i] = norm * i * exp( coef * r2i ));
 
     return kernel;
 }
