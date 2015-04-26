@@ -13,6 +13,7 @@
 #include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
 #include "cuda/CudaEuclideanNormFilter.hxx"
+#include "cuda/CudaHysteresisFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
 #include "cuda/CudaInvertFilter.hxx"
 #include "cuda/CudaKirschOperatorFilter.hxx"
@@ -47,6 +48,8 @@ CudaBackend::createFilter(
         return new CudaDesaturateFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CudaEuclideanNormFilter;
+    if( !strcmp( name, "hysteresis" ) )
+        return new CudaHysteresisFilter;
     if( !strcmp( name, "int-float" ) )
         return new CudaIntFloatFilter;
     if( !strcmp( name, "invert" ) )

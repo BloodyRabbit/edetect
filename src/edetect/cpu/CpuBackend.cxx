@@ -12,6 +12,7 @@
 #include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
 #include "cpu/CpuEuclideanNormFilter.hxx"
+#include "cpu/CpuHysteresisFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
 #include "cpu/CpuInvertFilter.hxx"
 #include "cpu/CpuKirschOperatorFilter.hxx"
@@ -41,6 +42,8 @@ CpuBackend::createFilter(
         return new CpuDesaturateFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CpuEuclideanNormFilter;
+    if( !strcmp( name, "hysteresis" ) )
+        return new CpuHysteresisFilter;
     if( !strcmp( name, "int-float" ) )
         return new CpuIntFloatFilter;
     if( !strcmp( name, "invert" ) )
