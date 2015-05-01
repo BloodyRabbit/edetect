@@ -20,6 +20,8 @@
 #include <stdexcept>
 #include <string>
 
+#include <sys/time.h>
+
 #include <cuda_runtime.h>
 #include <FreeImagePlus.h>
 #include <tinyxml2.h>

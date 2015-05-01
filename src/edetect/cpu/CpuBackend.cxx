@@ -18,6 +18,7 @@
 #include "cpu/CpuKirschOperatorFilter.hxx"
 #include "cpu/CpuMultiplyFilter.hxx"
 #include "cpu/CpuNonmaxSuppressionFilter.hxx"
+#include "cpu/CpuTimerFilter.hxx"
 #include "cpu/CpuZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -56,6 +57,8 @@ CpuBackend::createFilter(
         return new CpuNonmaxSuppressionFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CpuRowConvolutionFilter;
+    if( !strcmp( name, "timer" ) )
+        return new CpuTimerFilter;
     if( !strcmp( name, "zero-cross" ) )
         return new CpuZeroCrossFilter;
 

@@ -19,6 +19,7 @@
 #include "cuda/CudaKirschOperatorFilter.hxx"
 #include "cuda/CudaMultiplyFilter.hxx"
 #include "cuda/CudaNonmaxSuppressionFilter.hxx"
+#include "cuda/CudaTimerFilter.hxx"
 #include "cuda/CudaZeroCrossFilter.hxx"
 
 /*************************************************************************/
@@ -62,6 +63,8 @@ CudaBackend::createFilter(
         return new CudaNonmaxSuppressionFilter;
     if( !strcmp( name, "row-convolution" ) )
         return new CudaRowConvolutionFilter;
+    if( !strcmp( name, "timer" ) )
+        return new CudaTimerFilter;
     if( !strcmp( name, "zero-cross" ) )
         return new CudaZeroCrossFilter;
 

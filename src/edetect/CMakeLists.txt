@@ -62,6 +62,8 @@ cuda_add_library(
   "filters/INonmaxSuppressionFilter.cxx"
   "filters/IMultiplyFilter.hxx"
   "filters/IMultiplyFilter.cxx"
+  "filters/ITimerFilter.hxx"
+  "filters/ITimerFilter.cxx"
   "filters/IZeroCrossFilter.hxx"
   "filters/IZeroCrossFilter.cxx"
   # Generic filter classes
@@ -96,6 +98,8 @@ cuda_add_library(
   "cpu/CpuMultiplyFilter.cxx"
   "cpu/CpuNonmaxSuppressionFilter.hxx"
   "cpu/CpuNonmaxSuppressionFilter.cxx"
+  "cpu/CpuTimerFilter.hxx"
+  "cpu/CpuTimerFilter.cxx"
   "cpu/CpuZeroCrossFilter.hxx"
   "cpu/CpuZeroCrossFilter.cxx"
 
@@ -127,6 +131,8 @@ cuda_add_library(
   "cuda/CudaMultiplyFilter.cu"
   "cuda/CudaNonmaxSuppressionFilter.hxx"
   "cuda/CudaNonmaxSuppressionFilter.cu"
+  "cuda/CudaTimerFilter.hxx"
+  "cuda/CudaTimerFilter.cxx"
   "cuda/CudaZeroCrossFilter.hxx"
   "cuda/CudaZeroCrossFilter.cu"
   )
