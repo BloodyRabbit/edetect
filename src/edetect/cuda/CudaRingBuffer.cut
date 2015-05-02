@@ -1,0 +1,90 @@
+/** @file
+ * @brief Template definition of CudaRingBuffer.
+ *
+ * @author Jan Bobek
+ * @since 2nd May 2015
+ */
+
+/*************************************************************************/
+/* CudaRingBuffer< T >                                                   */
+/*************************************************************************/
+template< typename T >
+CudaRingBuffer< T >*
+CudaRingBuffer< T >::create(
+    unsigned int capacity
+    )
+{
+    CudaRingBuffer* buffer;
+
+    cudaCheckError(
+        cudaMalloc( &buffer, sizeof(*buffer) + capacity * sizeof(T) ) );
+    return new( buffer ) CudaRingBuffer( capacity );
+}
+
+template< typename T >
+void
+CudaRingBuffer< T >::destroy(
+    CudaRingBuffer* buffer
+    )
+{
+    buffer->~CudaRingBuffer();
+    cudaCheckError( cudaFree( buffer ) );
+}
+
+template< typename T >
+CudaRingBuffer< T >::CudaRingBuffer(
+    unsigned int capacity
+    )
+{
+    cudaCheckError(
+        cudaMemset( &mSize, 0, sizeof(mSize) ) );
+    cudaCheckError(
+        cudaMemcpy( &mCapacity, &capacity, sizeof(capacity),
+                    cudaMemcpyHostToDevice ) );
+    cudaCheckError(
+        cudaMemset( &mFrontIdx, 0, sizeof(mFrontIdx) ) );
+    cudaCheckError(
+        cudaMemset( &mBackIdx, 0, sizeof(mBackIdx) ) );
+}
+
+template< typename T >
+CudaRingBuffer< T >::~CudaRingBuffer()
+{
+}
+
+template< typename T >
+__device__ bool
+CudaRingBuffer< T >::pop_front(
+    T& value
+    )
+{
+    unsigned int idx, size;
+
+    do
+    {
+        size = mSize;
+        if( 0 == size )
+            return false;
+    } while( size != atomicCAS( &mSize, size, size - 1 ) );
+
+    idx = atomicInc( &mFrontIdx, mCapacity - 1 );
+    value = mData[idx];
+    return true;
+}
+
+template< typename T >
+__device__ void
+CudaRingBuffer< T >::push_back(
+    const T& value
+    )
+{
+    unsigned int idx, size;
+
+    idx = atomicInc( &mBackIdx, mCapacity - 1 );
+    mData[idx] = value;
+
+    size = atomicInc( &mSize, mCapacity );
+#ifndef NDEBUG
+    assert( size < mCapacity );
+#endif /* !NDEBUG */
+}

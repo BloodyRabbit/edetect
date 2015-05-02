@@ -7,6 +7,7 @@
 #ifndef EDETECT_HXX__INCL__
 #define EDETECT_HXX__INCL__
 
+#include <cassert>
 #include <cmath>
 #include <cstdarg>
 #include <cstdio>

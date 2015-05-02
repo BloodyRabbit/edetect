@@ -102,6 +102,8 @@ cuda_add_library(
   "cuda/CudaError.cxx"
   "cuda/CudaImage.hxx"
   "cuda/CudaImage.cxx"
+  "cuda/CudaRingBuffer.cuh"
+  "cuda/CudaRingBuffer.cut"
   # CUDA-backed filters
   "cuda/CudaConvolutionFilter.hxx"
   "cuda/CudaConvolutionFilter.cu"
