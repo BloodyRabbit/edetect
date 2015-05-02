@@ -32,30 +32,32 @@ main(
         argv += 3;
         for(; 0 < argc; argc -= 2, argv += 2 )
         {
+            fprintf( stderr, "\nLoading image from file `%s'\n",
+                     argv[0] );
             Image image( backend, argv[0] );
+
             fprintf( stderr,
-                     "Loaded image from file `%s'\n"
                      "Input image info:\n"
                      "  Width:      %u px\n"
                      "  Height:     %u px\n"
                      "  Pixel size: %u B\n",
-                     argv[0],
                      image.columns(),
                      image.rows(),
                      image.pixelSize() );
 
             filter.filter( image );
 
-            image.save( argv[1] );
             fprintf( stderr,
                      "Output image info:\n"
                      "  Width:      %u px\n"
                      "  Height:     %u px\n"
-                     "  Pixel size: %u B\n"
-                     "Saved image to file `%s'\n\n",
+                     "  Pixel size: %u B\n",
                      image.columns(),
                      image.rows(),
-                     image.pixelSize(),
+                     image.pixelSize() );
+
+            image.save( argv[1] );
+            fprintf( stderr, "Saved image to file `%s'\n",
                      argv[1] );
         }
     }
