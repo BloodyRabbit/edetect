@@ -46,62 +46,62 @@ convolveKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
+    if( !(row < rows && col < cols) )
+        return;
+
+    const unsigned int cstart =
+        (col < r ? r - col : 0);
+    const unsigned int rstart =
+        (row < r ? r - row : 0);
+
+    const unsigned int cend =
+        (cols <= col + r ? cols - col + r - 1 : 2 * r);
+    const unsigned int rend =
+        (rows <= row + r ? rows - row + r - 1 : 2 * r);
+
+    float* dstp =
+        (float*)(ddata + row * dstride)
+        + col;
+    const unsigned char* rowp = sdata
+        + (row - r + rstart) * sstride
+        + (col - r + cstart) * sizeof(float);
+    const float* colp;
+
+    unsigned int i, j;
+    float x = 0.0f;
+
+    for( i = 0; i < rstart; ++i )
     {
-        const unsigned int cstart =
-            (col < r ? r - col : 0);
-        const unsigned int rstart =
-            (row < r ? r - row : 0);
-
-        const unsigned int cend =
-            (cols <= col + r ? cols - col + r - 1 : 2 * r);
-        const unsigned int rend =
-            (rows <= row + r ? rows - row + r - 1 : 2 * r);
-
-        float* dstp =
-            (float*)(ddata + row * dstride)
-            + col;
-        const unsigned char* rowp = sdata
-            + (row - r + rstart) * sstride
-            + (col - r + cstart) * sizeof(float);
-        const float* colp;
-
-        unsigned int i, j;
-        float x = 0.0f;
-
-        for( i = 0; i < rstart; ++i )
-        {
-            colp = (float*)rowp;
-            for( j = 0; j < cstart; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j < cend; ++j, ++colp )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j <= 2 * r; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-        }
-        for(; i < rend; ++i, rowp += sstride )
-        {
-            colp = (float*)rowp;
-            for( j = 0; j < cstart; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j < cend; ++j, ++colp )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j <= 2 * r; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-        }
-        for(; i <= 2 * r; ++i )
-        {
-            colp = (float*)rowp;
-            for( j = 0; j < cstart; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j < cend; ++j, ++colp )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-            for(; j <= 2 * r; ++j )
-                x += *colp * cKernel[i * (2 * r + 1) + j];
-        }
-
-        *dstp = x;
+        colp = (float*)rowp;
+        for( j = 0; j < cstart; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j < cend; ++j, ++colp )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j <= 2 * r; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
     }
+    for(; i < rend; ++i, rowp += sstride )
+    {
+        colp = (float*)rowp;
+        for( j = 0; j < cstart; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j < cend; ++j, ++colp )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j <= 2 * r; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+    }
+    for(; i <= 2 * r; ++i )
+    {
+        colp = (float*)rowp;
+        for( j = 0; j < cstart; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j < cend; ++j, ++colp )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+        for(; j <= 2 * r; ++j )
+            x += *colp * cKernel[i * (2 * r + 1) + j];
+    }
+
+    *dstp = x;
 }
 
 /**
@@ -139,34 +139,34 @@ convolveRowsKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        const unsigned int start =
-            (col < r ? r - col : 0);
-        const unsigned int end =
-            (cols <= col + r
-             ? cols - col + r - 1
-             : 2 * r);
+    if( !(row < rows && col < cols) )
+        return;
 
-        float* dstp =
-            (float*)(ddata + row * dstride)
-            + col;
-        const float* srcp =
-            (const float*)(sdata + row * sstride)
-            + (col - r + start);
+    const unsigned int start =
+        (col < r ? r - col : 0);
+    const unsigned int end =
+        (cols <= col + r
+         ? cols - col + r - 1
+         : 2 * r);
 
-        unsigned int i;
-        float x = 0.0f;
+    float* dstp =
+        (float*)(ddata + row * dstride)
+        + col;
+    const float* srcp =
+        (const float*)(sdata + row * sstride)
+        + (col - r + start);
 
-        for( i = 0; i < start; ++i )
-            x += *srcp * cKernel[i];
-        for(; i < end; ++i, ++srcp )
-            x += *srcp * cKernel[i];
-        for(; i <= 2 * r; ++i )
-            x += *srcp * cKernel[i];
+    unsigned int i;
+    float x = 0.0f;
 
-        *dstp = x;
-    }
+    for( i = 0; i < start; ++i )
+        x += *srcp * cKernel[i];
+    for(; i < end; ++i, ++srcp )
+        x += *srcp * cKernel[i];
+    for(; i <= 2 * r; ++i )
+        x += *srcp * cKernel[i];
+
+    *dstp = x;
 }
 
 /**
@@ -204,34 +204,34 @@ convolveColumnsKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        const unsigned int start =
-            (row < r ? r - row : 0);
-        const unsigned int end =
-            (rows <= row + r
-             ? rows - row + r - 1
-             : 2 * r);
+    if( !(row < rows && col < cols) )
+        return;
 
-        float* dstp =
-            (float*)(ddata + row * dstride)
-            + col;
-        const unsigned char* srcp = sdata
-            + (row - r + start) * sstride
-            + col * sizeof(float);
+    const unsigned int start =
+        (row < r ? r - row : 0);
+    const unsigned int end =
+        (rows <= row + r
+         ? rows - row + r - 1
+         : 2 * r);
 
-        unsigned int i;
-        float x = 0.0f;
+    float* dstp =
+        (float*)(ddata + row * dstride)
+        + col;
+    const unsigned char* srcp = sdata
+        + (row - r + start) * sstride
+        + col * sizeof(float);
 
-        for( i = 0; i < start; ++i )
-            x += *(float*)srcp * cKernel[i];
-        for(; i < end; ++i, srcp += sstride )
-            x += *(float*)srcp * cKernel[i];
-        for(; i <= 2 * r; ++i )
-            x += *(float*)srcp * cKernel[i];
+    unsigned int i;
+    float x = 0.0f;
 
-        *dstp = x;
-    }
+    for( i = 0; i < start; ++i )
+        x += *(float*)srcp * cKernel[i];
+    for(; i < end; ++i, srcp += sstride )
+        x += *(float*)srcp * cKernel[i];
+    for(; i <= 2 * r; ++i )
+        x += *(float*)srcp * cKernel[i];
+
+    *dstp = x;
 }
 
 /*************************************************************************/

@@ -41,15 +41,15 @@ desaturateAverageKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        float* const dstp =
-            (float*)(ddata + row * dstride) + col;
-        const float3* const srcp =
-            (const float3*)(sdata + row * sstride) + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        *dstp = (srcp->x + srcp->y + srcp->z) / 3.0f;
-    }
+    float* const dstp =
+        (float*)(ddata + row * dstride) + col;
+    const float3* const srcp =
+        (const float3*)(sdata + row * sstride) + col;
+
+    *dstp = (srcp->x + srcp->y + srcp->z) / 3.0f;
 }
 
 /**
@@ -84,20 +84,20 @@ desaturateLightnessKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        float* const dstp =
-            (float*)(ddata + row * dstride) + col;
-        const float3* const srcp =
-            (const float3*)(sdata + row * sstride) + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        const float a = fminf( srcp->x, srcp->y );
-        const float b = fmaxf( srcp->x, srcp->y );
-        const float c = fminf( a, srcp->z );
-        const float d = fmaxf( b, srcp->z );
+    float* const dstp =
+        (float*)(ddata + row * dstride) + col;
+    const float3* const srcp =
+        (const float3*)(sdata + row * sstride) + col;
 
-        *dstp = 0.5f * (c + d);
-    }
+    const float a = fminf( srcp->x, srcp->y );
+    const float b = fmaxf( srcp->x, srcp->y );
+    const float c = fminf( a, srcp->z );
+    const float d = fmaxf( b, srcp->z );
+
+    *dstp = 0.5f * (c + d);
 }
 
 /**
@@ -132,19 +132,19 @@ desaturateLuminosityKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        float* const dstp =
-            (float*)(ddata + row * dstride) + col;
-        const float3* const srcp =
-            (const float3*)(sdata + row * sstride) + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        *dstp =
-            /* z:RED y:GREEN x:BLUE */
-            0.2126f * srcp->z +
-            0.7152f * srcp->y +
-            0.0722f * srcp->x;
-    }
+    float* const dstp =
+        (float*)(ddata + row * dstride) + col;
+    const float3* const srcp =
+        (const float3*)(sdata + row * sstride) + col;
+
+    *dstp =
+        /* z:RED y:GREEN x:BLUE */
+        0.2126f * srcp->z +
+        0.7152f * srcp->y +
+        0.0722f * srcp->x;
 }
 
 /*************************************************************************/

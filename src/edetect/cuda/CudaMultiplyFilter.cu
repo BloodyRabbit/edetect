@@ -42,15 +42,15 @@ multiplyKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( row < rows && col < cols )
-    {
-        float* const dstp =
-            (float*)(ddata + row * dstride) + col;
-        const float* const srcp =
-            (const float*)(sdata + row * sstride) + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        *dstp *= *srcp;
-    }
+    float* const dstp =
+        (float*)(ddata + row * dstride) + col;
+    const float* const srcp =
+        (const float*)(sdata + row * sstride) + col;
+
+    *dstp *= *srcp;
 }
 
 /*************************************************************************/

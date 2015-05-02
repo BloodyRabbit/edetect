@@ -40,15 +40,15 @@ convertInt2FloatKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( col < cols && row < rows )
-    {
-        float* const dstp =
-            (float*)(ddata + row * dstride) + col;
-        const unsigned char* const srcp =
-            sdata + row * sstride + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        *dstp = *srcp / 255.0f;
-    }
+    float* const dstp =
+        (float*)(ddata + row * dstride) + col;
+    const unsigned char* const srcp =
+        sdata + row * sstride + col;
+
+    *dstp = *srcp / 255.0f;
 }
 
 /**
@@ -82,15 +82,15 @@ convertFloat2IntKernel(
     const unsigned int row =
         blockIdx.y * blockDim.y + threadIdx.y;
 
-    if( col < cols && row < rows )
-    {
-        unsigned char* const dstp =
-            ddata + row * dstride + col;
-        const float* const srcp =
-            (const float*)(sdata + row * sstride) + col;
+    if( !(row < rows && col < cols) )
+        return;
 
-        *dstp = (unsigned char)(__saturatef(*srcp) * 255.0f);
-    }
+    unsigned char* const dstp =
+        ddata + row * dstride + col;
+    const float* const srcp =
+        (const float*)(sdata + row * sstride) + col;
+
+    *dstp = (unsigned char)(__saturatef(*srcp) * 255.0f);
 }
 
 /*************************************************************************/
