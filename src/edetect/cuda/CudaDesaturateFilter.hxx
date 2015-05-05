@@ -19,12 +19,20 @@ class CudaDesaturateFilter
 : public IDesaturateFilter
 {
 protected:
-    /// @copydoc IDesaturateFilter::desaturateAverage(IImage&, const IImage&)
-    void desaturateAverage( IImage& dest, const IImage& src );
-    /// @copydoc IDesaturateFilter::desaturateLightness(IImage&, const IImage&)
-    void desaturateLightness( IImage& dest, const IImage& src );
-    /// @copydoc IDesaturateFilter::desaturateLuminosity(IImage&, const IImage&)
-    void desaturateLuminosity( IImage& dest, const IImage& src );
+    /// @copydoc IDesaturateFilter::desaturateAverageInt(IImage&, const IImage&)
+    void desaturateAverageInt( IImage& dest, const IImage& src );
+    /// @copydoc IDesaturateFilter::desaturateAverageFloat(IImage&, const IImage&)
+    void desaturateAverageFloat( IImage& dest, const IImage& src );
+
+    /// @copydoc IDesaturateFilter::desaturateLightnessInt(IImage&, const IImage&)
+    void desaturateLightnessInt( IImage& dest, const IImage& src );
+    /// @copydoc IDesaturateFilter::desaturateLightnessFloat(IImage&, const IImage&)
+    void desaturateLightnessFloat( IImage& dest, const IImage& src );
+
+    /// @copydoc IDesaturateFilter::desaturateLuminosityInt(IImage&, const IImage&)
+    void desaturateLuminosityInt( IImage& dest, const IImage& src );
+    /// @copydoc IDesaturateFilter::desaturateLuminosityFloat(IImage&, const IImage&)
+    void desaturateLuminosityFloat( IImage& dest, const IImage& src );
 };
 
 #endif /* !CUDA__CUDA_DESATURATE_FILTER_HXX__INCL__ */

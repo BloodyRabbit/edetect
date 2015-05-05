@@ -17,6 +17,8 @@ IDesaturateFilter::filter(
     IImage& image
     )
 {
+    IImage* output;
+
     switch( image.format() )
     {
     case Image::FMT_GRAY_UINT8:
@@ -24,32 +26,25 @@ IDesaturateFilter::filter(
         fputs( "IDesaturateFilter: Image already in grayscale\n", stderr );
         return;
 
+    case Image::FMT_RGB_UINT8:
+        output = image.cloneImpl();
+        output->reset( image.rows(), image.columns(),
+                       Image::FMT_GRAY_FLOAT32 );
+
+        (this->*mDesaturateInt)( *output, image );
+        break;
+
     case Image::FMT_RGB_FLOAT32:
+        output = image.cloneImpl();
+        output->reset( image.rows(), image.columns(),
+                       Image::FMT_GRAY_FLOAT32 );
+
+        (this->*mDesaturateFloat)( *output, image );
         break;
 
     default:
-    case Image::FMT_RGB_UINT8:
         throw std::runtime_error(
             "IDesaturateFilter: Unsupported image format" );
-    }
-
-    IImage* output = image.cloneImpl();
-    output->reset( image.rows(), image.columns(),
-                   Image::FMT_GRAY_FLOAT32 );
-
-    switch( mMethod )
-    {
-    case METHOD_AVERAGE:
-        desaturateAverage( *output, image );
-        break;
-
-    case METHOD_LIGHTNESS:
-        desaturateLightness( *output, image );
-        break;
-
-    case METHOD_LUMINOSITY:
-        desaturateLuminosity( *output, image );
-        break;
     }
 
     image.swap( *output );
@@ -87,5 +82,21 @@ IDesaturateFilter::setMethod(
     IDesaturateFilter::Method method
     )
 {
-    mMethod = method;
+    switch( method )
+    {
+    case METHOD_AVERAGE:
+        mDesaturateInt   = &IDesaturateFilter::desaturateAverageInt;
+        mDesaturateFloat = &IDesaturateFilter::desaturateAverageFloat;
+        break;
+
+    case METHOD_LIGHTNESS:
+        mDesaturateInt   = &IDesaturateFilter::desaturateLightnessInt;
+        mDesaturateFloat = &IDesaturateFilter::desaturateLightnessFloat;
+        break;
+
+    case METHOD_LUMINOSITY:
+        mDesaturateInt   = &IDesaturateFilter::desaturateLuminosityInt;
+        mDesaturateFloat = &IDesaturateFilter::desaturateLuminosityFloat;
+        break;
+    }
 }

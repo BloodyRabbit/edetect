@@ -52,35 +52,66 @@ public:
 
 protected:
     /**
-     * @brief Desaturates the image using the Average method.
+     * @brief Desaturates an integer image using the Average method.
      *
      * @param[out] dest
      *   Where to place the results.
      * @param[in] src
      *   The image data to convolve.
      */
-    virtual void desaturateAverage( IImage& dest, const IImage& src ) = 0;
+    virtual void desaturateAverageInt( IImage& dest, const IImage& src ) = 0;
     /**
-     * @brief Desaturates the image using the Lightness method.
+     * @brief Desaturates a floating-point image using the Average method.
      *
      * @param[out] dest
      *   Where to place the results.
      * @param[in] src
      *   The image data to convolve.
      */
-    virtual void desaturateLightness( IImage& dest, const IImage& src ) = 0;
-    /**
-     * @brief Desaturates the image using the Luminosity method.
-     *
-     * @param[out] dest
-     *   Where to place the results.
-     * @param[in] src
-     *   The image data to convolve.
-     */
-    virtual void desaturateLuminosity( IImage& dest, const IImage& src ) = 0;
+    virtual void desaturateAverageFloat( IImage& dest, const IImage& src ) = 0;
 
-    /// The chosen method of desaturation.
-    Method mMethod;
+    /**
+     * @brief Desaturates an integer image using the Lightness method.
+     *
+     * @param[out] dest
+     *   Where to place the results.
+     * @param[in] src
+     *   The image data to convolve.
+     */
+    virtual void desaturateLightnessInt( IImage& dest, const IImage& src ) = 0;
+    /**
+     * @brief Desaturates a floating-point image using the Lightness method.
+     *
+     * @param[out] dest
+     *   Where to place the results.
+     * @param[in] src
+     *   The image data to convolve.
+     */
+    virtual void desaturateLightnessFloat( IImage& dest, const IImage& src ) = 0;
+
+    /**
+     * @brief Desaturates an integer image using the Luminosity method.
+     *
+     * @param[out] dest
+     *   Where to place the results.
+     * @param[in] src
+     *   The image data to convolve.
+     */
+    virtual void desaturateLuminosityInt( IImage& dest, const IImage& src ) = 0;
+    /**
+     * @brief Desaturates a floating-point image using the Luminosity method.
+     *
+     * @param[out] dest
+     *   Where to place the results.
+     * @param[in] src
+     *   The image data to convolve.
+     */
+    virtual void desaturateLuminosityFloat( IImage& dest, const IImage& src ) = 0;
+
+    /// The chosen integer desaturation callback
+    void (IDesaturateFilter::* mDesaturateInt)(IImage&, const IImage&);
+    /// The chosen floating-point desaturation callback
+    void (IDesaturateFilter::* mDesaturateFloat)(IImage&, const IImage&);
 };
 
 #endif /* !FILTERS__IDESATURATE_FILTER_HXX__INCL__ */

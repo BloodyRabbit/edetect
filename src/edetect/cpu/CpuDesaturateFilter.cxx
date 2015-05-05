@@ -13,7 +13,28 @@
 /* CpuDesaturateFilter                                                   */
 /*************************************************************************/
 void
-CpuDesaturateFilter::desaturateAverage(
+CpuDesaturateFilter::desaturateAverageInt(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    for( unsigned int row = 0; row < src.rows(); ++row )
+    {
+        float* const dstp =
+            (float*)(dest.data() + row * dest.stride());
+        const unsigned char* const srcp =
+            src.data() + row * src.stride();
+
+        for( unsigned int col = 0; col < src.columns(); ++col )
+            dstp[col] = ((unsigned int)
+                         srcp[3 * col + 0] +
+                         srcp[3 * col + 1] +
+                         srcp[3 * col + 2]) / 765.0f;
+    }
+}
+
+void
+CpuDesaturateFilter::desaturateAverageFloat(
     IImage& dest,
     const IImage& src
     )
@@ -26,16 +47,41 @@ CpuDesaturateFilter::desaturateAverage(
             (const float*)(src.data() + row * src.stride());
 
         for( unsigned int col = 0; col < src.columns(); ++col )
-            dstp[col] = (
-                srcp[3 * col + 0] +
-                srcp[3 * col + 1] +
-                srcp[3 * col + 2]
-                ) / 3.0f;
+            dstp[col] = (srcp[3 * col + 0] +
+                         srcp[3 * col + 1] +
+                         srcp[3 * col + 2]) / 3.0f;
     }
 }
 
 void
-CpuDesaturateFilter::desaturateLightness(
+CpuDesaturateFilter::desaturateLightnessInt(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    for( unsigned int row = 0; row < src.rows(); ++row )
+    {
+        float* const dstp =
+            (float*)(dest.data() + row * dest.stride());
+        const unsigned char* const srcp =
+            src.data() + row * src.stride();
+
+        for( unsigned int col = 0; col < src.columns(); ++col )
+        {
+            const unsigned char
+                a = std::min( srcp[3 * col + 0], srcp[3 * col + 1] ),
+                b = std::max( srcp[3 * col + 0], srcp[3 * col + 1] );
+            const unsigned int
+                c = std::min( srcp[3 * col + 2], a ),
+                d = std::max( srcp[3 * col + 2], b );
+
+            dstp[col] = (c + d) / 510.0f;
+        }
+    }
+}
+
+void
+CpuDesaturateFilter::desaturateLightnessFloat(
     IImage& dest,
     const IImage& src
     )
@@ -49,10 +95,11 @@ CpuDesaturateFilter::desaturateLightness(
 
         for( unsigned int col = 0; col < src.columns(); ++col )
         {
-            const float a = std::min( srcp[3 * col + 0], srcp[3 * col + 1] );
-            const float b = std::max( srcp[3 * col + 0], srcp[3 * col + 1] );
-            const float c = std::min( srcp[3 * col + 2], a );
-            const float d = std::max( srcp[3 * col + 2], b );
+            const float
+                a = std::min( srcp[3 * col + 0], srcp[3 * col + 1] ),
+                b = std::max( srcp[3 * col + 0], srcp[3 * col + 1] ),
+                c = std::min( srcp[3 * col + 2], a ),
+                d = std::max( srcp[3 * col + 2], b );
 
             dstp[col] = 0.5f * (c + d);
         }
@@ -60,7 +107,28 @@ CpuDesaturateFilter::desaturateLightness(
 }
 
 void
-CpuDesaturateFilter::desaturateLuminosity(
+CpuDesaturateFilter::desaturateLuminosityInt(
+    IImage& dest,
+    const IImage& src
+    )
+{
+    for( unsigned int row = 0; row < src.rows(); ++row )
+    {
+        float* const dstp =
+            (float*)(dest.data() + row * dest.stride());
+        const unsigned char* const srcp =
+            src.data() + row * src.stride();
+
+        for( unsigned int col = 0; col < src.columns(); ++col )
+            /* +2:RED +1:GREEN +0:BLUE */
+            dstp[col] = (0.2126f * srcp[3 * col + 2] / 255.0f +
+                         0.7152f * srcp[3 * col + 1] / 255.0f +
+                         0.0722f * srcp[3 * col + 0] / 255.0f);
+    }
+}
+
+void
+CpuDesaturateFilter::desaturateLuminosityFloat(
     IImage& dest,
     const IImage& src
     )
@@ -73,10 +141,9 @@ CpuDesaturateFilter::desaturateLuminosity(
             (const float*)(src.data() + row * src.stride());
 
         for( unsigned int col = 0; col < src.columns(); ++col )
-            dstp[col] =
-                /* +2:RED +1:GREEN +0:BLUE */
-                0.2126f * srcp[3 * col + 2] +
-                0.7152f * srcp[3 * col + 1] +
-                0.0722f * srcp[3 * col + 0];
+            /* +2:RED +1:GREEN +0:BLUE */
+            dstp[col] = (0.2126f * srcp[3 * col + 2] +
+                         0.7152f * srcp[3 * col + 1] +
+                         0.0722f * srcp[3 * col + 0]);
     }
 }
