@@ -20,6 +20,10 @@ class CudaBackend
 {
 public:
     /**
+     * @brief Initializes the CUDA backend.
+     */
+    CudaBackend();
+    /**
      * @brief Deinitializes the CUDA backend.
      */
     ~CudaBackend();

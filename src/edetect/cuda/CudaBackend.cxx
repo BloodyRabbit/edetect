@@ -25,6 +25,53 @@
 /*************************************************************************/
 /* CudaBackend                                                           */
 /*************************************************************************/
+CudaBackend::CudaBackend()
+{
+    int device;
+    cudaDeviceProp prop;
+
+    cudaCheckError( cudaGetDevice( &device ) );
+    cudaCheckError( cudaGetDeviceProperties( &prop, device ) );
+
+    fprintf(
+        stderr,
+        "Active CUDA device %d: \"%s\"\n"
+        "  CUDA Capability Major/Minor version number:    %d.%d\n"
+        "  Number of available Multiprocessors:           %d\n"
+        "  GPU Clock rate:                                %d Hz\n"
+        "  Memory Clock rate:                             %d Hz\n"
+        "  Memory Bus Width:                              %d-bit\n"
+        "  L2 Cache Size:                                 %d bytes\n"
+        "  Total amount of constant memory:               %lu bytes\n"
+        "  Total amount of global memory:                 %lu bytes\n"
+        "  Total amount of shared memory per block:       %lu bytes\n"
+        "  Total amount of registers available per block: %d\n"
+        "  Warp size:                                     %d\n"
+        "  Maximum number of threads per multiprocessor:  %d\n"
+        "  Maximum number of threads per block:           %d\n"
+        "  Max dimension size of a thread block (x,y,z): (%d, %d, %d)\n"
+        "  Max dimension size of a grid size    (x,y,z): (%d, %d, %d)\n"
+        "  Maximum memory pitch:                          %lu bytes\n",
+        device, prop.name,
+        prop.major, prop.minor,
+        prop.multiProcessorCount,
+        prop.clockRate,
+        prop.memoryClockRate,
+        prop.memoryBusWidth,
+        prop.l2CacheSize,
+        prop.totalConstMem,
+        prop.totalGlobalMem,
+        prop.sharedMemPerBlock,
+        prop.regsPerBlock,
+        prop.warpSize,
+        prop.maxThreadsPerMultiProcessor,
+        prop.maxThreadsPerBlock,
+        prop.maxThreadsDim[0], prop.maxThreadsDim[1], prop.maxThreadsDim[2],
+        prop.maxGridSize[0], prop.maxGridSize[1], prop.maxGridSize[2],
+        prop.memPitch
+        );
+}
+
 CudaBackend::~CudaBackend()
 {
     cudaCheckError( cudaDeviceReset() );
