@@ -35,7 +35,7 @@ CudaTimerFilter::filter(
     float ms;
 
     cudaCheckError( cudaEventRecord( mStart ) );
-    mFilter->filter( image );
+    ITimerFilter::filter( image );
     cudaCheckError( cudaEventRecord( mStop ) );
 
     cudaCheckError( cudaEventSynchronize( mStop ) );

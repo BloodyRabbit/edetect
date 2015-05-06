@@ -23,7 +23,7 @@ CpuTimerFilter::filter(
         throw std::runtime_error(
             "CpuTimerFilter: starting call to `gettimeofday' failed" );
 
-    mFilter->filter( image );
+    ITimerFilter::filter( image );
 
     if( gettimeofday( &end, NULL ) )
         throw std::runtime_error(

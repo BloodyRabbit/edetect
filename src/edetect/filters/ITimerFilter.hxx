@@ -31,6 +31,8 @@ public:
      */
     ~ITimerFilter();
 
+    /// @copydoc IImageFilter::filter(IImage&)
+    void filter( IImage& image );
     /// @copydoc IImageFilter::setParamVa(const char*, va_list ap)
     void setParamVa( const char* name, va_list ap );
 

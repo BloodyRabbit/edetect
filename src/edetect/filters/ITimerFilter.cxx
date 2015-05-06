@@ -27,6 +27,14 @@ ITimerFilter::~ITimerFilter()
 }
 
 void
+ITimerFilter::filter(
+    IImage& image
+    )
+{
+    mFilter->filter( image );
+}
+
+void
 ITimerFilter::setParamVa(
     const char* name,
     va_list ap
