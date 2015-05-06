@@ -6,6 +6,7 @@
  */
 
 #include "edetect.hxx"
+#include "IImage.hxx"
 #include "filters/ITimerFilter.hxx"
 
 /*************************************************************************/
@@ -64,4 +65,18 @@ ITimerFilter::setFilter(
 {
     delete mFilter;
     mFilter = filter;
+}
+
+void
+ITimerFilter::print(
+    float ms,
+    const IImage& image
+    )
+{
+    fputs( "Timer", stdout );
+    if( mName )
+        fprintf( stdout, " `%s'", mName );
+
+    fprintf( stdout, ": %f milliseconds (%f MPix/s)\n",
+             ms, 1e-3 * image.rows() * image.columns() / ms );
 }

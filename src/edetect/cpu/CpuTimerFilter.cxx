@@ -16,6 +16,7 @@ CpuTimerFilter::filter(
     IImage& image
     )
 {
+    float ms;
     timeval start, end;
 
     if( gettimeofday( &start, NULL ) )
@@ -29,7 +30,8 @@ CpuTimerFilter::filter(
             "CpuTimerFilter: ending call to `gettimeofday' failed" );
 
     timersub( &end, &start, &end );
-    fprintf( stdout, "Timer `%s': %ld.%ld milliseconds\n",
-             mName, end.tv_sec * 1000 + end.tv_usec / 1000,
-             end.tv_usec % 1000 );
+
+    ms = end.tv_sec * 1e+3 +
+        end.tv_usec * 1e-3;
+    print( ms, image );
 }

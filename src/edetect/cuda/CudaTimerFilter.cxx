@@ -41,5 +41,5 @@ CudaTimerFilter::filter(
     cudaCheckError( cudaEventSynchronize( mStop ) );
     cudaCheckError( cudaEventElapsedTime( &ms, mStart, mStop ) );
 
-    fprintf( stdout, "Timer `%s': %f milliseconds\n", mName, ms );
+    print( ms, image );
 }

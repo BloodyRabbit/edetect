@@ -50,6 +50,16 @@ public:
     void setFilter( IImageFilter* filter );
 
 protected:
+    /**
+     * @brief Prints the measured time interval.
+     *
+     * @param[in] ms
+     *   The interval in milliseconds.
+     * @param[in] image
+     *   The processed image.
+     */
+    void print( float ms, const IImage& image );
+
     /// Name of this timer.
     char* mName;
     /// The filter being measured.
