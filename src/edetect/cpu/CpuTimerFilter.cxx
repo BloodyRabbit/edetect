@@ -11,6 +11,13 @@
 /*************************************************************************/
 /* CpuTimerFilter                                                        */
 /*************************************************************************/
+CpuTimerFilter::CpuTimerFilter(
+    IImageFilter* filter
+    )
+: ITimerFilter( filter )
+{
+}
+
 void
 CpuTimerFilter::filter(
     IImage& image

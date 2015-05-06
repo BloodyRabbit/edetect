@@ -19,6 +19,9 @@ class CpuTimerFilter
 : public ITimerFilter
 {
 public:
+    /// @copydoc ITimerFilter::ITimerFilter(IImageFilter*)
+    CpuTimerFilter( IImageFilter* filter = NULL );
+
     /// @copydoc ITimerFilter::filter(IImage&)
     void filter( IImage& image );
 };
