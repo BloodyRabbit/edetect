@@ -12,6 +12,7 @@
 
 #include "cuda/CudaConvolutionFilter.hxx"
 #include "cuda/CudaDesaturateFilter.hxx"
+#include "cuda/CudaDualInputTimerFilter.hxx"
 #include "cuda/CudaEuclideanNormFilter.hxx"
 #include "cuda/CudaHysteresisFilter.hxx"
 #include "cuda/CudaIntFloatFilter.hxx"
@@ -94,6 +95,8 @@ CudaBackend::createFilter(
         return new CudaColumnConvolutionFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CudaDesaturateFilter;
+    if( !strcmp( name, "dual-input-timer" ) )
+        return new CudaDualInputTimerFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CudaEuclideanNormFilter;
     if( !strcmp( name, "hysteresis" ) )

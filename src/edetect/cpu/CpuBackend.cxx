@@ -11,6 +11,7 @@
 
 #include "cpu/CpuConvolutionFilter.hxx"
 #include "cpu/CpuDesaturateFilter.hxx"
+#include "cpu/CpuDualInputTimerFilter.hxx"
 #include "cpu/CpuEuclideanNormFilter.hxx"
 #include "cpu/CpuHysteresisFilter.hxx"
 #include "cpu/CpuIntFloatFilter.hxx"
@@ -41,6 +42,8 @@ CpuBackend::createFilter(
         return new CpuColumnConvolutionFilter;
     if( !strcmp( name, "desaturate" ) )
         return new CpuDesaturateFilter;
+    if( !strcmp( name, "dual-input-timer" ) )
+        return new CpuDualInputTimerFilter;
     if( !strcmp( name, "euclidean-norm" ) )
         return new CpuEuclideanNormFilter;
     if( !strcmp( name, "hysteresis" ) )

@@ -19,6 +19,8 @@ class IDualInputFilter
 : public IImageFilter
 {
 public:
+    friend class IDualInputTimerFilter;
+
     /**
      * @brief Initializes the filter.
      *
