@@ -29,7 +29,7 @@ IDesaturateFilter::filter(
     case Image::FMT_RGB_UINT8:
         output = image.cloneImpl();
         output->reset( image.rows(), image.columns(),
-                       Image::FMT_GRAY_FLOAT32 );
+                       Image::FMT_GRAY_UINT8 );
 
         (this->*mDesaturateInt)( *output, image );
         break;

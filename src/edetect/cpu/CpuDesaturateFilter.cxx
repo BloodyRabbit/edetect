@@ -20,8 +20,8 @@ CpuDesaturateFilter::desaturateAverageInt(
 {
     for( unsigned int row = 0; row < src.rows(); ++row )
     {
-        float* const dstp =
-            (float*)(dest.data() + row * dest.stride());
+        unsigned char* const dstp =
+            dest.data() + row * dest.stride();
         const unsigned char* const srcp =
             src.data() + row * src.stride();
 
@@ -29,7 +29,7 @@ CpuDesaturateFilter::desaturateAverageInt(
             dstp[col] = ((unsigned int)
                          srcp[3 * col + 0] +
                          srcp[3 * col + 1] +
-                         srcp[3 * col + 2]) / 765.0f;
+                         srcp[3 * col + 2] + 1) / 3;
     }
 }
 
@@ -61,8 +61,8 @@ CpuDesaturateFilter::desaturateLightnessInt(
 {
     for( unsigned int row = 0; row < src.rows(); ++row )
     {
-        float* const dstp =
-            (float*)(dest.data() + row * dest.stride());
+        unsigned char* const dstp =
+            dest.data() + row * dest.stride();
         const unsigned char* const srcp =
             src.data() + row * src.stride();
 
@@ -75,7 +75,7 @@ CpuDesaturateFilter::desaturateLightnessInt(
                 c = std::min( srcp[3 * col + 2], a ),
                 d = std::max( srcp[3 * col + 2], b );
 
-            dstp[col] = (c + d) / 510.0f;
+            dstp[col] = (c + d + 1) / 2;
         }
     }
 }
@@ -114,16 +114,17 @@ CpuDesaturateFilter::desaturateLuminosityInt(
 {
     for( unsigned int row = 0; row < src.rows(); ++row )
     {
-        float* const dstp =
-            (float*)(dest.data() + row * dest.stride());
+        unsigned char* const dstp =
+            dest.data() + row * dest.stride();
         const unsigned char* const srcp =
             src.data() + row * src.stride();
 
         for( unsigned int col = 0; col < src.columns(); ++col )
             /* +2:RED +1:GREEN +0:BLUE */
-            dstp[col] = (0.2126f * srcp[3 * col + 2] / 255.0f +
-                         0.7152f * srcp[3 * col + 1] / 255.0f +
-                         0.0722f * srcp[3 * col + 0] / 255.0f);
+            dstp[col] = (0.2126f * srcp[3 * col + 2] +
+                         0.7152f * srcp[3 * col + 1] +
+                         0.0722f * srcp[3 * col + 0]
+                         + 0.5f);
     }
 }
 

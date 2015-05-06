@@ -44,13 +44,12 @@ desaturateAverageIntKernel(
     if( !(row < rows && col < cols) )
         return;
 
-    float* const dstp =
-        (float*)(ddata + row * dstride) + col;
+    unsigned char* const dstp =
+        ddata + row * dstride + col;
     const uchar3* const srcp =
         (const uchar3*)(sdata + row * sstride) + col;
 
-    *dstp = ((unsigned int)
-             srcp->x + srcp->y + srcp->z) / 765.0f;
+    *dstp = ((unsigned int)srcp->x + srcp->y + srcp->z + 1) / 3;
 }
 
 /**
@@ -131,8 +130,8 @@ desaturateLightnessIntKernel(
     if( !(row < rows && col < cols) )
         return;
 
-    float* const dstp =
-        (float*)(ddata + row * dstride) + col;
+    unsigned char* const dstp =
+        ddata + row * dstride + col;
     const uchar3* const srcp =
         (const uchar3*)(sdata + row * sstride) + col;
 
@@ -143,7 +142,7 @@ desaturateLightnessIntKernel(
         c = min( a, srcp->z ),
         d = max( b, srcp->z );
 
-    *dstp = (c + d) / 510.0f;
+    *dstp = (c + d + 1) / 2;
 }
 
 /**
@@ -230,16 +229,17 @@ desaturateLuminosityIntKernel(
     if( !(row < rows && col < cols) )
         return;
 
-    float* const dstp =
-        (float*)(ddata + row * dstride) + col;
+    unsigned char* const dstp =
+        ddata + row * dstride + col;
     const uchar3* const srcp =
         (const uchar3*)(sdata + row * sstride) + col;
 
     *dstp =
         /* z:RED y:GREEN x:BLUE */
-        0.2126f * srcp->z / 255.0f +
-        0.7152f * srcp->y / 255.0f +
-        0.0722f * srcp->x / 255.0f;
+        0.2126f * srcp->z +
+        0.7152f * srcp->y +
+        0.0722f * srcp->x +
+        0.5f;
 }
 
 /**
