@@ -19,3 +19,5 @@ endif( CMAKE_COMPILER_IS_GNUCXX )
 include_directories( "include" )
 add_subdirectory( "src/edetect" )
 add_subdirectory( "src/edetect-proc" )
+
+include( "CPack" )

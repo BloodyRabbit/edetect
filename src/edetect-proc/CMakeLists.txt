@@ -20,3 +20,7 @@ target_link_libraries(
   "edetect-proc"
   "edetect"
   )
+install(
+  TARGETS "edetect-proc"
+  RUNTIME DESTINATION "bin"
+  )

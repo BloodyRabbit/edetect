@@ -147,3 +147,8 @@ target_link_libraries(
   "freeimageplus"
   "tinyxml2"
   )
+install(
+  TARGETS "edetect"
+  RUNTIME DESTINATION "bin"
+  LIBRARY DESTINATION "lib"
+  )
